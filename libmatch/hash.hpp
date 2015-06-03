@@ -246,7 +246,7 @@ linear<K, V, H, C>::get_entry_index(K const& key) const
 {
   int idx = get_hash_index(key); 
   for (int i = 0; i < buckets; i++) {
-    if (data_[idx].key == key) 
+    if (data_[idx].key == key) // FIXME: Use comp_?
       break;
     idx = (idx + 1 < buckets ? idx + 1 : 0);
   }
