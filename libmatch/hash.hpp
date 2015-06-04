@@ -43,7 +43,7 @@ struct list_entry : entry<K, V>
   { }
 
   list_entry(K const& k, V const& v)
-    : entry<K, V>(k,v), next(nullptr)
+    : entry<K, V>(k, v), next(nullptr)
   { }
 
   ~list_entry()
@@ -65,7 +65,7 @@ struct tree_entry : entry<K, V>
   { }
 
   tree_entry(K const& k, V const& v)
-    : entry<K, V>(k,v), left(nullptr), right(nullptr)
+    : entry<K, V>(k, v), left(nullptr), right(nullptr)
   { }
 
   tree_entry<K, V>* left;
@@ -78,12 +78,34 @@ template<typename K, typename V>
 struct basic_bucket : public entry<K, V> 
 { 
   basic_bucket()
-    : entry<K, V>()
+    : entry<K, V>(), empty(true)
   { }
 
   basic_bucket(K const& k, V const& v)
-    : entry<K, V>(k,v)
+    : entry<K, V>(k, v), empty(false)
   { }
+
+  bool
+  is_empty() 
+  { 
+    return empty; 
+  }
+
+  void
+  add(K const& k, V const& v)
+  {
+    this->key = k;
+    this->val = v;
+    empty = false;
+  }
+
+  void
+  clear() 
+  {
+    empty = true; 
+  }
+
+  bool empty;
 };
 
 
@@ -91,27 +113,43 @@ struct basic_bucket : public entry<K, V>
 template<typename K, typename V>
 struct list_bucket 
 {
-  list_bucket(int n)
-    : size(n)
-  { 
-    head = new list_entry<K, V>[n];
-  }
+  list_bucket()
+    : head(nullptr), size(0), empty(true)
+  { }
 
   ~list_bucket()
   {
-    delete head;
+    if (nullptr != head)
+      delete head;
+  }
+
+  bool
+  is_empty()
+  {
+    return empty;
   }
 
   void
   add(K const& k, V const& v)
   {
-    list_entry<K, V>* nh = new list_entry<K, V>(k,v);
+    list_entry<K, V>* nh = new list_entry<K, V>(k, v);
     nh->next = head;
     head = nh;
+    empty = false;
+    size++;
+  }
+
+  void
+  clear()
+  {
+    // TODO: implement this
+    empty = true;  
+    size = 0;  
   }
 
   list_entry<K, V>* head;
   int size;
+  bool empty;
 };
 
 
@@ -119,9 +157,15 @@ struct list_bucket
 template<typename K, typename V>
 struct array_bucket
 {
-  int size;
+  
+  array_bucket()
+    : size(0), capacity(7), empty(true)
+  { 
+    data = new entry<K, V>[capacity];
+  }
+
   array_bucket(int n)
-    : size(n)      
+    : size(0), capacity(n), empty(true)
   { 
     data = new entry<K, V>[n];
   }
@@ -131,13 +175,81 @@ struct array_bucket
     delete[] data;
   }
 
+  void
+  add(K const& k, V const& v)
+  {
+    if (size + 1 < capacity) {
+      data[size++] = entry<K, V>(k, v);
+      empty = false;
+    }
+  }
+
+  bool
+  is_empty()
+  {
+    return empty;
+  }
+
+  void
+  clear()
+  {
+    // TODO: implement this
+    empty = true;
+    size = 0;
+  }
+
   entry<K, V>* data;
+  int size;
+  int capacity;
+  bool empty;
 };
 
 
 // A tree based hash table bucket
 template<typename K, typename V>
-struct tree_bucket : tree_entry<K, V> { };
+struct tree_bucket : tree_entry<K, V> 
+{ 
+  tree_bucket()
+    : tree_entry<K, V>(), empty(true)
+  { }
+
+  tree_bucket(K const& k, V const& v)
+    : tree_entry<K, V>(k, v), empty(false)
+  { }
+
+  ~tree_bucket()
+  {
+    // TODO: may need to do this different
+    if (nullptr != this->left)
+      delete this->left;
+    if (nullptr != this->right)
+      delete this->right;
+  }
+
+  void
+  add(K const& k, V const& v)
+  {
+    // TODO: balance the tree when adding to it
+    this->key = k;
+    this->val = v;
+    empty = false;
+  }
+
+  bool
+  is_empty()
+  {
+    return empty;
+  }
+
+  void
+  clear()
+  {
+    // TODO: implement this
+    empty = true;
+  }
+
+  bool empty;
+};
 
 
 } // end namespace data_store
@@ -152,10 +264,9 @@ namespace open
 template<typename K, typename V, typename H, typename C>
 class linear
 {
-  using store_type = std::vector<data_store::basic_bucket<K, V>>;
 public:
+  using store_type = std::vector<data_store::basic_bucket<K, V>>;
   using value_type = data_store::basic_bucket<K, V>;
-
   using hasher = H;
   using compare = C;
 
@@ -262,7 +373,6 @@ linear<K, V, H, C>::get_hash_index(K const& key) const
 { 
   return hash(key) % buckets; 
 }
-
 
 
 } //end namespace open
