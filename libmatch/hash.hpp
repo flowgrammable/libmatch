@@ -14,6 +14,14 @@
 namespace hash_table
 {
 
+constexpr long table_sizes[] = {
+  29, 53, 97, 193, 389, 769, 1543, 3079,
+  6151, 12289, 24593, 49157, 98317, 196613,
+  393241, 786433, 1572869, 3145739, 6191469,
+  12582917, 25165843, 50331653, 100663319,
+  201326611, 402653189, 805306457, 1610612741
+}
+
 namespace data_store
 {
 
@@ -206,6 +214,7 @@ struct array_bucket
 
 
 // A tree based hash table bucket
+// TODO: implement this using an array, not pointers
 template<typename K, typename V>
 struct tree_bucket : tree_entry<K, V> 
 { 
@@ -229,7 +238,7 @@ struct tree_bucket : tree_entry<K, V>
   void
   add(K const& k, V const& v)
   {
-    // TODO: balance the tree when adding to it
+    // TODO: balance & sort the tree when adding to it
     this->key = k;
     this->val = v;
     empty = false;
@@ -268,7 +277,7 @@ public:
   using store_type = std::vector<data_store::basic_bucket<K, V>>;
   using value_type = data_store::basic_bucket<K, V>;
   using hasher = H;
-  using compare = C;
+  using compare = C;  
 
   linear()
     : linear(17)
@@ -322,51 +331,48 @@ linear<K, V, H, C>::find(K const& key) const -> value_type const*
 }
 
 
-// Inserts a new key-value pair into the data store.,
+// Inserts a new key-value pair into an empty bucket.
 template<typename K, typename V, typename H, typename C> 
 auto
 linear<K, V, H, C>::insert(K const& key, V const& value) -> value_type*
 {
-  int idx = get_entry_index(K());
-  if (idx < 0)
-    return nullptr;
+  int idx = get_hash_index(key);
+  while (!data_[idx].is_empty()) 
+    idx = (idx + 1 < buckets ? idx + 1 : 0);
   data_[idx] = data_store::basic_bucket<K, V>(key, value);
   ++size;
   return &data_[idx];
 }
 
 
-// Removes a key-value pair from the data store.
+// Clears the bucket containing the same key, if found.
 template<typename K, typename V, typename H, typename C> 
 void
 linear<K, V, H, C>::erase(K const& key)
 {
   int idx = get_entry_index(key);
   if (idx >= 0) {
-    data_[idx] = data_store::basic_bucket<K, V>(K(), V());
-    --size;  
+    data_[idx].clear();
+    --size;        
   }
 }
 
 
-// Returns the index in the table for the given key. This is the actual
-// index in the table for the key.
+// Returns the index in the table for the given key or -1 if not found. 
+// This is guaranteed to be the actual index in the table for the key.
 template<typename K, typename V, typename H, typename C> 
 int
 linear<K, V, H, C>::get_entry_index(K const& key) const
 {
   int idx = get_hash_index(key); 
-  for (int i = 0; i < buckets; i++) {
-    if (data_[idx].key == key) // FIXME: Use comp_?
-      break;
+  while (!comp_(data_[idx].key, key))
     idx = (idx + 1 < buckets ? idx + 1 : 0);
-  }
-  return (data_[idx].key == key ? idx : -1);
+  return (comp_(data_[idx].key, key) ? idx : -1);
 }
 
 
-// Returns an index in the table for a given key. This is not necessarily
-// the actual index for the key.
+// Returns an index in the table for a given key. This is not guaranteed
+// to be the actual index for the key.
 template<typename K, typename V, typename H, typename C> 
 inline int
 linear<K, V, H, C>::get_hash_index(K const& key) const
