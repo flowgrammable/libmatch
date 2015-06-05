@@ -9,7 +9,7 @@
 // TODO: Actually document the hash table.
 
 #include <vector>
-
+#include <boost/optional.hpp>
 
 namespace hash_table
 {
@@ -20,21 +20,37 @@ constexpr long table_sizes[] = {
   393241, 786433, 1572869, 3145739, 6191469,
   12582917, 25165843, 50331653, 100663319,
   201326611, 402653189, 805306457, 1610612741
-}
+};
 
 namespace data_store
 {
 
-// A simple key-value pair
+// A key-value pair
+template<typename K, typename V>
+struct key_value
+{
+  key_value()
+    : key(K()), val(V())
+  { }
+
+  key_value(K const& k, V const& v)
+    : key(k), val(v)
+  { }
+
+  K key;
+  V val;  
+};
+
+// A basic entry type
 template<typename K, typename V>
 struct entry
 {
   entry()
-    : key(K()),val(V())
+    : key(), val()
   { }
   
   entry(K const& k, V const& v)
-    : key(k),val(v)
+    : key(k), val(v)
   { }
 
   K key;
@@ -82,38 +98,58 @@ struct tree_entry : entry<K, V>
 
 
 // A basic hash table bucket containing a single entry
-template<typename K, typename V>
-struct basic_bucket : public entry<K, V> 
+template<typename T>
+struct basic_bucket
 { 
   basic_bucket()
-    : entry<K, V>(), empty(true)
   { }
 
-  basic_bucket(K const& k, V const& v)
-    : entry<K, V>(k, v), empty(false)
-  { }
-
-  bool
-  is_empty() 
+  basic_bucket(T const& v)
   { 
-    return empty; 
+    data_.emplace(v);
   }
 
-  void
-  add(K const& k, V const& v)
+  
+  // Accessors
+
+  
+  // Retrieves the current value from the bucket. This can be a
+  // usable value or the boost::none value to indicate it is not
+  // set.
+  boost::optional<T>
+  open()
   {
-    this->key = k;
-    this->val = v;
-    empty = false;
+    return (full() ? *data_ : boost::none);
   }
 
-  void
-  clear() 
+  // Checks if the bucket contains a usable value
+  inline bool
+  full()
   {
-    empty = true; 
+    return data_ != boost::none;
   }
 
-  bool empty;
+  // Mutators
+
+  
+  // Adds an item to the bucket if it is not full
+  void
+  fill(T const& v)
+  {
+    if (!full())
+      data_.emplace(v);
+  }
+
+  
+  // Clears the bucket of its current value(s)
+  void
+  dump() 
+  {
+    data_ = boost::none;
+  }
+
+  // Data members
+  boost::optional<T> data_;
 };
 
 
@@ -274,8 +310,8 @@ template<typename K, typename V, typename H, typename C>
 class linear
 {
 public:
-  using store_type = std::vector<data_store::basic_bucket<K, V>>;
-  using value_type = data_store::basic_bucket<K, V>;
+  using store_type = std::vector<data_store::basic_bucket<data_store::entry<K, V>>>;
+  using value_type = data_store::basic_bucket<data_store::entry<K, V>>;
   using hasher = H;
   using compare = C;  
 
@@ -327,7 +363,7 @@ linear<K, V, H, C>::find(K const& key) const -> value_type const*
   int idx = get_entry_index(key);    
   if (idx < 0)
     return nullptr;
-  return &data_[idx];
+  return &data_[idx].open();
 }
 
 
@@ -337,11 +373,11 @@ auto
 linear<K, V, H, C>::insert(K const& key, V const& value) -> value_type*
 {
   int idx = get_hash_index(key);
-  while (!data_[idx].is_empty()) 
+  while (!data_[idx].full()) 
     idx = (idx + 1 < buckets ? idx + 1 : 0);
-  data_[idx] = data_store::basic_bucket<K, V>(key, value);
+  data_[idx].fill(data_store::entry<K, V>(key, value));
   ++size;
-  return &data_[idx];
+  return &data_[idx].open();
 }
 
 
@@ -352,7 +388,7 @@ linear<K, V, H, C>::erase(K const& key)
 {
   int idx = get_entry_index(key);
   if (idx >= 0) {
-    data_[idx].clear();
+    data_[idx].dump();
     --size;        
   }
 }
@@ -365,9 +401,9 @@ int
 linear<K, V, H, C>::get_entry_index(K const& key) const
 {
   int idx = get_hash_index(key); 
-  while (!comp_(data_[idx].key, key))
+  while (!comp_(data_[idx], key))
     idx = (idx + 1 < buckets ? idx + 1 : 0);
-  return (comp_(data_[idx].key, key) ? idx : -1);
+  return (comp_(data_[idx], key) ? idx : -1);
 }
 
 
