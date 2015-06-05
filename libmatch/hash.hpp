@@ -120,16 +120,26 @@ struct basic_bucket
   boost::optional<T>
   open()
   {
-    return (full() ? *data_ : boost::none);
+    return (is_empty() ? boost::none : *data_);
   }
 
+  
   // Checks if the bucket contains a usable value
   inline bool
-  full()
+  is_full()
   {
     return data_ != boost::none;
   }
 
+  
+  // Checks if the bucket does not contain a usable value
+  inline bool
+  is_empty()
+  {
+    return data_ == boost::none;
+  }
+
+  
   // Mutators
 
   
@@ -137,7 +147,7 @@ struct basic_bucket
   void
   fill(T const& v)
   {
-    if (!full())
+    if (!is_full())
       data_.emplace(v);
   }
 
@@ -149,152 +159,232 @@ struct basic_bucket
     data_ = boost::none;
   }
 
-  // Data members
+  
+  // Data Members
   boost::optional<T> data_;
 };
 
 
 // A chained hash table bucket containing chained entries
-template<typename K, typename V>
+template<typename T>
 struct list_bucket 
 {
   list_bucket()
-    : head(nullptr), size(0), empty(true)
   { }
+
+  list_bucket(T const& v)
+  {
+    data_.emplace(v);
+  }
 
   ~list_bucket()
   {
-    if (nullptr != head)
-      delete head;
+    // TODO: Same issue found in dump().
+    data_ = boost::none;
   }
 
-  bool
+  // Accessors
+
+  
+  // Retrieves the entry from the bucket
+  boost::optional<T>
+  open()
+  {
+    return (is_empty() ? boost::none : *data_);
+  }
+
+
+  // Checks if the bucket contains any entries
+  inline bool
   is_empty()
   {
-    return empty;
+    return data_ == boost::none;
   }
 
+  
+  // Mutators
+
+  
+  // Adds an entry to the bucket. Since this is an unbounded data store
+  // type there is no concept of being 'full'.
   void
-  add(K const& k, V const& v)
+  fill(T const& v)
   {
-    list_entry<K, V>* nh = new list_entry<K, V>(k, v);
-    nh->next = head;
-    head = nh;
-    empty = false;
-    size++;
+    // If there are no other entries, add this one
+    if (is_empty()) {
+      data_.emplace(v);
+    }
+    // Else, have new entry point at old head
+    else {
+      v.next = *data_;
+      // Destroy old data_
+      data_ = boost::none;
+      // Construct new data_
+      data_.emplace(v);
+    }
   }
 
+
+  // Clears the bucket of its values
   void
-  clear()
+  dump()
   {
-    // TODO: implement this
-    empty = true;  
-    size = 0;  
+    // TODO: This is probably not right. With a simple pointer list
+    // we would probably need to walk the list and delete them. It has been
+    // suggested to use a forward_list to avoid this issue.
+    data_ = boost::none;
   }
 
-  list_entry<K, V>* head;
-  int size;
-  bool empty;
+
+  // Data Members
+
+  boost::optional<T> data_;
 };
 
 
 // An array based hash table bucket
-template<typename K, typename V>
+template<typename T>
 struct array_bucket
 {
   
   array_bucket()
-    : size(0), capacity(7), empty(true)
-  { 
-    data = new entry<K, V>[capacity];
-  }
+    : array_bucket(10)
+  { }
 
   array_bucket(int n)
-    : size(0), capacity(n), empty(true)
+    : size(0), capacity(n)
   { 
-    data = new entry<K, V>[n];
+    data_ = new boost::optional<T>[n];
   }
 
   ~array_bucket()
   {
-    delete[] data;
+    delete data_;
   }
 
+
+  // Accesors
+
+
+  // Retrieves the entries from the bucket
+  boost::optional<T>*
+  open()
+  {
+    return (is_empty() ? boost::none : data_);
+  }
+
+
+  // Checks if the bucket is at maximum capacity
+  inline bool
+  is_full()
+  {
+    return size == capacity - 1;
+  }
+
+
+  // Checks if the bucket contains any entries
+  inline bool
+  is_empty()
+  {
+    return size;
+  }
+
+
+  // Mutators
+
+
+  // Adds an entry if the bucket is not full. Since this is a bounded
+  // data store type there is a maximum number of entries that can be
+  // held.
   void
-  add(K const& k, V const& v)
+  fill(T const& v)
   {
     if (size + 1 < capacity) {
-      data[size++] = entry<K, V>(k, v);
-      empty = false;
+      data_[size++].emplace(v);
     }
   }
 
-  bool
-  is_empty()
-  {
-    return empty;
-  }
 
+  // Clears the bucket of its entries
   void
-  clear()
+  dump()
   {
-    // TODO: implement this
-    empty = true;
+    delete data_;
+    data_ = new boost::optional<T>[capacity];
     size = 0;
   }
 
-  entry<K, V>* data;
-  int size;
-  int capacity;
-  bool empty;
+
+  // Data Members
+  boost::optional<T>* data_;  // Data store
+  int size;                   // Current size
+  int capacity;               // Maximum size
 };
 
 
 // A tree based hash table bucket
 // TODO: implement this using an array, not pointers
-template<typename K, typename V>
-struct tree_bucket : tree_entry<K, V> 
+template<typename T>
+struct tree_bucket
 { 
   tree_bucket()
-    : tree_entry<K, V>(), empty(true)
   { }
 
-  tree_bucket(K const& k, V const& v)
-    : tree_entry<K, V>(k, v), empty(false)
-  { }
+  tree_bucket(T const& v)
+  { 
+    data_.emplace(v);
+  }
 
   ~tree_bucket()
   {
-    // TODO: may need to do this different
-    if (nullptr != this->left)
-      delete this->left;
-    if (nullptr != this->right)
-      delete this->right;
+    // TODO: Same issue as dump().
+    data_ = boost::none;
   }
 
-  void
-  add(K const& k, V const& v)
+
+  // Accessors
+
+
+  // Retrieves the entries from the bucket
+  boost::optional<T>
+  open()
   {
-    // TODO: balance & sort the tree when adding to it
-    this->key = k;
-    this->val = v;
-    empty = false;
+    return (is_empty() ? boost::none : *data_);
   }
 
-  bool
+
+  // Checks if the bucket contains any entries
+  inline bool
   is_empty()
   {
-    return empty;
+    return data_ == boost::none;
   }
+  
 
+  // Mutators
+
+
+  // Adds an entry to the bucket
   void
-  clear()
+  fill(T const& v)
   {
-    // TODO: implement this
-    empty = true;
+    // TODO: balance & sort the tree when adding to it
+    data_.emplace(v);
   }
 
-  bool empty;
+  
+  // Clears the bucket of any entries
+  void
+  dump()
+  {
+    // TODO: Same issue that list_bucket has. Will need to traverse
+    // the tree and delete nodes.
+    data_ = boost::none;
+  }
+
+
+  // Data Members
+  boost::optional<T> data_;
 };
 
 
@@ -364,7 +454,7 @@ linear<K, V, H, C>::find(K const& key) const -> value_type const*
   int idx = get_entry_index(key);    
   if (idx < 0)
     return nullptr;
-  return &data_[idx].open();
+  return &data_[idx];
 }
 
 
@@ -374,11 +464,11 @@ auto
 linear<K, V, H, C>::insert(K const& key, V const& value) -> value_type*
 {
   int idx = get_hash_index(key);
-  while (!data_[idx].full()) 
+  while (data_[idx].is_full())
     idx = (idx + 1 < buckets ? idx + 1 : 0);
   data_[idx].fill(data_store::entry<K, V>(key, value));
   ++size;
-  return &data_[idx].open();
+  return &data_[idx];
 }
 
 
@@ -402,9 +492,9 @@ int
 linear<K, V, H, C>::get_entry_index(K const& key) const
 {
   int idx = get_hash_index(key); 
-  while (!comp_(data_[idx], key))
+  while (!cmp_(data_[idx], key))
     idx = (idx + 1 < buckets ? idx + 1 : 0);
-  return (comp_(data_[idx], key) ? idx : -1);
+  return (cmp_(data_[idx], key) ? idx : -1);
 }
 
 
