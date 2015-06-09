@@ -98,71 +98,144 @@ struct tree_entry : entry<K, V>
 };
 
 
-// A basic hash table bucket containing a single entry
+// A basic hash table bucket containing a single entry. This
+// class is similar to a standard container.
+//
+// TODO: Define iterators so that this works like a regular
+// container.
 template<typename T>
-struct basic_bucket
+class basic_bucket
 { 
+public:
   basic_bucket()
   { }
 
   basic_bucket(T const& v)
-  { 
-    data_.emplace(v);
-  }
+    : data_(v)
+  { }
 
-  
+  basic_bucket(T& v)
+    : data_(std::move(v))
+  { }
+
   // Accessors
-
+  bool is_full() const;
+  bool is_empty() const;
   
-  // Retrieves the current value from the bucket. This can be a
-  // usable value or the boost::none value to indicate it is not
-  // set.
-  boost::optional<T>
-  open()
-  {
-    return (is_empty() ? boost::none : *data_);
-  }
+  T&       get();
+  T const& get() const;
 
-  
-  // Checks if the bucket contains a usable value
-  inline bool
-  is_full()
-  {
-    return data_ != boost::none;
-  }
-
-  
-  // Checks if the bucket does not contain a usable value
-  inline bool
-  is_empty()
-  {
-    return data_ == boost::none;
-  }
-
-  
   // Mutators
+  void insert(T const&);
+  void insert(T&&);
 
+  template<typename... Args> 
+  void emplace(Args&&...);
   
-  // Adds an item to the bucket if it is not full
-  void
-  fill(T const& v)
-  {
-    if (!is_full())
-      data_.emplace(v);
-  }
+  void erase(T const&);
+  void clear();
 
-  
-  // Clears the bucket of its current value(s)
-  void
-  dump() 
-  {
-    data_ = boost::none;
-  }
-
-  
-  // Data Members
+private:
   boost::optional<T> data_;
 };
+
+
+// Retrieves the current value from the bucket. The bucket
+// shall not be full.
+template<typename T>
+inline T&
+basic_bucket<T>::get()
+{
+  assert(!is_empty());
+  return *data_;
+}
+
+
+// Retrieves the current value from the bucket. The bucket
+// shall not be full.
+template<typename T>
+inline T const&
+basic_bucket<T>::get() const
+{
+  assert(!is_empty());
+  return *data_;
+}
+
+
+// Returns true if the bucket contains a value.
+template<typename T>
+inline bool 
+basic_bucket<T>::is_full() const
+{ 
+  return (bool)data_; 
+}
+
+
+// Returns true if the bucket does not contain a value.
+template<typename T>
+inline bool 
+basic_bucket<T>::is_empty() const
+{ 
+  return (bool)data_; 
+}
+
+
+// Copies `t` to the bucket. The bucket shall not be full.
+//
+// TODO: Return an iterator?
+template<typename T>
+inline void 
+basic_bucket<T>::insert(T const& t)
+{
+  assert(is_empty());
+  data_ = t;
+}
+
+
+// Moves `t` into the bucket. The bucket shall not be full.
+//
+// TODO: Return an iterator?
+template<typename T>
+inline void 
+basic_bucket<T>::insert(T&& t)
+{
+  assert(is_empty());
+  data_ = std::move(t);
+}
+
+
+// Emplace a value with the given `args` into the bucket.
+// The bucket shall not be full.
+//
+// TODO: Reteurn an iterator?
+template<typename T>
+template<typename... Args>
+inline void
+basic_bucket<T>::emplace(Args&&... args)
+{
+  data_.emplace(std::forward<Args>(args)...);
+}
+
+
+// Erase the value `t` from the bucket. If `t` is not in
+// the bucket, no operation is performed.
+template<typename T>
+inline void 
+basic_bucket<T>::erase(T const& t)
+{
+  if (data_ == t)
+    data_ = boost::none;
+}
+
+
+// Clears the bucket of its current value.
+template<typename T>
+inline void 
+basic_bucket<T>::clear()
+{
+  data_ = boost::none;
+}
+
 
 
 // A chained hash table bucket containing chained entries
@@ -466,7 +539,7 @@ linear<K, V, H, C>::insert(K const& key, V const& value) -> value_type*
   int idx = get_hash_index(key);
   while (data_[idx].is_full())
     idx = (idx + 1 < buckets ? idx + 1 : 0);
-  data_[idx].fill(data_store::entry<K, V>(key, value));
+  data_[idx].insert(data_store::entry<K, V>(key, value));
   ++size;
   return &data_[idx];
 }
@@ -479,7 +552,7 @@ linear<K, V, H, C>::erase(K const& key)
 {
   int idx = get_entry_index(key);
   if (idx >= 0) {
-    data_[idx].dump();
+    data_[idx].clear();
     --size;        
   }
 }
