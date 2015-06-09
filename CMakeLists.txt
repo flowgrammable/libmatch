@@ -17,6 +17,17 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")  
 endif()
 
+# Compile in C++11.
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+
+# Require Boost C++ Libraries.
+#
+# We should require at least 1.55, but that's breaking on
+# my system because of an older system install -- and I can't
+# figure out how to redirect the search (CMAKE)
+find_package(Boost REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+
 
 add_subdirectory(libmatch)
