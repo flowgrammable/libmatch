@@ -554,17 +554,9 @@ public:
   using hasher = H;
   using compare = C;  
 
-  linear()
-    : linear(17)
-  { }
-
-  linear(int n)
-    : linear(n, hasher(), compare())
-  { }
-
-  linear(int n, hasher h, compare c)
-    : size_(0), buckets_(n), hash_(h), cmp_(c), data_(n)
-  { }  
+  linear();
+  linear(int);
+  linear(int, hasher, compare); 
 
   // Observers
   int size() const { return size_; }
@@ -592,6 +584,24 @@ private:
   compare    cmp_;     // Equality comparison
   store_type data_;    // Data store
 };
+
+
+template<typename K, typename V, typename H, typename C> 
+linear<K, V, H, C>::linear()
+  : linear(17)
+{ }
+
+
+template<typename K, typename V, typename H, typename C> 
+linear<K, V, H, C>::linear(int n)
+  : linear(n, hasher(), compare())
+{ }
+
+
+template<typename K, typename V, typename H, typename C> 
+linear<K, V, H, C>::linear(int n, hasher h, compare c)
+  : size_(0), buckets_(n), hash_(h), cmp_(c), data_(n)
+{ }
 
 
 // Retrieves a key-value pair from the data store.
