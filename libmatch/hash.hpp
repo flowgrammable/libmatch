@@ -9,6 +9,7 @@
 // TODO: Actually document the hash table.
 
 #include <vector>
+#include <iterator>
 #include <boost/optional.hpp>
 
 namespace hash_table
@@ -26,23 +27,7 @@ static size_t const nprimes = sizeof(primes) / sizeof(size_t);
 namespace data_store
 {
 
-// A key-value pair
-template<typename K, typename V>
-struct key_value
-{
-  key_value()
-    : key(K()), val(V())
-  { }
-
-  key_value(K const& k, V const& v)
-    : key(k), val(v)
-  { }
-
-  K key;
-  V val;  
-};
-
-// A basic entry type
+// A basic entry type comprised of a key and a value.
 template<typename K, typename V>
 struct entry
 {
@@ -59,7 +44,7 @@ struct entry
 };
 
 
-// A linked key-value pair
+// A linked list entry.
 template<typename K, typename V>
 struct list_entry : entry<K, V>
 {
@@ -81,7 +66,7 @@ struct list_entry : entry<K, V>
 };
 
 
-// A tree node key-value pair
+// A tree node entry.
 template<typename K, typename V>
 struct tree_entry : entry<K, V>
 {
@@ -107,6 +92,36 @@ template<typename T>
 class basic_bucket
 { 
 public:
+
+  class iterator
+  {
+    using data_type = basic_bucket<T>*;
+    using reference_type = boost::optional<T>&;
+    using pointer_type = boost::optional<T>*;
+  public:
+    // Constructor/Destructor
+    iterator(data_type);
+    ~iterator();
+
+    // Assignment and Relational operators.
+    iterator& operator=(iterator const&);
+    bool operator==(iterator const&) const;
+    bool operator!=(iterator const&);
+
+    // Prefix increment
+    iterator& operator++();
+    // Postfix increment
+    iterator& operator++(int);
+
+    // Dereferencing operations
+    reference_type operator*();
+    pointer_type operator->();
+
+  private:
+    data_type data_;
+  };
+
+
   basic_bucket()
   { }
 
@@ -121,16 +136,19 @@ public:
   // Accessors
   bool is_full() const;
   bool is_empty() const;
+
+  iterator begin();
+  iterator end();
   
   T&       get();
   T const& get() const;
 
   // Mutators
-  void insert(T const&);
-  void insert(T&&);
+  iterator& insert(T const&);
+  iterator& insert(T&&);
 
   template<typename... Args> 
-  void emplace(Args&&...);
+  iterator& emplace(Args&&...);
   
   void erase(T const&);
   void clear();
@@ -138,6 +156,88 @@ public:
 private:
   boost::optional<T> data_;
 };
+
+
+// Constructor
+template<typename T>
+basic_bucket<T>::iterator::iterator(data_type data = 0)
+  : data_(data)
+{ }
+
+
+// Destructor
+template<typename T>
+basic_bucket<T>::iterator::~iterator()
+{
+  delete data_;
+}
+
+
+// Assignment operator.
+template<typename T>
+auto
+basic_bucket<T>::iterator::operator=(iterator const& other) -> iterator&
+{
+  data_ = other.data_;
+  return *this;
+}
+
+
+// Equality operator
+template<typename T>
+inline bool 
+basic_bucket<T>::iterator::operator==(iterator const& other) const
+{
+  return (data_ == other.data_);
+}
+
+
+// Inequality operator
+template<typename T>
+inline bool 
+basic_bucket<T>::iterator::operator!=(iterator const& other)
+{
+  return !(data_ == other.data_);
+}
+
+
+// Prefix increment.
+template<typename T>
+auto
+basic_bucket<T>::iterator::operator++() -> iterator& 
+{
+  data_++;
+  return *this;
+}
+
+
+// Postfix increment.
+template<typename T>
+auto
+basic_bucket<T>::iterator::operator++(int) -> iterator&
+{
+  iterator temp = *this;
+  data_++;
+  return *temp;
+}
+
+
+// Dereferencing operator.
+template<typename T>
+auto
+basic_bucket<T>::iterator::operator*() -> reference_type
+{
+  return *data_;
+}
+
+
+// Dereferencing operator.
+template<typename T>
+auto
+basic_bucket<T>::iterator::operator->() -> pointer_type
+{
+  return data_;
+}
 
 
 // Retrieves the current value from the bucket. The bucket
@@ -181,39 +281,36 @@ basic_bucket<T>::is_empty() const
 
 
 // Copies `t` to the bucket. The bucket shall not be full.
-//
-// TODO: Return an iterator?
 template<typename T>
-inline void 
-basic_bucket<T>::insert(T const& t)
+inline auto 
+basic_bucket<T>::insert(T const& t) -> iterator&
 {
   assert(is_empty());
   data_ = t;
+  return iterator(this);
 }
 
 
 // Moves `t` into the bucket. The bucket shall not be full.
-//
-// TODO: Return an iterator?
 template<typename T>
-inline void 
-basic_bucket<T>::insert(T&& t)
+inline auto 
+basic_bucket<T>::insert(T&& t) -> iterator&
 {
   assert(is_empty());
   data_ = std::move(t);
+  return iterator(this);
 }
 
 
 // Emplace a value with the given `args` into the bucket.
 // The bucket shall not be full.
-//
-// TODO: Reteurn an iterator?
 template<typename T>
 template<typename... Args>
-inline void
-basic_bucket<T>::emplace(Args&&... args)
+inline auto
+basic_bucket<T>::emplace(Args&&... args) -> iterator&
 {
   data_.emplace(std::forward<Args>(args)...);
+  return iterator(this);
 }
 
 
@@ -237,85 +334,63 @@ basic_bucket<T>::clear()
 }
 
 
-
-// A chained hash table bucket containing chained entries
+// Creates an iterator pointing to the bucket.
 template<typename T>
-struct list_bucket 
+inline auto
+basic_bucket<T>::begin() -> iterator
 {
-  list_bucket()
-  { }
+  return iterator(this);
+}
 
-  list_bucket(T const& v)
-  {
-    data_.emplace(v);
-  }
 
-  ~list_bucket()
-  {
-    // TODO: Same issue found in dump().
-    data_ = boost::none;
-  }
+// Creates an iterator pointing past the bucket.
+template<typename T>
+inline auto
+basic_bucket<T>::end() -> iterator
+{
+  return iterator();
+}
+
+
+// A chained hash table bucket containing chained entries.
+template<typename T>
+class list_bucket 
+{
+public:
+  list_bucket();
+  list_bucket(T const& v);
+  ~list_bucket();
 
   // Accessors
 
   
-  // Retrieves the entry from the bucket
-  boost::optional<T>
-  open()
-  {
-    return (is_empty() ? boost::none : *data_);
-  }
+  // Retrieves the entry from the bucket.
+  boost::optional<T> open();
 
-
-  // Checks if the bucket contains any entries
-  inline bool
-  is_empty()
-  {
-    return data_ == boost::none;
-  }
-
+  
+  // Checks if the bucket contains any entries.
+  inline bool is_empty();
+  
   
   // Mutators
 
   
   // Adds an entry to the bucket. Since this is an unbounded data store
   // type there is no concept of being 'full'.
+  void fill(T const& v);
+
+
+  // Clears the bucket of its values.
   void
-  fill(T const& v)
-  {
-    // If there are no other entries, add this one
-    if (is_empty()) {
-      data_.emplace(v);
-    }
-    // Else, have new entry point at old head
-    else {
-      v.next = *data_;
-      // Destroy old data_
-      data_ = boost::none;
-      // Construct new data_
-      data_.emplace(v);
-    }
-  }
+  dump();
 
-
-  // Clears the bucket of its values
-  void
-  dump()
-  {
-    // TODO: This is probably not right. With a simple pointer list
-    // we would probably need to walk the list and delete them. It has been
-    // suggested to use a forward_list to avoid this issue.
-    data_ = boost::none;
-  }
-
-
+private:
   // Data Members
-
   boost::optional<T> data_;
 };
 
 
-// An array based hash table bucket
+// An array based hash table bucket.
 template<typename T>
 struct array_bucket
 {
@@ -339,7 +414,7 @@ struct array_bucket
   // Accesors
 
 
-  // Retrieves the entries from the bucket
+  // Retrieves the entries from the bucket.
   boost::optional<T>*
   open()
   {
@@ -347,7 +422,7 @@ struct array_bucket
   }
 
 
-  // Checks if the bucket is at maximum capacity
+  // Checks if the bucket is at maximum capacity.
   inline bool
   is_full()
   {
@@ -355,7 +430,7 @@ struct array_bucket
   }
 
 
-  // Checks if the bucket contains any entries
+  // Checks if the bucket contains any entries.
   inline bool
   is_empty()
   {
@@ -378,7 +453,7 @@ struct array_bucket
   }
 
 
-  // Clears the bucket of its entries
+  // Clears the bucket of its entries.
   void
   dump()
   {
@@ -395,7 +470,7 @@ struct array_bucket
 };
 
 
-// A tree based hash table bucket
+// A tree based hash table bucket.
 // TODO: implement this using an array, not pointers
 template<typename T>
 struct tree_bucket
@@ -418,7 +493,7 @@ struct tree_bucket
   // Accessors
 
 
-  // Retrieves the entries from the bucket
+  // Retrieves the entries from the bucket.
   boost::optional<T>
   open()
   {
@@ -426,7 +501,7 @@ struct tree_bucket
   }
 
 
-  // Checks if the bucket contains any entries
+  // Checks if the bucket contains any entries.
   inline bool
   is_empty()
   {
@@ -437,7 +512,7 @@ struct tree_bucket
   // Mutators
 
 
-  // Adds an entry to the bucket
+  // Adds an entry to the bucket.
   void
   fill(T const& v)
   {
@@ -446,7 +521,7 @@ struct tree_bucket
   }
 
   
-  // Clears the bucket of any entries
+  // Clears the bucket of any entries.
   void
   dump()
   {
@@ -464,7 +539,7 @@ struct tree_bucket
 } // end namespace data_store
 
 
-// Encapsulates the open addressing hash table family
+// Encapsulates the open addressing hash table family.
 namespace open
 {
 
@@ -507,7 +582,7 @@ private:
   int get_hash_index(K const&) const;
   int get_entry_index(K const&) const;
   
-  // Resizes the hash table when the load reaches a particular value
+  // Resizes the hash table when the load reaches a particular value.
   void resize();
 
 private:
@@ -519,7 +594,7 @@ private:
 };
 
 
-// Retrieves a key-value pair from the data store
+// Retrieves a key-value pair from the data store.
 template<typename K, typename V, typename H, typename C> 
 auto
 linear<K, V, H, C>::find(K const& key) const -> value_type const*
