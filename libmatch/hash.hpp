@@ -9,7 +9,6 @@
 // TODO: Actually document the hash table.
 
 #include <vector>
-#include <iterator>
 #include <boost/optional.hpp>
 
 namespace hash_table
