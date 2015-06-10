@@ -26,4 +26,7 @@ find_package(Boost 1.55.0 REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 
+include_directories(.)
+
 add_subdirectory(libmatch)
+add_subdirectory(test)
