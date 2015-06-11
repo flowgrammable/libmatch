@@ -425,6 +425,8 @@ public:
 
   // Lookup
   value_type const* find(K const&) const;
+  iterator begin();
+  iterator end();
 
   // Mutators
   value_type* insert(K const&, V const&);
@@ -481,15 +483,18 @@ template<typename K, typename V, typename H, typename C>
 auto
 linear<K, V, H, C>::insert(K const& key, V const& value) -> value_type*
 {
-  int idx = get_hash_index(key);
-  while (data_[idx].is_full())
-    idx = (idx + 1 < buckets ? idx + 1 : 0);
-  data_[idx].insert(data_store::entry<K, V>(key, value));
   ++size;
-
+  // Check if load is at the high water mark and resize if necessary.
   if (load() >= 0.7)
     resize();
 
+  int idx = get_hash_index(key);
+  // Look for an open bucket.
+  while (data_[idx].is_full())
+    idx = (idx + 1 < buckets ? idx + 1 : 0);
+  // Add the entry.
+  data_[idx].insert(data_store::entry<K, V>(key, value));
+  // Return a pointer to the newly inserted entry.
   return &data_[idx];
 }
 
@@ -578,7 +583,8 @@ template<typename K, typename V, typename H, typename C>
 auto
 linear<K, V, H, C>::iterator::operator++() -> iterator& 
 {
-  data_++;
+  while (++data_ != end() && data_->is_empty())
+  { }
   return *this;
 }
 
@@ -589,7 +595,8 @@ auto
 linear<K, V, H, C>::iterator::operator++(int) -> iterator&
 {
   iterator temp = *this;
-  data_++;
+  while (++data_ != end() && data_->is_empty())
+  { }
   return *temp;
 }
 
@@ -599,7 +606,7 @@ template<typename K, typename V, typename H, typename C>
 auto
 linear<K, V, H, C>::iterator::operator*() -> reference_type
 {
-  return *data_;
+  return data_->get();
 }
 
 
