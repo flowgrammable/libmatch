@@ -13,15 +13,15 @@
 
 namespace hash_table
 {
-// A list of primes numbers such that the next value is slightly
+// A list of primes numbers such that each value is slightly
 // less than double the previous value.
 static size_t const primes[] = {
           53,        97,       193,       379,       757,
-        1511,      3019,      6037,     12073,     24593, 
-       49157,     98317,    196613,    393241,    786433, 
-     1572869,   3145739,   6291469,  12582917,  25165843,
-    50331653, 100663319, 201326611, 402653189, 805306457,
-  1610612741,
+        1511,      3019,      6037,     12073,     24137, 
+       48271,     96527,    193051,    386093,    772181, 
+     1544357,   3088711,   6177419,  12354821,  24709621,
+    49419241,  98838479, 197676953, 395353901, 790707787,
+  1581415553,
 };
 static size_t const nprimes = sizeof(primes) / sizeof(size_t);
 
