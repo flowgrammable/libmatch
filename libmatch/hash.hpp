@@ -13,15 +13,45 @@
 
 namespace hash_table
 {
+// A list of primes numbers such that the next value is slightly
+// less than double the previous value.
 static size_t const primes[] = {
-          53,        97,       193,       389,       769,
-        1543,      3079,      6151,     12289,     24593, 
+          53,        97,       193,       379,       757,
+        1511,      3019,      6037,     12073,     24593, 
        49157,     98317,    196613,    393241,    786433, 
      1572869,   3145739,   6291469,  12582917,  25165843,
     50331653, 100663319, 201326611, 402653189, 805306457,
   1610612741,
 };
 static size_t const nprimes = sizeof(primes) / sizeof(size_t);
+
+
+
+static size_t const
+next_prime(size_t old)
+{
+  // Our compare value will be twice the old value.
+  old <<= 1;
+  // Start in the middle of the primes list
+  size_t pivot = nprimes >> 1;
+  while (1) {
+    // Check if we have gone outside the list bounds
+    if (pivot + 1 >= nprimes)
+      return 0;
+    // If the pivot value is less than our compare value and the next
+    // largest value is greater than our compare value, we have found
+    // our next size.
+    if (primes[pivot] < old && primes[pivot + 1] > old)
+      break;
+    // If the pivot value is greater than our compare value, look in 
+    // the lower half. Otherwise look in the upper half.
+    if (primes[pivot] > old)
+      pivot -= pivot >> 1;
+    else
+      pivot += pivot >> 1;
+  }
+  return primes[pivot];
+}
 
 namespace data_store
 {
@@ -31,7 +61,7 @@ template<typename K, typename V>
 struct entry
 {
   entry()
-    : key(), val()
+    : entry(K(), V())
   { }
   
   entry(K const& k, V const& v)
@@ -560,6 +590,7 @@ public:
   // Observers
   int size() const { return size_; }
   int buckets() const { return buckets_; }
+  double load() const { return (double)size_ / (double)buckets_; }
   bool empty() const { return size_ == 0; }
 
   // Lookup
@@ -625,6 +656,10 @@ linear<K, V, H, C>::insert(K const& key, V const& value) -> value_type*
     idx = (idx + 1 < buckets ? idx + 1 : 0);
   data_[idx].insert(data_store::entry<K, V>(key, value));
   ++size;
+
+  if (load() >= 0.7)
+    resize();
+
   return &data_[idx];
 }
 
@@ -661,7 +696,7 @@ template<typename K, typename V, typename H, typename C>
 inline int
 linear<K, V, H, C>::get_hash_index(K const& key) const
 { 
-  return hash(key) % buckets; 
+  return hash_(key) % buckets; 
 }
 
 
