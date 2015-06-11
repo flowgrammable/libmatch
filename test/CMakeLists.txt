@@ -2,4 +2,4 @@
 # All rights reserved
 
 add_executable(test_wildcard wildcard.cpp)
-
+add_executable(test_hashtable hash.cpp)
