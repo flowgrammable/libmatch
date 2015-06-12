@@ -392,7 +392,7 @@ public:
     using pointer_type = linear::value_type*;
   public:
     // Constructor/Destructor
-    iterator(data_type);
+    iterator(data_type data = 0);
     ~iterator();
 
     // Assignment and Relational operators.
@@ -537,7 +537,7 @@ linear<K, V, H, C>::get_hash_index(K const& key) const
 
 // Constructor
 template<typename K, typename V, typename H, typename C> 
-linear<K, V, H, C>::iterator::iterator(data_type data = 0)
+linear<K, V, H, C>::iterator::iterator(data_type data)
   : data_(data)
 { }
 

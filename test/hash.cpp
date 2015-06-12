@@ -1,4 +1,4 @@
-#include "libmatch/hash.hpp"
+#include "../libmatch/hash.hpp"
 
 #include <cassert>
 #include <iostream>

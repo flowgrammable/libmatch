@@ -1,5 +1,5 @@
 
-#include "libmatch/wildcard.hpp"
+#include "../libmatch/wildcard.hpp"
 
 #include <cassert>
 #include <numeric>
