@@ -37,6 +37,44 @@ struct stop_watch
   }
 };
 
+void
+basic_bucket_test()
+{
+  using hash_table::data_store::basic_bucket;
+  
+  basic_bucket<size_t> initially_empty;
+  basic_bucket<size_t> initially_full(20);
+  
+  // Check that the buckets were constructed correctly
+  assert(initially_empty.is_empty());
+  assert(initially_full.is_full());
+  std::cout << "Constructors are good\n";
+  
+  // Check that the correct value is contained
+  assert(initially_full.get() == 20);
+  std::cout << "Get is good.\n";
+  
+  // Try inserting into the empty one
+  initially_empty.insert(16);
+  assert(initially_empty.get() == 16);
+  std::cout << "Insert is good.\n";
+  
+  // Try erasing the wrong value
+  initially_full.erase(1);
+  assert(initially_full.get() == 20);
+  std::cout << "Bad erase is good.\n";
+  
+  // Try erasing the correct value
+  initially_full.erase(20);
+  assert(initially_full.is_empty());
+  std::cout << "Good erase is good.\n";
+  
+  // Try clearing
+  initially_empty.clear();
+  assert(initially_empty.is_empty());
+  std::cout << "Clear is good.\n";
+}
+
 
 // Base test to make sure the table actually works
 void
@@ -75,6 +113,10 @@ resize_test()
 
 int 
 main(void)
-{
+{ 
+  std::cout << "Beginning hash test...\n";
+  basic_bucket_test();
+  
+  std::cout << "Done.";
   return 0;
 }

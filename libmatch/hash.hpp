@@ -207,7 +207,7 @@ template<typename T>
 inline bool 
 basic_bucket<T>::is_empty() const
 { 
-  return (bool)data_; 
+  return !(bool)data_; 
 }
 
 

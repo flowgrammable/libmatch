@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.0)
 project(match CXX)
 enable_testing()
 
+set(env{CTEST_OUTPUT_ON_FAILURE} TRUE)
 
 # Configure the compiler.
 #
