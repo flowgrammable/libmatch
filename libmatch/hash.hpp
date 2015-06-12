@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <iterator>
 #include <boost/optional.hpp>
 
 namespace hash_table
@@ -129,6 +130,11 @@ public:
   basic_bucket(T&);
   T& operator=(T&);
 
+
+  // Equality comparators
+  inline bool operator==(basic_bucket&) const;
+  inline bool operator!=(basic_bucket&) const;
+
   // Accessors
   bool is_full() const;
   bool is_empty() const;
@@ -179,6 +185,24 @@ T&
 basic_bucket<T>::operator=(T& v)
 { 
   data_(std::move(v));
+}
+
+
+// Basic bucket equality comparison
+template<typename T>
+inline bool
+basic_bucket<T>::operator==(basic_bucket<T>& other) const
+{
+  return (*data_ == *other.data_);
+}
+
+
+// Basic bucket inequality comparison
+template<typename T>
+inline bool
+basic_bucket<T>::operator!=(basic_bucket<T>& other) const
+{
+  return !(this==other);
 }
 
 
@@ -398,13 +422,16 @@ public:
 
   class iterator
   {
-    using data_type = linear::value_type;
-    using reference_type = linear::value_type&;
-    using pointer_type = linear::value_type*;
+    using difference_type = std::ptrdiff_t;
+    using value_type = linear::value_type;
+    using reference = linear::value_type&;
+    using pointer = linear::value_type*;
+    using iterator_category = std::random_access_iterator_tag;
   public:
     // Constructor/Destructor
-    iterator(data_type&);
-    iterator(data_type const&);
+    iterator();
+    iterator(value_type&);
+    iterator(value_type const&);
     
     ~iterator();
 
@@ -419,11 +446,11 @@ public:
     iterator& operator++(int);
 
     // Dereferencing operations
-    reference_type operator*();
-    pointer_type operator->();
+    reference operator*();
+    pointer operator->();
 
   private:
-    data_type* data_;
+    value_type* data_;
   };
 
   linear();
@@ -494,6 +521,32 @@ linear<K, V, H, C>::find(K const& key) const -> value_type const*
 }
 
 
+template<typename K, typename V, typename H, typename C> 
+auto
+linear<K, V, H, C>::begin() -> iterator
+{
+  for (auto it = data_.begin(); it != data_.end(); ++it) {
+    if (*it.is_full()) {
+      return iterator(it);
+    }
+  }
+  return iterator();
+}
+
+
+template<typename K, typename V, typename H, typename C> 
+auto
+linear<K, V, H, C>::end() -> iterator
+{
+  for (auto it = data_.end(); it != data_.begin(); --it) {
+    if (*it.is_full()) {
+      return iterator(++it);
+    }
+  }
+  return iterator();
+}
+
+
 // Inserts a new key-value pair into an empty bucket.
 template<typename K, typename V, typename H, typename C> 
 auto
@@ -561,16 +614,23 @@ iter_swap(iterator a, iterator b)
 }
 
 
+// Linear iterator default constructor.
+template<typename K, typename V, typename H, typename C> 
+linear<K, V, H, C>::iterator::iterator()
+  : data_()
+{ }
+
+
 // Linear iterator copy constructor.
 template<typename K, typename V, typename H, typename C> 
-linear<K, V, H, C>::iterator::iterator(data_type& data)
+linear<K, V, H, C>::iterator::iterator(value_type& data)
   : data_(data)
 { }
 
 
 // Linear iterator copy constructor.
 template<typename K, typename V, typename H, typename C> 
-linear<K, V, H, C>::iterator::iterator(data_type const& data)
+linear<K, V, H, C>::iterator::iterator(value_type const& data)
   : data_(data)
 { }
 
@@ -638,7 +698,7 @@ linear<K, V, H, C>::iterator::operator++(int) -> iterator&
 // Dereferencing operator.
 template<typename K, typename V, typename H, typename C> 
 auto
-linear<K, V, H, C>::iterator::operator*() -> reference_type
+linear<K, V, H, C>::iterator::operator*() -> reference
 {
   return data_->get();
 }
@@ -647,7 +707,7 @@ linear<K, V, H, C>::iterator::operator*() -> reference_type
 // Dereferencing operator.
 template<typename K, typename V, typename H, typename C> 
 auto
-linear<K, V, H, C>::iterator::operator->() -> pointer_type
+linear<K, V, H, C>::iterator::operator->() -> pointer
 {
   return data_;
 }
