@@ -44,6 +44,7 @@ basic_bucket_test()
   
   basic_bucket<size_t> initially_empty;
   basic_bucket<size_t> initially_full(20);
+  std::cout << "Begin 'basic_bucket' test...\n";
   
   // Check that the buckets were constructed correctly
   assert(initially_empty.is_empty());
@@ -73,6 +74,7 @@ basic_bucket_test()
   initially_empty.clear();
   assert(initially_empty.is_empty());
   std::cout << "Clear is good.\n";
+  std::cout << "End 'basic_bucket' test\n";
 }
 
 
@@ -117,6 +119,6 @@ main(void)
   std::cout << "Beginning hash test...\n";
   basic_bucket_test();
   
-  std::cout << "Done.";
+  std::cout << "Done.\n";
   return 0;
 }
