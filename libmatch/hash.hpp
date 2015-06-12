@@ -9,6 +9,7 @@
 // TODO: Actually document the hash table.
 
 #include <vector>
+#include <algorithm>
 #include <boost/optional.hpp>
 
 namespace hash_table
@@ -52,6 +53,7 @@ next_prime(size_t old)
   }
   return primes[pivot];
 }
+
 
 namespace data_store
 {
@@ -123,9 +125,9 @@ class basic_bucket
 public:
   // Constructors
   basic_bucket();
-  basic_bucket(T const& v);
-  basic_bucket(T& v);
-
+  basic_bucket(T const&);
+  basic_bucket(T&);
+  T& operator=(T&);
 
   // Accessors
   bool is_full() const;
@@ -169,6 +171,15 @@ template<typename T>
 basic_bucket<T>::basic_bucket(T& v)
   : data_(std::move(v))
 { }
+
+
+// Move assignment operator.
+template<typename T>
+T&
+basic_bucket<T>::operator=(T& v)
+{ 
+  data_(std::move(v));
+}
 
 
 // Retrieves the current value from the bucket. The bucket
@@ -387,12 +398,14 @@ public:
 
   class iterator
   {
-    using data_type = linear::value_type*;
+    using data_type = linear::value_type;
     using reference_type = linear::value_type&;
     using pointer_type = linear::value_type*;
   public:
     // Constructor/Destructor
-    iterator(data_type data = 0);
+    iterator(data_type&);
+    iterator(data_type const&);
+    
     ~iterator();
 
     // Assignment and Relational operators.
@@ -410,7 +423,7 @@ public:
     pointer_type operator->();
 
   private:
-    data_type data_;
+    data_type* data_;
   };
 
   linear();
@@ -446,6 +459,9 @@ private:
   compare    cmp_;     // Equality comparison
   store_type data_;    // Data store
 };
+
+
+// Linear constructor definitions.
 
 
 template<typename K, typename V, typename H, typename C> 
@@ -535,18 +551,36 @@ linear<K, V, H, C>::get_hash_index(K const& key) const
 }
 
 
-// Constructor
+// Linear iterator swap. Uses std::swap to exchange the values pointed
+// to by two iterators.
+template<class iterator> 
+static void
+iter_swap(iterator a, iterator b)
+{
+  std::swap(*a, *b);
+}
+
+
+// Linear iterator copy constructor.
 template<typename K, typename V, typename H, typename C> 
-linear<K, V, H, C>::iterator::iterator(data_type data)
+linear<K, V, H, C>::iterator::iterator(data_type& data)
   : data_(data)
 { }
 
 
-// Destructor
+// Linear iterator copy constructor.
+template<typename K, typename V, typename H, typename C> 
+linear<K, V, H, C>::iterator::iterator(data_type const& data)
+  : data_(data)
+{ }
+
+
+// Linear iterator destructor.
 template<typename K, typename V, typename H, typename C> 
 linear<K, V, H, C>::iterator::~iterator()
 {
   delete data_;
+  data_ = nullptr;
 }
 
 
@@ -555,7 +589,7 @@ template<typename K, typename V, typename H, typename C>
 auto
 linear<K, V, H, C>::iterator::operator=(iterator const& other) -> iterator&
 {
-  data_ = other.data_;
+  *data_ = *other.data_;
   return *this;
 }
 
@@ -565,7 +599,7 @@ template<typename K, typename V, typename H, typename C>
 inline bool 
 linear<K, V, H, C>::iterator::operator==(iterator const& other) const
 {
-  return (data_ == other.data_);
+  return (*data_ == *other.data_);
 }
 
 
@@ -628,5 +662,11 @@ namespace closed
 } // end namespace closed
 
 } // end namespace hash_table
+
+// A collection of hashing functions.
+namespace hash_function
+{
+
+} // end namespace hash_function
 
 #endif
