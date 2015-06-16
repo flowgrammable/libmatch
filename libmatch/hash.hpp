@@ -304,7 +304,8 @@ class list_bucket
 public:
   // Constructors/Destructor
   list_bucket();
-  list_bucket(T const& v);
+  list_bucket(T const&);
+  list_bucket(T&);
   ~list_bucket();
 
   // Accessors
@@ -328,6 +329,98 @@ private:
   // Data Members
   boost::optional<T> data_;
 };
+
+
+// Default list_bucket constructor.
+template<typename T>
+list_bucket<T>::list_bucket()
+  : data_()
+{ }
+
+
+// Copy constructor for list_bucket.
+template<typename T>
+list_bucket<T>::list_bucket(T const& v)
+  : data_(v)
+{ }
+
+
+// Move constructor for list_bucket.
+template<typename T>
+list_bucket<T>::list_bucket(T& v)
+  : data_(std::move(v))
+{ }
+
+
+// Destructor for list_bucket.
+template<typename T>
+list_bucket<T>::~list_bucket()
+{ 
+
+}
+
+
+// Checks if the bucket is empty
+template<typename T>
+inline bool
+list_bucket<T>::is_empty() const
+{
+
+}
+
+
+// Accessor
+template<typename T>
+inline T&
+list_bucket<T>::get()
+{
+
+}
+
+
+// Const accessor
+template<typename T>
+inline T const&
+list_bucket<T>::get() const
+{
+
+}
+
+
+// Add entry
+template<typename T>
+inline void 
+list_bucket<T>::insert(T const&)
+{
+
+}
+
+
+// Add entry
+template<typename T>
+inline void 
+list_bucket<T>::insert(T&&)
+{
+
+}
+
+
+// Remove the entry given if it exists
+template<typename T>
+inline void 
+list_bucket<T>::erase(T const& v)
+{
+
+}
+
+
+// Clear the bucket of all entries.
+template<typename T>
+inline void 
+list_bucket<T>::clear()
+{
+
+}
 
 
 // An array based hash table bucket.
@@ -695,7 +788,8 @@ linear<K, V, H, C>::iterator::operator++(int) -> iterator&
 }
 
 
-// Dereferencing operator.
+// Dereferencing operator. Returns the bucket pointed to by the
+// iterator.
 template<typename K, typename V, typename H, typename C> 
 auto
 linear<K, V, H, C>::iterator::operator*() -> reference
@@ -704,7 +798,8 @@ linear<K, V, H, C>::iterator::operator*() -> reference
 }
 
 
-// Dereferencing operator.
+// Dereferencing operator. Returns a pointer to the bucket that
+// the iterator is pointing at.
 template<typename K, typename V, typename H, typename C> 
 auto
 linear<K, V, H, C>::iterator::operator->() -> pointer
