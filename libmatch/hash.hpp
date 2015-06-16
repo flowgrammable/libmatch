@@ -493,7 +493,7 @@ private:
 
 template<typename K, typename V, typename H, typename C> 
 linear<K, V, H, C>::linear()
-  : linear(17)
+  : linear(29)
 { }
 
 
@@ -521,19 +521,19 @@ linear<K, V, H, C>::find(K const& key) const -> value_type const*
 }
 
 
+// Returns an iterator pointing before the first bucket that is full.
 template<typename K, typename V, typename H, typename C> 
 auto
 linear<K, V, H, C>::begin() -> iterator
 {
-  for (auto it = data_.begin(); it != data_.end(); ++it) {
-    if (*it.is_full()) {
-      return iterator(it);
-    }
-  }
+  for (auto it = data_.begin(); it != data_.end(); ++it)
+    if (*it.is_full()) 
+      return iterator(--it);
   return iterator();
 }
 
 
+// Returns an iterator pointing past the last bucket that is full.
 template<typename K, typename V, typename H, typename C> 
 auto
 linear<K, V, H, C>::end() -> iterator
