@@ -49,31 +49,31 @@ basic_bucket_test()
   // Check that the buckets were constructed correctly
   assert(initially_empty.is_empty());
   assert(initially_full.is_full());
-  std::cout << "Constructors are good\n";
+  std::cout << "Constructors passed.\n";
   
   // Check that the correct value is contained
   assert(initially_full.get() == 20);
-  std::cout << "Get is good.\n";
+  std::cout << "'Get' passed.\n";
   
   // Try inserting into the empty one
   initially_empty.insert(16);
   assert(initially_empty.get() == 16);
-  std::cout << "Insert is good.\n";
+  std::cout << "'Insert' passed.\n";
   
   // Try erasing the wrong value
   initially_full.erase(1);
   assert(initially_full.get() == 20);
-  std::cout << "Bad erase is good.\n";
+  std::cout << "'Erase' (invalid) passed.\n";
   
   // Try erasing the correct value
   initially_full.erase(20);
   assert(initially_full.is_empty());
-  std::cout << "Good erase is good.\n";
+  std::cout << "'Erase' (valid) passed.\n";
   
   // Try clearing
   initially_empty.clear();
   assert(initially_empty.is_empty());
-  std::cout << "Clear is good.\n";
+  std::cout << "'Clear' passed.\n";
   std::cout << "End 'basic_bucket' test\n";
 }
 
@@ -116,9 +116,9 @@ resize_test()
 int 
 main(void)
 { 
-  std::cout << "Beginning hash test...\n";
+  std::cout << "Begin hash test...\n\n";
   basic_bucket_test();
   
-  std::cout << "Done.\n";
+  std::cout << "\nEnd hash test.\n";
   return 0;
 }
