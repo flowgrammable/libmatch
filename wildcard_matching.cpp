@@ -1,4 +1,4 @@
-///////////////////////////////////// 
+/////////////////////////////////////
 
 // File Name : wildcard matching
 
@@ -11,6 +11,7 @@
 #include <string>
 #include <iterator>
 #include <algorithm>
+
 
 using namespace std;
 
@@ -33,69 +34,64 @@ using namespace std;
 // 01110110
 // 10001010
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+typedef vector<int> vInt;
+typedef vector<string> vString;
+
 
 /* Test whether the incoming packet match the rule table  */
-vector<int> ruleMatches( string packet,  vector< vector<int> > bitMask,  /* return to a int value  */
-                   vector< vector<int> > wildMask)        /* 2-dim vector  */
-{	
-	vector<int> result;
-        
-	for(int j = 0; j < bitMask.size(); j++)     /* when using vector, don't need to declare the size of vector, use .size() */
-		{
-			int match = 1;
-        	for (int i = 0; i < packet.size(); ++i)
-			{
-                if(((packet[i]-'0') & wildMask[j][i]) != bitMask[j][i]){
-                       match = 0;
-                }
-			}
-		if(match) 
-			result.push_back(j);
-        }
-	if(result.empty()) 
-		result.push_back(-1);
-        
-		return result;
+vInt ruleMatches( int const &packet,  vector<vInt> const &bitMask, vector<vInt> const &wildMask) /* return to a int value, 2-dim vector  */
+{
+  vector<int> result;
+  for(int j = 0; j < bitMask.size(); j++)
+  {
+    int match = 1;
+	if(packet & wildMask[j] != bitMask[j])
+	  match = 0;
+    if(match)
+      result.push_back(j);
+  }
+    if(result.empty())
+      result.push_back(-1);
+    return result;
 }
-	
+
 
 /* Parse the rules into wildmask.  */
 /* retrun int vector.  */
 
-vector< vector<int> > parseWildmask(vector<string> &ruleArray)
+vector<vInt> parseWildmask(vString &ruleArray)
 {
-	vector< vector<int> > wildMask(ruleArray.size(), vector<int>(ruleArray[0].size()));
-	for(int i = 0; i < ruleArray.size(); i++)
-	{		
-		for (int j = 0; j < ruleArray[0].size(); j++)
-		{
-			 if (ruleArray[i][j] == '*') 
-                                wildMask[i][j] = 0; 
-                        else 
-                                wildMask[i][j] = 1;
-		}
-	
-	}
+  vector<vInt> wildMask(ruleArray.size(), vector<int>(ruleArray[0].size()));
+  for(int i = 0; i < ruleArray.size(); i++)
+  {
+    for (int j = 0; j < ruleArray[0].size(); j++)
+      {
+        if (ruleArray[i][j] == '*')
+          wildMask[i][j] = 0;
+        else
+          wildMask[i][j] = 1;
+      }
+
+  }
 return wildMask;
 }
 
 /* Parse the rules into bitmask.  */
 /* retrun int vector.  */
 
-vector< vector<int> > parseBitmask(vector<string> &ruleArray)
+vector<vInt> parseBitmask(vString &ruleArray)
 {
-	vector< vector<int> > bitMask(ruleArray.size(), vector<int>(ruleArray[0].size()));
-	for(int i = 0; i < ruleArray.size(); i++)
-	{		
-		for (int j = 0; j < ruleArray[0].size(); j++)
-		{
-			  if (ruleArray[i][j] == '0' || ruleArray[i][j]=='*') 
-                                        bitMask[i][j] = 0;
-                        if (ruleArray[i][j] == '1')
-                                        bitMask[i][j] = 1;
-		}
-	}
+  vector<vInt> bitMask(ruleArray.size(), vector<int>(ruleArray[0].size()));
+  for(int i = 0; i < ruleArray.size(); i++)
+  {
+    for (int j = 0; j < ruleArray[0].size(); j++)
+    {
+      if (ruleArray[i][j] == '0' || ruleArray[i][j]=='*')
+        bitMask[i][j] = 0;
+      if (ruleArray[i][j] == '1')
+        bitMask[i][j] = 1;
+    }
+  }
 return bitMask;
 }
 
@@ -107,67 +103,68 @@ int main(int argc, char* argv[])
 {
 
 /* Read the rules from an input file  */
-	string line;
-	ifstream file ("ping_test.txt");
-	
-	vector<string> ruleArray;
+  string line;
+  ifstream file ("ping_test.txt");
 
-	int i = 0;
- 	if(file.is_open()) {
-	
-      	while(!file.eof()) {
-			getline(file, line);  /*  Read lines as long as the file is */
-			if(!line.empty())			
-			ruleArray.push_back(line);   /* Push the input file into ruleArray  */
-		}
+  vString ruleArray;
+  int i = 0;
+  if(file.is_open())
+  {
+    while(!file.eof())
+    {
+      getline(file, line);  /*  Read lines as long as the file is */
+      if(!line.empty())
+        ruleArray.push_back(line);   /* Push the input file into ruleArray  */
+    }
 
-	}
-	
-	file.close();
-	
-	for(int j = 0; j < ruleArray.size(); j++) {
-		cout << ruleArray[j] << endl;  /* get the ruleArray table */
-	}
+  }
 
-	
-	vector< vector<int> > wildMask = parseWildmask(ruleArray);    /* get the wildmask rule table  */
+  file.close();
+  for(int j = 0; j < ruleArray.size(); j++)
+  {
+    cout << ruleArray[j] << endl;  /* get the ruleArray table */
+  }
 
-	vector< vector<int> >  bitMask = parseBitmask(ruleArray);     /* get the bitmask rule table  */
 
-	cout <<endl;
+  vector<vInt> wildMask = parseWildmask(ruleArray);    /* get the wildmask rule table  */
+
+  vector<vInt> bitMask = parseBitmask(ruleArray);     /* get the bitmask rule table  */
+
+  cout <<endl;
 
 /* Output the wildmask rule table.  */
 
-	for(int i = 0; i < wildMask.size(); i++) {
-		for(int j = 0; j < wildMask[0].size(); j++)
-			cout << wildMask[i][j];
-			cout << endl;
-		}
-	
-		cout <<endl;
+  for(int i = 0; i < wildMask.size(); i++)
+  {
+    for(int j = 0; j < wildMask[0].size(); j++)
+      cout << wildMask[i][j];
+      cout << endl;
+  }
+
+  cout <<endl;
 
 /* Output the bitmask rule table.  */
 
-	for(int i = 0; i < bitMask.size(); i++) {
-		for(int j = 0; j < bitMask[0].size(); j++)
-			cout <<bitMask[i][j];
-			cout <<endl;
-		}
-	
+  for(int i = 0; i < bitMask.size(); i++)
+  {
+    for(int j = 0; j < bitMask[0].size(); j++)
+      cout <<bitMask[i][j];
+      cout <<endl;
+  }
 
-	string packet = "00110110";      /* Incoming packet  */
 
-	vector<int> result;
-	result = ruleMatches(packet, bitMask, wildMask);
-	for(int i = 0; i < result.size(); i++)
-	cout << result[i] << endl;
+  int packet = 00110110;      /* Incoming packet  */
 
-	
-	return 0;	
+  vector<int> result;
+  result = ruleMatches(packet, bitMask, wildMask);
+  for(int i = 0; i < result.size(); i++)
+    cout << result[i] << endl;
+
+  return 0;
+
 }
 
 
-   
 
 
 
@@ -175,7 +172,10 @@ int main(int argc, char* argv[])
 
 
 
-        
+
+
+
+
 
 
 
