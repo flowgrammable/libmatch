@@ -24,78 +24,73 @@ using namespace std;
 
 //////// Input File Format ////////////////////////////////////////////////////////////////////////////////////////////
 /* Rules  */
-// *11*0110 drop
-// **1010** port1
-// 0011*110 port2
-// 0011010* port3
-// 10101100 port4
+// *11*0110
+// **1010**
+// 0011*110
+// 0011010*
+// 10101100
 
 /* Incoming packets  */
 // 01110110
 // 10001010
 
-typedef vector<int> vInt;
-typedef vector<string> vString;
-
-
 /* Test whether the incoming packet match the rule table  */
-vInt ruleMatches( int const &packet,  vector<vInt> const &bitMask, vector<vInt> const &wildMask) /* return to a int value, 2-dim vector  */
+vector<int> ruleMatchesBit( const string &packet,  const vector< unsigned int > &bitMask,  /* return to a int value  */
+                         const vector< unsigned int > &wildMask)        /* 2-dim vector  */
 {
   vector<int> result;
-  for(int j = 0; j < bitMask.size(); j++)
+  unsigned int packetBit = 0;
+  for(int i = 0; i < packet.size(); i++) {
+    packetBit <<= 1;
+      if(packet[i] == '1')
+        packetBit |= 1;
+  }
+
+  for(int i = 0; i < (wildMask.size() - 1); i++)     
   {
-    int match = 1;
-	if(packet & wildMask[j] != bitMask[j])
-	  match = 0;
+    bool match = true;
+    if((packetBit & wildMask[i]) != bitMask[i])
+      match = false;
+
     if(match)
-      result.push_back(j);
-  }
-    if(result.empty())
-      result.push_back(-1);
-    return result;
+      result.push_back(i);
+   }
+
+   return result;
 }
 
-
-/* Parse the rules into wildmask.  */
-/* retrun int vector.  */
-
-vector<vInt> parseWildmask(vString &ruleArray)
-{
-  vector<vInt> wildMask(ruleArray.size(), vector<int>(ruleArray[0].size()));
-  for(int i = 0; i < ruleArray.size(); i++)
-  {
-    for (int j = 0; j < ruleArray[0].size(); j++)
-      {
-        if (ruleArray[i][j] == '*')
-          wildMask[i][j] = 0;
-        else
-          wildMask[i][j] = 1;
-      }
-
-  }
-return wildMask;
-}
 
 /* Parse the rules into bitmask.  */
 /* retrun int vector.  */
-
-vector<vInt> parseBitmask(vString &ruleArray)
+void parseBitmaskBit(string& s, vector<unsigned int> &rules)
 {
-  vector<vInt> bitMask(ruleArray.size(), vector<int>(ruleArray[0].size()));
-  for(int i = 0; i < ruleArray.size(); i++)
+  unsigned int rule = 0;
+  for(int i = 0; i < s.length(); i++)
   {
-    for (int j = 0; j < ruleArray[0].size(); j++)
-    {
-      if (ruleArray[i][j] == '0' || ruleArray[i][j]=='*')
-        bitMask[i][j] = 0;
-      if (ruleArray[i][j] == '1')
-        bitMask[i][j] = 1;
-    }
+    rule = rule << 1;
+    if(s[i] == '1')
+      rule = rule | 1;
+    else if(s[i] == '0' || s[i] == '*')
+      rule = rule | 0;
   }
-return bitMask;
+  rules.push_back(rule);
 }
+/* Parse the rules into wildmask.  */
+/* retrun int vector.  */
 
-
+void parseWildmaskBit(string& s, vector<unsigned int> &rules)
+{
+  unsigned int rule = 0;
+  for(int i = 0; i < s.length(); i++)
+  {
+    rule = rule << 1;
+    if(s[i] == '1' || s[i] == '0')
+      rule = rule | 1;
+    else if(s[i] == '*')
+      rule = rule | 0;
+  }
+  rules.push_back(rule);
+}
 /* Main function  */
 
 
@@ -106,72 +101,37 @@ int main(int argc, char* argv[])
   string line;
   ifstream file ("ping_test.txt");
 
-  vString ruleArray;
+  vector<string> ruleArray;
+  vector<unsigned int> wildMask;
+  vector<unsigned int> bitMask;
+ 
   int i = 0;
-  if(file.is_open())
-  {
-    while(!file.eof())
-    {
+  if(file.is_open()) {
+    while(!file.eof()) {
       getline(file, line);  /*  Read lines as long as the file is */
+
+      std::cout << line << endl;
+
       if(!line.empty())
         ruleArray.push_back(line);   /* Push the input file into ruleArray  */
+        parseWildmaskBit(line, wildMask);
+        parseBitmaskBit(line, bitMask);
     }
-
   }
 
   file.close();
-  for(int j = 0; j < ruleArray.size(); j++)
-  {
-    cout << ruleArray[j] << endl;  /* get the ruleArray table */
-  }
 
-
-  vector<vInt> wildMask = parseWildmask(ruleArray);    /* get the wildmask rule table  */
-
-  vector<vInt> bitMask = parseBitmask(ruleArray);     /* get the bitmask rule table  */
-
-  cout <<endl;
-
-/* Output the wildmask rule table.  */
-
-  for(int i = 0; i < wildMask.size(); i++)
-  {
-    for(int j = 0; j < wildMask[0].size(); j++)
-      cout << wildMask[i][j];
-      cout << endl;
-  }
-
-  cout <<endl;
-
-/* Output the bitmask rule table.  */
-
-  for(int i = 0; i < bitMask.size(); i++)
-  {
-    for(int j = 0; j < bitMask[0].size(); j++)
-      cout <<bitMask[i][j];
-      cout <<endl;
-  }
-
-
-  int packet = 00110110;      /* Incoming packet  */
-
+  cout << endl;
+  string packet = "00110110";      /* Incoming packet  */
+  cout << packet << endl;
   vector<int> result;
-  result = ruleMatches(packet, bitMask, wildMask);
+  result = ruleMatchesBit(packet, bitMask, wildMask);
+  
   for(int i = 0; i < result.size(); i++)
     cout << result[i] << endl;
 
   return 0;
-
 }
-
-
-
-
-
-
-
-
-
 
 
 
