@@ -210,10 +210,10 @@ void
 trie_node<T,G,V>::init(G strd)
 {
 	stride = strd;
-	trieNodes = new trie_node[(T)pow(2,stride)]; 
-	prefixNodes = new prefix_node<V>[(T)pow(2,stride)*2-1];
-	triePointers.init((T)pow(2,stride));
-	prefixPointers.init((T)pow(2,stride)*2-1); 
+	trieNodes = new trie_node[(T)(1<<stride)]; 
+	prefixNodes = new prefix_node<V>[(T)(1<<stride)*2-1];
+	triePointers.init((T)(1<<stride));
+	prefixPointers.init((T)(1<<stride)*2-1); 
 }
 
 
@@ -237,8 +237,8 @@ trie_node<T,G,V>::checkIfEmpty()
 	// FIXME: put a space between 'for', 'while', and 'if' and the
 	// first '('
 	// FIX: as mentioned above
-	if (triePointers.checkIfEmpty((G)pow(2,stride)) 
-	&& prefixPointers.checkIfEmpty((G)pow(2,stride)*2-1))	
+	if (triePointers.checkIfEmpty((G)(1<<stride)) 
+	&& prefixPointers.checkIfEmpty((G)(1<<stride)*2-1))	
 	{
 		// reseting entire Trie node. De-allocating memory.
 		// ~init() ~= del() 
@@ -271,6 +271,7 @@ trie_node<T,G,V>::insertData(trie_node<T,G,V>* node, G prefix,
 		G node_prefix = (prefix&mask)>>(max_prefix_length -
 				std::min(node->stride, prefix_length));	
 
+		//std::cout<<"Insert: Traversal"<<node<<"\n";
 		// update prefixes in the corresponding trie positions
 		if (prefix_length > node->stride)
 		{
@@ -278,7 +279,7 @@ trie_node<T,G,V>::insertData(trie_node<T,G,V>* node, G prefix,
 			// create trie node pointer	
 			if (!node->triePointers.get(node_prefix)) 
 			{
-				std::cout<<"Initializing trie node: "<<node<<"\n";
+				//std::cout<<"Initializing trie node: "<<node<<" "<<node_prefix<<"\n";
 				tn->init(node->stride);
 				node->triePointers.set(node_prefix);
 			}
@@ -291,10 +292,11 @@ trie_node<T,G,V>::insertData(trie_node<T,G,V>* node, G prefix,
 		else
 		{
 			// insert prefix pointer
-			T prefixPointerIndex = pow(2, prefix_length)-1 + node_prefix;
+			T prefixPointerIndex = (1<< prefix_length)-1 + node_prefix;
 			prefix_node<V>* pn = node->prefixNodes + prefixPointerIndex;
-			std::cout<<"Initializing prefix node: "<<pn<<" with data: "
-				<<next_hop<<"\n"; pn->init(next_hop);
+			//std::cout<<"Initializing prefix node: "<<pn<<" with data: "
+			//	<<next_hop<<"\n";
+			pn->init(next_hop);
 			node->prefixPointers.set(prefixPointerIndex);
 			break;
 		}
@@ -310,31 +312,31 @@ trie_node<T,G,V>::searchData(trie_node<T,G,V>* node, G item,
 {
 	while (1)
 	{
-		std::cout<<"Traversing trie node: "<<node<<"\n";
 		G mask = ~0 << (max_prefix_length - node->stride);
 		G node_prefix = (item&mask) >> (max_prefix_length - stride);
 		T cur_stride= stride;
+		//std::cout<<"Traversing trie node: "<<node<<" "<<node_prefix<<"\n";
 		// update BMP
 		while (cur_stride > 0)
 		{
-			T prefixNodeIndex = (pow(2,cur_stride)-1) + 	
+			T prefixNodeIndex = ((1<<cur_stride)-1) + 	
 				(node_prefix >> (stride - cur_stride));
-			if (prefixPointers.get(prefixNodeIndex))
+			if (node->prefixPointers.get(prefixNodeIndex))
 			{
-				std::cout<<"Setting Prefix Node: "<<prefixNodes
+				std::cout<<"Setting Prefix Node: "<<node->prefixNodes
 					  + prefixNodeIndex<<" index: "<<
 					  prefixNodeIndex<<"\n";
-				BMP = prefixNodes + prefixNodeIndex;
+				BMP = node->prefixNodes + prefixNodeIndex;
 				break;
 			}
 			cur_stride--;
 		}
 		// traverse successor trie node if it exists create
 		// trie node pointer	
-		if (triePointers.get(node_prefix))
+		if (node->triePointers.get(node_prefix))
 		{
 			item = item<<node->stride;
-			node = trieNodes + node_prefix;
+			node = node->trieNodes + node_prefix;
 		}
 		else
 			break;
@@ -374,15 +376,14 @@ trie_node<T,G,V>::updateData(trie_node<T,G,V>* node, G prefix, T
 		else
 		{
 			// update prefix pointer
-			T prefixPointerIndex = pow(2, prefix_length)
+			T prefixPointerIndex = (1<<prefix_length)
 				-1 + node_prefix; 
 			prefix_node<V>* pn = node->prefixNodes + 
 						prefixPointerIndex;
 			if (node->prefixPointers.get(prefixPointerIndex))
 			{
-				std::cout<<"Updating Prefix node: "<<pn<<
-					" with next hop info:"<<next_hop<<
-					"\n";
+				//std::cout<<"Updating Prefix node: "<<pn<<
+				//	" with next hop info:"<<next_hop<<"\n";
 				pn->init(next_hop);
 			}
 			else
@@ -422,7 +423,7 @@ trie_node<T,G,V>::deleteData(trie_node<T,G,V>* node, G prefix, T
 	else
 	{
 		// access and reset prefix pointer bitmap
-		int prefixPointerIndex = pow(2, prefix_length) -1  +
+		int prefixPointerIndex = (1<<prefix_length) -1  +
 			node_prefix;
 		prefix_node<V>* pn = node->prefixNodes + prefixPointerIndex;
 		node->prefixPointers.reset(prefixPointerIndex);

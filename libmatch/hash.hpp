@@ -4,9 +4,28 @@
 #ifndef LIBMATCH_HASH_HPP
 #define LIBMATCH_HASH_HPP
 
-// The hashing module...
+// The hashing module. Encompasses a collection of hashing
+// algorithms and data structures, as well as the algorithms
+// needed to implement the structures.
 //
-// TODO: Actually document the hash table.
+// Inside the hashing library there are two major distinctions;
+// Closed addressing vs Open addressing. 
+// 
+// The closed addressing namespace houses the more basic chained
+// hash table variants (simple, list, array, tree) which utilize
+// a back end store to resolve collisions. That is, each hash
+// table bucket/slot can contain multiple entries.
+//
+// The open addressing namespace contains tables which implement
+// a flat addressing scheme and resolve collisions by using
+// different resolution algorithms to find an open address. 
+// In this setup each hash table bucket/slot contains at most 
+// one entry.
+//
+// We have chosen to use Boosts optional component to allow for
+// in place construction/destruction of elements. With the expected
+// release of a std::optional object this should become a more
+// common place method in the future.
 
 #include <vector>
 #include <algorithm>
@@ -15,6 +34,8 @@
 
 namespace hash_table
 {
+
+	
 // A list of primes numbers such that each value is slightly
 // less than double the previous value.
 static size_t const primes[] = {
@@ -28,23 +49,28 @@ static size_t const primes[] = {
 static size_t const nprimes = sizeof(primes) / sizeof(size_t);
 
 
-
+// Performs a binary search on the list of prime numbers to find a new
+// value that is slightly less than twice the value given (old).
 static size_t const
 next_prime(size_t old)
 {
-  // Our compare value will be twice the old value.
+  // Our starting compare value will be twice the old value.
   old <<= 1;
-  // Start in the middle of the primes list
+
+  // Start in the middle of the primes list.
   size_t pivot = nprimes >> 1;
+
   while (1) {
-    // Check if we have gone outside the list bounds
+    // Check if we have gone outside the list bounds.
     if (pivot + 1 >= nprimes)
       return 0;
+
     // If the pivot value is less than our compare value and the next
     // largest value is greater than our compare value, we have found
     // our next size.
     if (primes[pivot] < old && primes[pivot + 1] > old)
       break;
+
     // If the pivot value is greater than our compare value, look in 
     // the lower half. Otherwise look in the upper half.
     if (primes[pivot] > old)
@@ -52,12 +78,17 @@ next_prime(size_t old)
     else
       pivot += pivot >> 1;
   }
+
   return primes[pivot];
 }
 
 
+// The data store namespace contains the underlying backend stores
+// for the hash table variants. They are implemented using Boosts
+// optional object to allow for in place construction/destruction.
 namespace data_store
 {
+
 
 // A basic entry type comprised of a key and a value.
 template<typename K, typename V>
@@ -158,7 +189,8 @@ private:
   boost::optional<T> data_;
 };
 
-
+// Basic bucket.
+//
 // Basic bucket default constructor.
 template<typename T>
 basic_bucket<T>::basic_bucket()
@@ -331,6 +363,8 @@ private:
 };
 
 
+// List bucket.
+//
 // Default list_bucket constructor.
 template<typename T>
 list_bucket<T>::list_bucket()
@@ -353,6 +387,9 @@ list_bucket<T>::list_bucket(T& v)
 
 
 // Destructor for list_bucket.
+//
+// TODO: Implement this. Will most likely need to
+// walk the list(s) and delete all the entries.
 template<typename T>
 list_bucket<T>::~list_bucket()
 { 
@@ -360,7 +397,9 @@ list_bucket<T>::~list_bucket()
 }
 
 
-// Checks if the bucket is empty
+// Checks if the bucket is empty.
+//
+// TODO: Implement this.
 template<typename T>
 inline bool
 list_bucket<T>::is_empty() const
@@ -369,7 +408,9 @@ list_bucket<T>::is_empty() const
 }
 
 
-// Accessor
+// Accessor.
+//
+// TODO: Implement this.
 template<typename T>
 inline T&
 list_bucket<T>::get()
@@ -378,7 +419,9 @@ list_bucket<T>::get()
 }
 
 
-// Const accessor
+// Const accessor.
+//
+// TODO: Implement this.
 template<typename T>
 inline T const&
 list_bucket<T>::get() const
@@ -387,7 +430,9 @@ list_bucket<T>::get() const
 }
 
 
-// Add entry
+// Add entry by const reference.
+//
+// TODO: Implement this.
 template<typename T>
 inline void 
 list_bucket<T>::insert(T const&)
@@ -396,7 +441,9 @@ list_bucket<T>::insert(T const&)
 }
 
 
-// Add entry
+// Add entry using move.
+//
+// TODO: Implement this.
 template<typename T>
 inline void 
 list_bucket<T>::insert(T&&)
@@ -405,7 +452,9 @@ list_bucket<T>::insert(T&&)
 }
 
 
-// Remove the entry given if it exists
+// Remove the entry given if it exists.
+//
+// TODO: Implement this.
 template<typename T>
 inline void 
 list_bucket<T>::erase(T const& v)
@@ -415,6 +464,8 @@ list_bucket<T>::erase(T const& v)
 
 
 // Clear the bucket of all entries.
+//
+// TODO: Implement this.
 template<typename T>
 inline void 
 list_bucket<T>::clear()
@@ -424,6 +475,8 @@ list_bucket<T>::clear()
 
 
 // An array based hash table bucket.
+//
+// TODO: Implement this.
 template<typename T>
 class array_bucket
 {
@@ -461,7 +514,8 @@ private:
 
 
 // A tree based hash table bucket.
-// TODO: implement this using an array, not pointers
+//
+// TODO: Implement this. Use an array, not pointers.
 template<typename T>
 class tree_bucket
 { 
@@ -498,12 +552,12 @@ private:
 } // end namespace data_store
 
 
-// Encapsulates the open addressing hash table family.
+// Encapsulates the open addressing hash table implementations.
 namespace open
 {
 
-// A hash table with open addressing and linear probing for
-// resolving collisions.
+// Linear hash table. A hash table with open addressing and linear
+// probing for resolving collisions.
 template<typename K, typename V, typename H, typename C>
 class linear
 {
@@ -580,10 +634,9 @@ private:
   store_type data_;    // Data store
 };
 
-
+// Linear hash table.
+//
 // Linear constructor definitions.
-
-
 template<typename K, typename V, typename H, typename C> 
 linear<K, V, H, C>::linear()
   : linear(29)
@@ -811,14 +864,21 @@ linear<K, V, H, C>::iterator::operator->() -> pointer
 } //end namespace open
 
 
+// Contains the closed addressing hash table implementations.
+//
+// TODO: Implement this.
 namespace closed
 {
 
 } // end namespace closed
 
+
 } // end namespace hash_table
 
+
 // A collection of hashing functions.
+//
+// TODO: Implement this.
 namespace hash_function
 {
 
