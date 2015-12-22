@@ -65,7 +65,7 @@ struct bitmap
 	// FIX: constructor provided. init
 	// function designed to be different from constructor. Called
 	// at a later point of time than the memory allocation. 
-	bitmap() { bfield = NULL; } 
+	bitmap() { bfield = NULL; }
 
 
 	// FIXME: use a destructor to handle memory cleanup 
@@ -86,12 +86,12 @@ struct bitmap
 
 template<typename T> 
 void
-bitmap<T>::init(size_t size)  // indicate the valid or invalid, like 0 or 1
+bitmap<T>::init(size_t size)
 {
 	size_t mem_cells =
 	ceil((double)size/(double)sizeof(ul)) ; 
 	bfield = new ul[mem_cells];
-	memset(bfield, 0, sizeof(ul)*mem_cells);  // initialize the array of bfield
+	memset(bfield, 0, sizeof(ul)*mem_cells);
 }
 
 
