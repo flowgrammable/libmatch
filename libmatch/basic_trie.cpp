@@ -1,52 +1,18 @@
+// Copyright (c) 2015 Flowgrammable.org
+// All rights reserved
+
 #include <iostream>
 #include <vector>
 #include <string>
+#include "basic_trie.hpp"
  
 using namespace std;
 
 // Trie node which contains two pointers: left and right
 // int value represent if the node is leaf node
 
-struct trie_node
-{
-  int value; // Represent the leaf node information
-  trie_node *children[2]; // Trie stride = 1, has two pointer, '0' and '1'
 
-  // trie_node constructor
-
-  trie_node()
-  {
-    value = 0;
-    children[0] = NULL;
-    children[1] = NULL;
-  }
-
-};
-
-
-class Trie
-{
-public:
-  trie_node *root;
-  int count; // THe number of rules in a trie
-
-  // Trie constructor
-
-  Trie()
-  {
-    root = NULL;
-    count = 0;
-  }
-
-  static trie_node* getNode();
-  static void init_trie(Trie *pTrie); // Initilize a trie
-  void del();
-  static void insert_rule(Trie *pTrie, string key);
-  static int search_rule(Trie *pTrie, string key);
-
-};
-
-trie_node* Trie::getNode()
+trie_node* Trie::get_node()
 {
 trie_node *pNode = new trie_node();
   if (pNode)
@@ -61,7 +27,7 @@ trie_node *pNode = new trie_node();
 
 void Trie::init_trie(Trie *pTrie)
 {
-  pTrie->root = getNode();
+  pTrie->root = get_node();
   pTrie->count = 0;
 }
 
@@ -84,20 +50,23 @@ void Trie::insert_rule(Trie *pTrie, string key)
 	{
 	  index = 1;
 	}
+
+      // if the key is not present in the trie, insert a new node
       if ( !pRule->children[index] )
 	{
-	  pRule->children[index] = getNode();
+	  pRule->children[index] = get_node();
 	}
       pRule = pRule->children[index];
 
     }
+
   pRule->value = pTrie->count;
 
 }
 
 int Trie::search_rule(Trie *pTrie, string key)
 {
-  int level;
+  int level; 
   int index;
   trie_node *pRule;
 
@@ -120,6 +89,8 @@ int Trie::search_rule(Trie *pTrie, string key)
       pRule = pRule->children[index];
 
     }
+
+  // if return 0, then the incoming packet is not in the trie
   return (0 != pRule && pRule->value);
 }
 
