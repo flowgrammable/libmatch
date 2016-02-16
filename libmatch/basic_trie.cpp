@@ -24,6 +24,37 @@ trie_node *pNode = new trie_node();
   return pNode;
 }
 
+// Determine the node whether is leaf node
+// If the value = 0, it is not leaf node
+// If the value != 0, it is leaf node
+bool Trie::is_rule_node(trie_node *pNode)
+{
+  if(pNode->value == 0)
+    {
+      return false;
+    }
+  else
+    {
+      return true;
+    }
+// If the value != 0, it is a rule ending node
+}
+
+// Determine whether a node has children or not
+// If the node has no children, then it is an independent node
+// If the node has children, it is not
+bool Trie::is_independent_node(trie_node *pNode)
+{
+  if( (pNode->children[0] == NULL) && (pNode->children[1] == NULL) )
+    {
+      return true;
+    }
+  else
+    {
+      return false;
+    }
+}
+
 
 void Trie::init_trie(Trie *pTrie)
 {
@@ -60,25 +91,25 @@ void Trie::insert_rule(Trie *pTrie, string key)
 
     }
 
-  pRule->value = pTrie->count;
+  pRule->value = pTrie->count; // If the value is not 0, the node is leaf node
 
 }
 
-int Trie::search_rule(Trie *pTrie, string key)
+bool Trie::search_rule(Trie *pTrie, string packet)
 {
   int level; 
-  int index;
+  int index;  // The index of children, here just has 2 children
   trie_node *pRule;
 
   pRule = pTrie->root;
 
-  for (level=0; level<key.length(); level++)
+  for (level=0; level<packet.length(); level++)
     {
-      if (key.at(level) == '0')
+      if (packet.at(level) == '0')
 	{
 	  index = 0;
 	}
-      else if (key.at(level) == '1')
+      else if (packet.at(level) == '1')
 	{
 	  index = 1;
 	}
@@ -89,27 +120,63 @@ int Trie::search_rule(Trie *pTrie, string key)
       pRule = pRule->children[index];
 
     }
-
-  // if return 0, then the incoming packet is not in the trie
+ 
+  // If return 0, match miss
+  // If return 1, match hit
   return (0 != pRule && pRule->value);
+
 }
 
-int main()
+bool Trie::remove(trie_node *pNode, string key, int level, int len)
 {
-  vector<string> list = {"0010", "100", "00", "10101", "0", "110"};
-  Trie trie;
-  char output[][32] = {"Not present in trie", "Present in trie"};
-  Trie::init_trie(&trie);
-  for (int i=0; i<list.size(); i++)
+  //cout << pNode->value << (pNode->children[0] == NULL) << (pNode->children[1] == NULL) << endl;
+  int index;
+  if(pNode)
     {
-      Trie::insert_rule(&trie, list.at(i));
+      if(level == len)
+	{
+	  pNode->value = 0; // Unmark leaf node
+	  // If this node has no children, can be deleted
+	  if(Trie::is_independent_node(pNode))
+	    {
+	      return true;
+	    }
+	  else
+	    {
+	      return false;
+	    }
+	}
+      else
+	{
+	  if(key.at(level) == '0')
+	    {
+	      index = 0;
+	    }
+	  else if(key.at(level) == '1')
+	    {
+	      index = 1;
+	    }
+	  if(remove(pNode->children[index], key, level+1, len))
+	    {
+	      // cout << 1 << endl;
+	      delete pNode->children[index]; // Last node marked, delete it
+	      pNode->children[index] = NULL;
+	      // Determine whether the upper nodes should be deleted, parent node
+	      return(!Trie::is_rule_node(pNode) && Trie::is_independent_node(pNode));
+
+	    }
+	}
     }
-
-  cout << output[Trie::search_rule(&trie, "10101")] << endl;
-  cout << output[Trie::search_rule(&trie, "10111")] << endl;
-  cout << output[Trie::search_rule(&trie, "100")] << endl;
-  cout << output[Trie::search_rule(&trie, "1")] << endl;
-
-  return 0;
-
+  return false;
 }
+
+
+void Trie::delete_rule(Trie *pTrie, string key)
+{
+  int len = key.length();
+  if( len > 0 )
+    {
+      remove(pTrie->root, key, 0, len);
+    }
+}
+ 

@@ -38,23 +38,42 @@ public:
     root = NULL;
     count = 0;
   }
+  ~Trie()
+  {
+    // delete_Tire();
+  }
 
   // Return a new trie node
   static trie_node* get_node(); 
 
+  // Determine the node whether is a end node of a rule, according to the value
+  static bool is_rule_node(trie_node *pNode);
+
+  // Determine the node whether is independent, whether has children or not
+  // If it is independent, which means it can be deleted
+  // If not, it cannot be deleted
+  static bool is_independent_node(trie_node *pNode);
+
   // Initilize a trie
   static void init_trie(Trie *pTrie);
 
-  // Insert string type rules into the trie
+  // Insert rules into the trie
   static void insert_rule(Trie *pTrie, string key);
 
   // Search the incoming packet in the trie
-  // if return 0, then miss match
-  // else, hit match
-  static int search_rule(Trie *pTrie, string packet);
+  // If return 0, match miss
+  // If return 1, match hit
+  static bool search_rule(Trie *pTrie, string packet);
 
   // Delete rules in the trie
-  static void delete_rule();
+  // When deleting nodes, needs to satisfy two conditions
+  // 1. the deleting node is not the end node of a rule ( is_rule_node() )
+  // 2. the deleting node does not have childrens ( is_independent_node() )
+  static void delete_rule(Trie *pTrie, string key);
+
+  // Remove trie node in the trie
+  // Helping delete rules
+  static bool remove(trie_node *pNode, string key, int level, int len);
 
 };
 
