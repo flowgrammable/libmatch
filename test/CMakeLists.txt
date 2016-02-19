@@ -29,6 +29,8 @@ include_directories(${Boost_INCLUDE_DIRS})
 
 add_executable(wildcard.test wildcard.cpp)
 add_executable(hash.test hash.cpp)
+add_executable(basic_trie.test basic_trie.cpp)
 
 add_test(test_wildcard wildcard.test)
 add_test(test_hash hash.test)
+add_test(test_basic_trie basic_trie.test)
