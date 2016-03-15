@@ -82,7 +82,7 @@ public:
 
     // Convert Rule(value, mask) into integer type in a trie data structure
     // Guarantee using the same input Rule(value, mask)
-    // static void convert_rule(vector<uint8_t>& rulesTable, Rule& rule);
+    static void convert_rule(vector<uint8_t>& rulesTable, Rule& rule);
 
     // Initilize a trie
     static void init_trie(Trie *pTrie);

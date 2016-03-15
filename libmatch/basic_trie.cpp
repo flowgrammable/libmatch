@@ -62,7 +62,7 @@ void Trie::init_trie(Trie *pTrie)
   pTrie->count = 0;
 }
 
-/*
+
 void Trie::convert_rule(vector<uint8_t>& rulesTable, Rule& rule)
 {
     // Store the wildcard postion into vector maskPosion
@@ -76,17 +76,17 @@ void Trie::convert_rule(vector<uint8_t>& rulesTable, Rule& rule)
     }
     uint8_t num = maskPosition.size(); // k is the number of wildcard
     uint8_t base = rule.value & (~rule.mask);
-    for(i = 0; i < pow(2,num); i++) {
+    for(uint8_t i = 0; i < pow(2,num); i++) {
         uint8_t newRule = base;
         for(uint8_t j = 0; j < num; j++) {
             if((1 << j) & i == 0) {
-                newRule = newRule + (1 << maskPosition[j]);
+                newRule = newRule + (1 << maskPosition.at(j));
             }
         }
           rulesTable.push_back(newRule);
     }
 }
-*/
+
 
 void Trie::insert_rule(Trie *pTrie, uint8_t rule)
 {

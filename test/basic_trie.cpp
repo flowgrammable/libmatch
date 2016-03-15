@@ -12,42 +12,42 @@
 
 int main()
 {
-  vector<uint8_t> list = {28, 30, 128, 200, 243};
-  Trie trie;
-
-  // Initilize the trie
-  Trie::init_trie(&trie);
-
-  // Insert all the rules in the list
-  for (int i=0; i<list.size(); i++)
-    {
-      Trie::insert_rule(&trie, list.at(i));
+    vector<Rule> list = {Rule(102,144), Rule(40,195), Rule(54,8), Rule(54,1), Rule(172,0)};
+    vector<uint8_t> rulesTable;
+    // Convert the Rule(value, mask) to integer type in trie
+    for (int i=0; i<list.size(); i++) {
+        Trie::convert_rule(vector<uint8_t> rulesTable, list.at(i));
     }
 
-  char output[][32] = {"Not present in trie", "Present in trie"};
+    Trie trie;
 
-  // Search the rules
-  cout << output[Trie::search_rule(&trie, 28)] << endl;
-  cout << output[Trie::search_rule(&trie, 30)] << endl;
-  cout << output[Trie::search_rule(&trie, 35)] << endl;
-  cout << output[Trie::search_rule(&trie, 243)] << endl;
+    // Initilize the trie
+    Trie::init_trie(&trie);
+
+    // Insert all the rules in the list
+    for (int i=0; i<rulesTable.size(); i++)
+    {
+        Trie::insert_rule(&trie, rulesTable.at(i));
+    }
+
+    char output[][32] = {"Not present in trie", "Present in trie"};
+
+    // Search the rules
+    cout << output[Trie::search_rule(&trie, 230)] << endl;
+    cout << output[Trie::search_rule(&trie, 202)] << endl;
+    cout << output[Trie::search_rule(&trie, 172)] << endl;
+    cout << output[Trie::search_rule(&trie, 192)] << endl;
 
 
-  // Delete rules
-  // When deleting nodes, needs to satisfy two conditions
-  // 1. the deleting node is not the end node of a rule ( is_rule_node() )
-  // 2. the deleting node does not have childrens ( is_independent_node() )
+    // Delete rules
 
-  Trie::delete_rule(&trie, list.at(1));
-  //Trie::delete_rule(&trie, list.at(2));
-
-  cout << output[Trie::search_rule(&trie, 30)] << endl;
-  cout << output[Trie::search_rule(&trie, 128)] << endl;
+    Trie::delete_rule(&trie, rulesTable.at(1));
 
 
-  //cout << output[Trie::search_rule(&trie, "1001")] << endl;
-  //cout << output[Trie::search_rule(&trie, "100")] << endl;
+    cout << output[Trie::search_rule(&trie, 30)] << endl;
+    cout << output[Trie::search_rule(&trie, 128)] << endl;
 
-  return 0;
+
+    return 0;
 
 }
