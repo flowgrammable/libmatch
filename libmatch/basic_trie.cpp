@@ -62,7 +62,33 @@ void Trie::init_trie(Trie *pTrie)
   pTrie->count = 0;
 }
 
-void Trie::insert_rule(Trie *pTrie, string key)
+/*
+void Trie::convert_rule(vector<uint8_t>& rulesTable, Rule& rule)
+{
+    // Store the wildcard postion into vector maskPosion
+    // Check the mask field from the lower bit
+
+    vector<uint8_t> maskPosition;
+    for(uint8_t i = 0; i < 8; i++) {
+        if((rule.mask << i) & 1 == 1) {
+            maskPosition.push_back(i);
+        }
+    }
+    uint8_t num = maskPosition.size(); // k is the number of wildcard
+    uint8_t base = rule.value & (~rule.mask);
+    for(i = 0; i < pow(2,num); i++) {
+        uint8_t newRule = base;
+        for(uint8_t j = 0; j < num; j++) {
+            if((1 << j) & i == 0) {
+                newRule = newRule + (1 << maskPosition[j]);
+            }
+        }
+          rulesTable.push_back(newRule);
+    }
+}
+*/
+
+void Trie::insert_rule(Trie *pTrie, uint8_t rule)
 {
   int level;
   int index;
@@ -71,16 +97,9 @@ void Trie::insert_rule(Trie *pTrie, string key)
   pTrie->count++;
   pRule = pTrie->root;
 
-  for (level=0; level<key.length(); level++)
+  for (level=0; level<8; level++)
     {
-      if (key.at(level) == '0')
-	{
-	  index = 0;
-	}
-      else if (key.at(level) == '1')
-	{
-	  index = 1;
-	}
+      index = (rule >> (7-level)) & 1;
 
       // if the key is not present in the trie, insert a new node
       if ( !pRule->children[index] )
@@ -95,39 +114,33 @@ void Trie::insert_rule(Trie *pTrie, string key)
 
 }
 
-bool Trie::search_rule(Trie *pTrie, string packet)
-{
-  int level; 
-  int index;  // The index of children, here just has 2 children
-  trie_node *pRule;
 
-  pRule = pTrie->root;
-
-  for (level=0; level<packet.length(); level++)
+bool Trie::search_rule(Trie *pTrie, uint8_t key)
     {
-      if (packet.at(level) == '0')
-	{
-	  index = 0;
-	}
-      else if (packet.at(level) == '1')
-	{
-	  index = 1;
-	}
-      if ( !pRule->children[index] )
-	{
-	  return 0;
-	}
-      pRule = pRule->children[index];
+      int level;
+      int index;  // The index of children, here just has 2 children
+      trie_node *pRule;
+
+      pRule = pTrie->root;
+
+      for (level=0; level<8; level++)
+        {
+          index = (key >> (7-level)) & 1;
+
+          if ( !pRule->children[index] )
+          return 0;
+          pRule = pRule->children[index];
+
+        }
+
+      // If return 0, match miss
+      // If return 1, match hit
+      return (0 != pRule && pRule->value);
 
     }
- 
-  // If return 0, match miss
-  // If return 1, match hit
-  return (0 != pRule && pRule->value);
 
-}
 
-bool Trie::remove(trie_node *pNode, string key, int level, int len)
+bool Trie::remove(trie_node *pNode, uint8_t rule, int level, int len)
 {
   //cout << pNode->value << (pNode->children[0] == NULL) << (pNode->children[1] == NULL) << endl;
   int index;
@@ -138,25 +151,14 @@ bool Trie::remove(trie_node *pNode, string key, int level, int len)
 	  pNode->value = 0; // Unmark leaf node
 	  // If this node has no children, can be deleted
 	  if(Trie::is_independent_node(pNode))
-	    {
 	      return true;
-	    }
 	  else
-	    {
 	      return false;
-	    }
 	}
       else
 	{
-	  if(key.at(level) == '0')
-	    {
-	      index = 0;
-	    }
-	  else if(key.at(level) == '1')
-	    {
-	      index = 1;
-	    }
-	  if(remove(pNode->children[index], key, level+1, len))
+      index = (rule >> (7-level)) & 1;
+          if(remove(pNode->children[index], rule, level+1, len))
 	    {
 	      // cout << 1 << endl;
 	      delete pNode->children[index]; // Last node marked, delete it
@@ -171,12 +173,12 @@ bool Trie::remove(trie_node *pNode, string key, int level, int len)
 }
 
 
-void Trie::delete_rule(Trie *pTrie, string key)
+void Trie::delete_rule(Trie *pTrie, uint8_t rule)
 {
-  int len = key.length();
+  int len = 8;
   if( len > 0 )
     {
-      remove(pTrie->root, key, 0, len);
+      remove(pTrie->root, rule, 0, len);
     }
 }
  

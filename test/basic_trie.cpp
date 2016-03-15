@@ -7,12 +7,12 @@
 #include <vector>
 #include <string>
 
-// Matches string type 
+// Matches integer type
 
 
 int main()
 {
-  vector<string> list = {"0010", "100", "1001", "00", "10101", "0", "110"};
+  vector<uint8_t> list = {28, 30, 128, 200, 243};
   Trie trie;
 
   // Initilize the trie
@@ -27,12 +27,11 @@ int main()
   char output[][32] = {"Not present in trie", "Present in trie"};
 
   // Search the rules
-  cout << output[Trie::search_rule(&trie, "1001")] << endl;
-  cout << output[Trie::search_rule(&trie, "10101")] << endl;
-  cout << output[Trie::search_rule(&trie, "10111")] << endl;
-  cout << output[Trie::search_rule(&trie, "100")] << endl;
-  cout << output[Trie::search_rule(&trie, "1")] << endl;
-  cout << output[Trie::search_rule(&trie, "0010")] << endl;
+  cout << output[Trie::search_rule(&trie, 28)] << endl;
+  cout << output[Trie::search_rule(&trie, 30)] << endl;
+  cout << output[Trie::search_rule(&trie, 35)] << endl;
+  cout << output[Trie::search_rule(&trie, 243)] << endl;
+
 
   // Delete rules
   // When deleting nodes, needs to satisfy two conditions
@@ -42,8 +41,8 @@ int main()
   Trie::delete_rule(&trie, list.at(1));
   //Trie::delete_rule(&trie, list.at(2));
 
-  cout << output[Trie::search_rule(&trie, "1001")] << endl;
-  cout << output[Trie::search_rule(&trie, "100")] << endl;
+  cout << output[Trie::search_rule(&trie, 30)] << endl;
+  cout << output[Trie::search_rule(&trie, 128)] << endl;
 
 
   //cout << output[Trie::search_rule(&trie, "1001")] << endl;
