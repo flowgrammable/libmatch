@@ -16,10 +16,9 @@ int main()
   vector<Rule> rulesTable;
 
   // Insert all the rules in the list
-  for (int i=0; i<list.size(); i++)
-    {
-      linearTable::insert_rule(rulesTable, list.at(i));
-    }
+  for (int i=0; i<list.size(); i++) {
+    linearTable::insert_rule(rulesTable, list.at(i));
+  }
 
   char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
 
