@@ -18,8 +18,8 @@ using namespace std;
 // For arbitrary match, using format Rule(value, mask) as input
 struct Rule
 {
-  uint8_t value;
-  uint8_t mask;
+  uint32_t value;
+  uint32_t mask;
 
   Rule()
   {
@@ -27,7 +27,7 @@ struct Rule
     mask = 0;
   }
 
-  Rule(uint8_t x, uint8_t y)
+  Rule(uint32_t x, uint32_t y)
   {
     value = x;
     mask = y;
@@ -37,17 +37,19 @@ struct Rule
 
 // Convert Rule(value, mask) into integer type in a trie data structure
 // Guarantee using the same input format Rule(value, mask)
-void convert_rule(vector<uint8_t>& rulesTable, Rule& rule);
+void convert_rule(vector<uint32_t>& rulesTable, Rule& rule);
 
 struct trie_node
 {
-  int value; // Used to mark leaf nodes
+  uint32_t priority; // Used to mark leaf nodes, and also can show pripority
+  uint32_t star_num;
   trie_node* children[2]; // Trie stride = 1, has two pointer, '0' and '1'
 
   // trie_node constructor
   trie_node()
   {
-    value = 0;
+    priority = 0;
+    star_num = 0;
     children[0] = NULL;
     children[1] = NULL;
   }
@@ -87,23 +89,31 @@ public:
   }
 
   // Insert rules into the trie
-  void insert_rule(uint8_t rule);
+  void insert_rule(uint32_t rule);
+
+  void insert_prefix_rule(uint32_t value, uint32_t mask);
+
+  void insert_rule(uint32_t value, uint32_t mask);
 
   // Search the incoming packet in the trie
   // If return 0, match miss
   // If return 1, match hit
-  bool search_rule(uint8_t key);
+  bool search_rule(uint32_t key);
+
+  bool prefix_search_rule(uint32_t key);
+  bool LPM_search_rule(uint32_t key);
+  bool LPM1_search_rule(uint32_t key);
 
   // Delete rules in the trie
   // When deleting nodes, needs to satisfy two conditions
   // 1. the deleting node is not the end node of a rule ( is_rule_node() )
   // 2. the deleting node does not have childrens ( is_independent_node() )
-  void delete_rule(uint8_t rule);
+  void delete_rule(uint32_t rule);
 
 private:
   // Remove trie node in the trie
   // Helping delete rules
-bool remove(trie_node *pNode, uint8_t rule, int level, int len);
+bool remove(trie_node *pNode, uint32_t rule, int level, int len);
 
 };
 

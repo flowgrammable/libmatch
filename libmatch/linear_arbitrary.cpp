@@ -59,7 +59,7 @@ void linearTable::insert_rule( vector<Rule>& rulesTable, Rule& rule )
 }
 
 
-bool linearTable::search_rule( vector<Rule>& rulesTable, uint8_t key )
+bool linearTable::search_rule( vector<Rule>& rulesTable, uint32_t key )
 {
   for (int i = 0; i < rulesTable.size(); i++) {
     if (rulesTable[i].value == ( key & ( ~rulesTable[i].mask ) ) ) {

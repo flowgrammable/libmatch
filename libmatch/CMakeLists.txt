@@ -5,4 +5,5 @@ add_library(match STATIC
     hash.cpp
     stride_trie.cpp
     wildcard.cpp
-    basic_trie)
+    basic_trie
+    linear_arbitrary)

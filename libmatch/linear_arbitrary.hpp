@@ -16,15 +16,15 @@ using namespace std;
 
 struct Rule
 {
-  uint8_t value;
-  uint8_t mask;
+  uint32_t value;
+  uint32_t mask;
   Rule()
   {
     value = 0;
     mask = 0;
   }
 
-  Rule(uint8_t x, uint8_t y)
+  Rule(uint32_t x, uint32_t y)
   {
     value = x;
     mask = y;
@@ -44,7 +44,7 @@ public:
 
   static void insert_rule( vector<Rule>& rulesTable, Rule& rule );
 
-  static bool search_rule( vector<Rule>& rulesTable, uint8_t key );
+  static bool search_rule( vector<Rule>& rulesTable, uint32_t key );
 
   static void delete_rule( vector<Rule>& rulesTable, Rule& rule );
 
