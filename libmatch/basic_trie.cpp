@@ -203,7 +203,8 @@ bool Trie::LPM_search_rule(uint32_t key)
 }
 
 // Prefix rules lookup--search rules
-bool Trie::LPM1_search_rule(uint32_t key)
+// Return the match priority, show which rule is being matched
+uint32_t Trie::LPM1_search_rule(uint32_t key)
 {
   trie_node* pRule = root;
   uint32_t match = 0;
@@ -225,7 +226,7 @@ bool Trie::LPM1_search_rule(uint32_t key)
     }
   }
 
-  return match != 0;
+  return match;
   // If return 0, match miss
   // If return 1, match hit
 }

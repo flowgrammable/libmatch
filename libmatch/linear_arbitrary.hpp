@@ -18,35 +18,46 @@ struct Rule
 {
   uint32_t value;
   uint32_t mask;
+  uint32_t priority;
   Rule()
   {
     value = 0;
     mask = 0;
+    priority = 0;
   }
 
-  Rule(uint32_t x, uint32_t y)
+  Rule(uint32_t x, uint32_t y, uint32_t z)
   {
     value = x;
     mask = y;
+    priority = z;
   }
 
 };
 
 class linearTable
 {
-public:
-  vector<Rule> rulesTable;   // Empty vector of Rule struct
+private:
+  vector<Rule> ruleTable;   // Empty vector of Rule struct
   int count; // The number of rules in the linearTable
 
+public:
   // linearTable constructor
-  linearTable();  // constructor
-  ~linearTable(); // delete structure
+  linearTable()
+  {
+    count = 0;
+  }
 
-  static void insert_rule( vector<Rule>& rulesTable, Rule& rule );
+  ~linearTable()
+  {
+    // delete constructor
+  }
 
-  static bool search_rule( vector<Rule>& rulesTable, uint32_t key );
+  void insert_rule( Rule& rule );
 
-  static void delete_rule( vector<Rule>& rulesTable, Rule& rule );
+  uint32_t search_rule( uint32_t key );
+
+  void delete_rule( Rule& rule );
 
 
 };

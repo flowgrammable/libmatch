@@ -121,7 +121,7 @@ int main(int argc, char* argv[])
   //get time1
   auto start = get_time::now(); //use auto keyword to minimize typing strokes :)
   for (int j=0; j<keyTable.size(); j++) {
-    bool present = trie.LPM1_search_rule(keyTable[j]);
+    uint32_t present = trie.LPM1_search_rule(keyTable[j]);
     //cout << j << " " << present << endl;
     sumPresent += present;
     /*

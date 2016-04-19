@@ -34,6 +34,7 @@ Rule strTint(string rulestr)
 
   rule.value = stoul(substr1);
   rule.mask = stoul(substr2);
+  rule.priority = 0;
 
   return rule;
 }
@@ -45,21 +46,25 @@ int main(int argc, char* argv[])
   Rule rule;
   ifstream file (argv[1]);
 
-  // Create a new vector
-  vector<Rule> rulesTable;
+  // Read in rules from file:
+  vector<Rule> inputRules;
+  int i = 0;
   if (file.is_open()) {
     while (!file.eof()) {
       // Read lines as long as the file is
       getline(file,line);
       if(!line.empty()) {
         rule = strTint(line);
+        rule.priority = ++i;
+
         // Push the input file into ruleArray
-        rulesTable.push_back(rule);
+        inputRules.push_back(rule);
       }
     }
   }
   file.close();
 
+  // Read in keys from file:
   string packet;
   uint32_t key;
   ifstream file1 (argv[2]);
@@ -77,23 +82,25 @@ int main(int argc, char* argv[])
   }
   file1.close();
 
-  for (int i=0; i<rulesTable.size(); i++) {
-    linearTable::insert_rule(rulesTable, rulesTable.at(i));
+  // Insert rules into linear arbitrary table:
+  linearTable table;
+  for (int i=0; i<inputRules.size(); i++) {
+    table.insert_rule(inputRules.at(i));
   }
 
   char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
 
   // Search the rules
   cout << "Begin test (keys=" << keyTable.size() <<
-          ", rules=" << rulesTable.size() << "):" << endl;
+          ", rules=" << inputRules.size() << "):" << endl;
 
   int sumPresent = 0;
   auto start = get_time::now(); //use auto keyword to minimize typing strokes :)
   //get time1
   for (int j=0; j<keyTable.size(); j++) {
-    bool present = linearTable::search_rule(rulesTable, keyTable[j]);
-    //cout << output[] << endl;
-    sumPresent += present;
+    uint32_t priority = table.search_rule(keyTable[j]);
+    //cout << present << endl;
+    sumPresent += (priority != 0);
   }
   auto end = get_time::now();
   auto diff = end - start;
@@ -106,31 +113,4 @@ int main(int argc, char* argv[])
   return 0;
 }
 
-/*
-int main()
-{
-  vector<Rule> list = {Rule(102,144), Rule(40,195), Rule(54,8), Rule(54,1), Rule(172,0)};
-  vector<Rule> rulesTable;
 
-  // Insert all the rules in the list
-  for (int i=0; i<list.size(); i++) {
-    linearTable::insert_rule(rulesTable, list.at(i));
-  }
-
-  char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
-
-  // Search the rules
-  cout << output[linearTable::search_rule(rulesTable, 230)] << endl;
-  cout << output[linearTable::search_rule(rulesTable, 202)] << endl;
-  cout << output[linearTable::search_rule(rulesTable, 172)] << endl;
-  cout << output[linearTable::search_rule(rulesTable, 192)] << endl;
-
-  // Delete rules
-  linearTable::delete_rule(rulesTable, list.at(4));
-
-  cout << output[linearTable::search_rule(rulesTable, 172)] << endl;
-
-  return 0;
-
-}
-*/

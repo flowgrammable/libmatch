@@ -102,7 +102,7 @@ public:
 
   bool prefix_search_rule(uint32_t key);
   bool LPM_search_rule(uint32_t key);
-  bool LPM1_search_rule(uint32_t key);
+  uint32_t LPM1_search_rule(uint32_t key);
 
   // Delete rules in the trie
   // When deleting nodes, needs to satisfy two conditions

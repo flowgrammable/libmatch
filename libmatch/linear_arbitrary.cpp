@@ -41,47 +41,50 @@ using namespace std;
 // Pass by reference, any changed made to the reference
 // are passed through to the argument
 
-void linearTable::insert_rule( vector<Rule>& rulesTable, Rule& rule )
+void linearTable::insert_rule( Rule& rule )
 {
+
   // Search table to see if rule exists:
 
   // Guarantee the value of rule is correct, didn't mess up by mask
   rule.value = rule.value & (~rule.mask);
-  for (int i = 0; i < rulesTable.size(); i++) {
-    if ( rule.value == rulesTable[i].value && rule.mask == rulesTable[i].mask ) {
+  for (int i = 0; i < ruleTable.size(); i++) {
+    if ( rule.value == ruleTable[i].value && rule.mask == ruleTable[i].mask ) {
       // Do something if it existed..
       return;
     }
   }
 
   /* Push the new rule into rules table  */
-  rulesTable.push_back(rule);
+
+  ruleTable.push_back(rule);
+
 }
 
 
-bool linearTable::search_rule( vector<Rule>& rulesTable, uint32_t key )
+uint32_t linearTable::search_rule( uint32_t key )
 {
-  for (int i = 0; i < rulesTable.size(); i++) {
-    if (rulesTable[i].value == ( key & ( ~rulesTable[i].mask ) ) ) {
-      return true;
+  for (int i = 0; i < ruleTable.size(); i++) {
+    if (ruleTable[i].value == ( key & ( ~ruleTable[i].mask ) ) ) {
+      return ruleTable[i].priority;
     }
   }
 
   // If no rules match:
-  return false;
+  return 0;
 }
 
 
-void linearTable::delete_rule( vector<Rule>& rulesTable, Rule& rule )
+void linearTable::delete_rule( Rule& rule )
 {
   // Search table to see if rule exists:
 
   // Guarantee the value of rule is correct, didn't mess up by mask
   rule.value = rule.value & (~rule.mask);
-  for (int i = 0; i < rulesTable.size(); i++) {
-    if ( rule.value == rulesTable[i].value && rule.mask == rulesTable[i].mask ) {
+  for (int i = 0; i < ruleTable.size(); i++) {
+    if ( rule.value == ruleTable[i].value && rule.mask == ruleTable[i].mask ) {
       // delete the rule if it existed
-      rulesTable.erase(rulesTable.begin()+i);
+      ruleTable.erase(ruleTable.begin()+i);
     }
   }
 
