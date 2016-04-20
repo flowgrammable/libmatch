@@ -23,6 +23,15 @@ static uint32_t mylog2 (uint32_t val) {
   return ret;
 }
 
+// Check whether Rule a is a subset of Rule b
+// Rule (value, mask, priority)
+// Rule a = 10****, Rule b = 1*****, which means Rule a is a subset of Rule b
+
+bool is_subset(Rule a, Rule b)
+{
+  return ( a.value & b.value == b.value ) && ( a.mask | b.mask == b.mask );
+}
+
 // Convert the input rule format Rule(value, mask) into the integer type in trie
 void convert_rule(vector<uint32_t>& rulesTable, Rule& rule)
 {
@@ -56,7 +65,6 @@ trie_node* new_node()
   trie_node* pNode = new trie_node();
   if (pNode) {
     pNode->priority = 0;
-    pNode->star_num = 0;
     pNode->children[0] = NULL;
     pNode->children[1] = NULL;
   }
@@ -91,7 +99,7 @@ bool is_independent_node(trie_node *pNode)
 }
 
 
-// Insert rules
+// Insert rules: original insert function, without expanding ** part.
 void Trie::insert_rule(uint32_t rule)
 {
   int level;
@@ -142,6 +150,46 @@ void Trie::insert_rule(uint32_t value, uint32_t mask)
 
 }
 
+
+// Insert prefix rules with Rule(value, mask, priority)
+// Added the priority purpose
+// Inserting rules will depend on the priority
+// The priority must be in-order of insertion
+// Which can reduce the number of inserted rules, make the data structure smaller
+
+void Trie::insert_prefix_rule_priority( Rule& rule )
+{
+  trie_node* pRule = root;
+  // Considering the prefix rules, thus the length of rule should be different
+  // depends on the mask value, the length of each rule = 32-mask
+  // The length of wildcard = mask number
+
+  uint32_t mask_num = mylog2(rule.mask+1);
+  // Has a bug here: when 32 bits are all wildcard, will overflow
+  uint32_t prefix_len = 32 - mask_num;
+
+  for (int level=0; level<prefix_len; level++) {
+    // Get the index value of each bit, totally is 32
+    int index = (rule.value >> (31-level)) & 1;
+    // if the key is not present in the trie (is NULL), insert a new node
+    if ( !pRule->children[index] ) {
+      pRule->children[index] = new_node();
+    }
+    // move to child node:
+    pRule = pRule->children[index];
+    // check if rule exists:
+    if (pRule->priority != 0) {
+      // do not insert rule...
+      // probably print a message of interest
+      return;
+    }
+  }
+  // Insert the new rule:
+  count++;
+  pRule->priority = rule.priority; // If the priority is not 0, the node is leaf node
+  //cout << pRule->priority << " " << pRule->star_num << endl;
+}
+
 // Insert prefix rules with Rule(value, mask)
 void Trie::insert_prefix_rule(uint32_t value, uint32_t mask)
 {
@@ -167,7 +215,7 @@ void Trie::insert_prefix_rule(uint32_t value, uint32_t mask)
     pRule = pRule->children[index];
   }
   pRule->priority = count; // If the priority is not 0, the node is leaf node
-  pRule->star_num = mask_num;
+
   //cout << pRule->priority << " " << pRule->star_num << endl;
 }
 

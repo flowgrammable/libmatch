@@ -41,18 +41,21 @@ Rule strTint(string rulestr)
 
 int main(int argc, char* argv[])
 {
-  string line;
-  Rule rule;
   ifstream file (argv[1]);
 
   // Read the rules from txt file
   vector<Rule> pingRulesTable;
+  int i = 0;
   if (file.is_open()) {
     while (!file.eof()) {
       // Read lines as long as the file is
+      string line;
       getline(file,line);
       if(!line.empty()) {
-        rule = strTint(line);
+        Rule rule = strTint(line);
+        // Add the priority feature when generating rules
+        // Priority is in-order of generating
+        rule.priority = ++i;
         // Push the input file into ruleArray
         pingRulesTable.push_back(rule);
       }
@@ -62,33 +65,16 @@ int main(int argc, char* argv[])
 
   cout << pingRulesTable.size() << endl;
 
-  // Get the vector interger vector<Rule>: pingRulesTable
-  // With the format Rule(value, mask)
-  // Need to use the convert function to convert the Rule(value, mask)
-  // to vector<uint32_t>
-/*
-  vector<uint32_t> rulesTable;
-  // Convert the Rule(value, mask) to integer type in trie
-  for (int i=0; i<pingRulesTable.size(); i++) {
-    convert_rule(rulesTable, pingRulesTable[i]);
-
-    //cout << rulesTable.size() << endl;
-  }
-  //cout << rulesTable[0] << endl;
-
-  cout << rulesTable.size() << endl;
-
-*/
-  string packet;
-  uint32_t key;
+ // Read in keys from file:
   ifstream file1 (argv[2]);
   vector<uint32_t> keyTable;
   if (file1.is_open()) {
     while (!file1.eof()) {
       // Read lines as long as the file is
+      string packet;
       getline(file1,packet);
       if(!packet.empty()) {
-        key = stoul(packet);
+        uint32_t key = stoul(packet);
         // Push the input file into ruleArray
         keyTable.push_back(key);
       }
@@ -103,10 +89,8 @@ int main(int argc, char* argv[])
   // insert rules into trie
 
   for (int k = 0; k < pingRulesTable.size(); k++) {
-    uint32_t value = pingRulesTable[k].value;
-    uint32_t mask = pingRulesTable[k].mask;
     //trie.insert_rule(value, mask);
-    trie.insert_prefix_rule(value, mask);
+    trie.insert_prefix_rule_priority(pingRulesTable.at(k));
   }
 
 
@@ -116,14 +100,16 @@ int main(int argc, char* argv[])
   cout << "Begin test (keys=" << keyTable.size() <<
           ", rules=" << pingRulesTable.size() << "):" << endl;
 
-  uint32_t sumPresent = 0;
+  uint32_t checksum = 0;
+  uint32_t match = 0;
 
   //get time1
   auto start = get_time::now(); //use auto keyword to minimize typing strokes :)
   for (int j=0; j<keyTable.size(); j++) {
-    uint32_t present = trie.LPM1_search_rule(keyTable[j]);
+    uint32_t priority = trie.LPM1_search_rule(keyTable[j]);
     //cout << j << " " << present << endl;
-    sumPresent += present;
+    checksum += priority;
+    match += (priority != 0);
     /*
     if (present) {
       sumPresent += 1;
@@ -134,7 +120,8 @@ int main(int argc, char* argv[])
   //get time2
   auto end = get_time::now();
   auto diff = end - start;
-  cout << "Total matches: " << sumPresent << endl;
+  cout << "Checksum: " << checksum << endl;
+  cout << "Total matches: " << match << endl;
   cout<<"Elapsed time is :  "<< chrono::duration_cast<ns>(diff).count()<<" ns "<<endl;
 
 

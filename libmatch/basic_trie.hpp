@@ -15,22 +15,25 @@
 
 using namespace std;
 
-// For arbitrary match, using format Rule(value, mask) as input
+// For arbitrary match, using format Rule(value, mask, priority) as input
 struct Rule
 {
   uint32_t value;
   uint32_t mask;
+  uint32_t priority;
 
   Rule()
   {
     value = 0;
     mask = 0;
+    priority = 0;
   }
 
-  Rule(uint32_t x, uint32_t y)
+  Rule(uint32_t x, uint32_t y, uint32_t z)
   {
     value = x;
     mask = y;
+    priority = z;
   }
 
 };
@@ -42,14 +45,12 @@ void convert_rule(vector<uint32_t>& rulesTable, Rule& rule);
 struct trie_node
 {
   uint32_t priority; // Used to mark leaf nodes, and also can show pripority
-  uint32_t star_num;
   trie_node* children[2]; // Trie stride = 1, has two pointer, '0' and '1'
 
   // trie_node constructor
   trie_node()
   {
     priority = 0;
-    star_num = 0;
     children[0] = NULL;
     children[1] = NULL;
   }
@@ -94,6 +95,8 @@ public:
   void insert_prefix_rule(uint32_t value, uint32_t mask);
 
   void insert_rule(uint32_t value, uint32_t mask);
+
+  void insert_prefix_rule_priority(Rule& rule);
 
   // Search the incoming packet in the trie
   // If return 0, match miss

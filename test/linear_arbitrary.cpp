@@ -55,6 +55,8 @@ int main(int argc, char* argv[])
       getline(file,line);
       if(!line.empty()) {
         rule = strTint(line);
+        // Add the priority feature when generating rules
+        // Priority is in-order of generating
         rule.priority = ++i;
 
         // Push the input file into ruleArray
@@ -94,18 +96,23 @@ int main(int argc, char* argv[])
   cout << "Begin test (keys=" << keyTable.size() <<
           ", rules=" << inputRules.size() << "):" << endl;
 
-  int sumPresent = 0;
+  uint32_t checksum = 0;
+  uint32_t match = 0;
+
+
   auto start = get_time::now(); //use auto keyword to minimize typing strokes :)
   //get time1
   for (int j=0; j<keyTable.size(); j++) {
     uint32_t priority = table.search_rule(keyTable[j]);
     //cout << present << endl;
-    sumPresent += (priority != 0);
+    checksum += priority;
+    match += (priority != 0);
   }
   auto end = get_time::now();
   auto diff = end - start;
   //get time2
-  cout << "Total matches: " << sumPresent << endl;
+  cout << "Checksum: " << checksum << endl;
+  cout << "Total matches: " << match << endl;
   cout<<"Elapsed time is :  "<< chrono::duration_cast<ns>(diff).count()<<" ns "<<endl;
 
 
