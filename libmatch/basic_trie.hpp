@@ -44,7 +44,7 @@ void convert_rule(vector<uint32_t>& rulesTable, Rule& rule);
 
 struct trie_node
 {
-  uint32_t priority; // Used to mark leaf nodes, and also can show pripority
+  uint32_t priority; // Used to mark rule nodes, and also can show pripority
   trie_node* children[2]; // Trie stride = 1, has two pointer, '0' and '1'
 
   // trie_node constructor
@@ -77,12 +77,14 @@ public:
   // This is the input of rules (value, mask)
   trie_node* root;
   int count; // The number of rules in a trie
+  int node_count; // The number of nodes in a trie
 
   // Trie constructor
   Trie()
   {
     root = new_node();
     count = 0;
+    node_count = 1; // Include the root node
   }
   ~Trie()
   {
@@ -90,11 +92,12 @@ public:
   }
 
   // Insert rules into the trie
-  void insert_rule(uint32_t rule);
+
+  void insert_rule_value(uint32_t rule_value);
 
   void insert_prefix_rule(uint32_t value, uint32_t mask);
 
-  void insert_rule(uint32_t value, uint32_t mask);
+  void insert_rule(Rule& rule);
 
   void insert_prefix_rule_priority(Rule& rule);
 

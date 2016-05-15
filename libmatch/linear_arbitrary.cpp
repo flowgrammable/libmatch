@@ -62,7 +62,7 @@ void linearTable::insert_rule( Rule& rule )
 }
 
 
-uint32_t linearTable::search_rule( uint32_t key )
+uint64_t linearTable::search_rule( uint64_t key )
 {
   for (int i = 0; i < ruleTable.size(); i++) {
     if (ruleTable[i].value == ( key & ( ~ruleTable[i].mask ) ) ) {

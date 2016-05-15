@@ -32,8 +32,8 @@ Rule strTint(string rulestr)
   string substr2 = rulestr.substr((p1 + 1));
 
 
-  rule.value = stoul(substr1);
-  rule.mask = stoul(substr2);
+  rule.value = stoull(substr1);
+  rule.mask = stoull(substr2);
   rule.priority = 0;
 
   return rule;
@@ -68,15 +68,15 @@ int main(int argc, char* argv[])
 
   // Read in keys from file:
   string packet;
-  uint32_t key;
+  uint64_t key;
   ifstream file1 (argv[2]);
-  vector<uint32_t> keyTable;
+  vector<uint64_t> keyTable;
   if (file1.is_open()) {
     while (!file1.eof()) {
       // Read lines as long as the file is
       getline(file1,packet);
       if(!packet.empty()) {
-        key = stoul(packet);
+        key = stoull(packet);
         // Push the input file into ruleArray
         keyTable.push_back(key);
       }
@@ -96,14 +96,14 @@ int main(int argc, char* argv[])
   cout << "Begin test (keys=" << keyTable.size() <<
           ", rules=" << inputRules.size() << "):" << endl;
 
-  uint32_t checksum = 0;
-  uint32_t match = 0;
+  uint64_t checksum = 0;
+  uint64_t match = 0;
 
 
   auto start = get_time::now(); //use auto keyword to minimize typing strokes :)
   //get time1
   for (int j=0; j<keyTable.size(); j++) {
-    uint32_t priority = table.search_rule(keyTable[j]);
+    uint64_t priority = table.search_rule(keyTable[j]);
     //cout << present << endl;
     checksum += priority;
     match += (priority != 0);

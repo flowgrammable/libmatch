@@ -100,20 +100,21 @@ bool is_independent_node(trie_node *pNode)
 
 
 // Insert rules: original insert function, without expanding ** part.
-void Trie::insert_rule(uint32_t rule)
+void Trie::insert_rule_value(uint32_t rule_value)
 {
   int level;
   int index;
   trie_node* pRule;
   count++;
-  pRule = root;
+  pRule = root; // Created the first node in a trie
   // Here is 32, because of the fixed length uint32_t
   for (level=0; level<32; level++) {
     // Get the index value of each bit, totally is 32
-    index = (rule >> (31-level)) & 1;
+    index = (rule_value >> (31-level)) & 1;
     // if the key is not present in the trie (is NULL), insert a new node
     if ( !pRule->children[index] ) {
       pRule->children[index] = new_node();
+      node_count++; // Created a new node in a trie
     }
     pRule = pRule->children[index];
   }
@@ -123,19 +124,19 @@ void Trie::insert_rule(uint32_t rule)
 
 // Insert rules with Rule(value, mask)
 // Expand wildcard part in a Rule(value, mask)
-void Trie::insert_rule(uint32_t value, uint32_t mask)
+void Trie::insert_rule( Rule& rule )
 {
   // Store the wildcard postion into vector maskPosion
   vector<uint32_t> maskPosition;
   // Check the mask field from the lower bit
   for(int i = 0; i < 32; i++) {
     // if this: get the position whose bit is 1 (have wildcard)
-    if((mask >> i) & 1 == 1) {
+    if((rule.mask >> i) & 1 == 1) {
       maskPosition.push_back(i);
     }
   }
   uint32_t num = maskPosition.size(); // num is the number of wildcard
-  uint32_t base = value & (~mask); // Get the value field of each rule
+  uint32_t base = rule.value & (~rule.mask); // Get the value field of each rule
   for(int i = 0; i < (1 << num); i++) {
     uint32_t newRule = base; // This is the base rule, smallest integer rule
     for(int j = 0; j < num; j++) {
@@ -144,7 +145,7 @@ void Trie::insert_rule(uint32_t value, uint32_t mask)
         newRule |= (1 << maskPosition.at(j));
       }
     }
-    insert_rule(newRule);
+    insert_rule_value(newRule);
 
   }
 
@@ -174,6 +175,7 @@ void Trie::insert_prefix_rule_priority( Rule& rule )
     // if the key is not present in the trie (is NULL), insert a new node
     if ( !pRule->children[index] ) {
       pRule->children[index] = new_node();
+      node_count++; // Created a new node in a trie
     }
     // move to child node:
     pRule = pRule->children[index];

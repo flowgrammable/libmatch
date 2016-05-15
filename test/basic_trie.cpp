@@ -89,10 +89,12 @@ int main(int argc, char* argv[])
   // insert rules into trie
 
   for (int k = 0; k < pingRulesTable.size(); k++) {
-    //trie.insert_rule(value, mask);
-    trie.insert_prefix_rule_priority(pingRulesTable.at(k));
+    trie.insert_rule(pingRulesTable.at(k));
+    //trie.insert_prefix_rule_priority(pingRulesTable.at(k));
+
   }
 
+  //void Trie::insert_rule(uint32_t value, uint32_t mask)
 
   char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
 
@@ -110,11 +112,7 @@ int main(int argc, char* argv[])
     //cout << j << " " << present << endl;
     checksum += priority;
     match += (priority != 0);
-    /*
-    if (present) {
-      sumPresent += 1;
-    }
-    */
+
   }
 
   //get time2

@@ -16,9 +16,9 @@ using namespace std;
 
 struct Rule
 {
-  uint32_t value;
-  uint32_t mask;
-  uint32_t priority;
+  uint64_t value;
+  uint64_t mask;
+  uint64_t priority;
   Rule()
   {
     value = 0;
@@ -26,7 +26,7 @@ struct Rule
     priority = 0;
   }
 
-  Rule(uint32_t x, uint32_t y, uint32_t z)
+  Rule(uint64_t x, uint64_t y, uint64_t z)
   {
     value = x;
     mask = y;
@@ -55,7 +55,7 @@ public:
 
   void insert_rule( Rule& rule );
 
-  uint32_t search_rule( uint32_t key );
+  uint64_t search_rule( uint64_t key );
 
   void delete_rule( Rule& rule );
 
