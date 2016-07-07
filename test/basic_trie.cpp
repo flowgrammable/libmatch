@@ -13,12 +13,19 @@
 #include <iomanip>
 #include <math.h>
 #include <chrono>
+#include <algorithm>
+#include <functional>
 
 using namespace std;
 using  ns = chrono::nanoseconds;
 using get_time = chrono::steady_clock ;
 
-
+typedef std::pair<int,int> mypair;
+/*
+bool comparator ( const mypair& l, const mypair& r)
+   { return l.first < r.first; }
+// forgetting the syntax here but intent is clear enough
+*/
 // Matches integer type
 Rule strTint(string rulestr)
 {
@@ -32,11 +39,42 @@ Rule strTint(string rulestr)
   string substr2 = rulestr.substr((p1 + 1));
 
 
-  rule.value = stoul(substr1);
-  rule.mask = stoul(substr2);
+  rule.value = stoull(substr1); // unsigned long long 64bit
+  rule.mask = stoull(substr2);
 
   return rule;
 }
+
+/*
+ * Detect the wildcard position in mask part
+ * Detect bit "1" in mask
+ * void detect_wildcard_mask(Rule& rule)
+{
+  vector<uint64_t> maskPositionArray; // store all the "1" bit position, start from 0
+  // Check the mask field from the lower bit, total is 64bit, two fields
+  for(int i = 0; i < 64; i++) {
+    // Get an array with 0 and 1
+    if((rule.mask >> i) & 1 == 1) {
+      maskPositionArray.push_back(1);
+    }
+    else {
+      maskPositionArray.push_back(0);
+    }
+  }
+}
+*/
+
+
+/*
+ * Find the intersection of each rule in rulesTable
+ * FInd the maximal overlapping wildcard in mask
+ * Return an array, a set of bit "1" position {4, 5, 6}
+ * void findIntersection(vector<uint64_t>& maskArray)
+{
+
+}
+*/
+
 
 
 int main(int argc, char* argv[])
@@ -67,14 +105,14 @@ int main(int argc, char* argv[])
 
  // Read in keys from file:
   ifstream file1 (argv[2]);
-  vector<uint32_t> keyTable;
+  vector<uint64_t> keyTable;
   if (file1.is_open()) {
     while (!file1.eof()) {
       // Read lines as long as the file is
       string packet;
       getline(file1,packet);
       if(!packet.empty()) {
-        uint32_t key = stoul(packet);
+        uint64_t key = stoull(packet);
         // Push the input file into ruleArray
         keyTable.push_back(key);
       }
@@ -82,6 +120,76 @@ int main(int argc, char* argv[])
   }
   file1.close();
   cout << keyTable.size() << endl;
+
+  /*
+   * Generate the two dimensional array (generate delta array) from the pingRulesTable array
+   * With all the bits in each rule, including "0" and "1"
+   * Caculate the score--the sum of column
+  */
+  vector<uint64_t> sumColumn;
+  for (int j = 0; j < 64; j++) {
+    for (i = 0; i < pingRulesTable.size(); i++) {
+      sumColumn[j] = sumColumn[j] + ((pingRulesTable[i].mask >> j) & 1);
+    }
+  }
+  // Copy the sumCOlumn vector to a new vector
+  vector<uint64_t> newSumColumn(sumColumn);
+
+  // Sort the newSumColumn vector in descending order
+  std::sort(newSumColumn.begin(), newSumColumn.end(), std::greater<uint64_t>());
+
+  // Construct the delta(): the rearrangement operation {left shift, right shift, and no change}
+  // the element in delta vector, can be negative, positive and "0"
+  vector<int> delta;
+  // checkpoint is the index/subscript of the newSumColumn has the same value with the sumColumn
+  int checkpoint = 0;
+  for (int i = 0; i < sumColumn.size(); i++) {
+    for (int j = 0; j < newSumColumn.size(); j++) {
+      // Check the first equal element, if it is true, then return the checkpoint
+      if (newSumColumn[j] == sumColumn[i]) {
+        checkpoint = j;
+      }
+      else {
+        cout << "Error occurs" << endl;
+      }
+    }
+    // Get the difference between the original vector data and the sorted vector data
+    // Create the rearrangement operation
+    delta[i] = i - checkpoint;
+  }
+
+  /*
+   * Generate the new rule after the delta operations
+   * if the element value of delta vector is negative, which means left shift
+   * if the element value of delta vector is positive, which means right shift
+   * if the element value of delta vector is "0", which means no change
+  */
+  // Create a new pingRulesTable for the new rearrangement rules
+  vector<Rule> newPingRulesTable;
+  vector<Rule> sumRule;
+  for (int i = 0; i < pingRulesTable.size(); i++) {
+    for (int j = 0; j < 64; j++) {
+      if (delta[j] < 0) {
+        // if it is negative, do the left shift
+        // from the lsb position, do the correct operations
+        newPingRulesTable[i].mask = ( ( pingRulesTable[i].mask & (1 << i) ) << abs(delta[j]) );
+        newPingRulesTable[i].value = ( ( pingRulesTable[i].value & (1 << i) ) << abs(delta[j]) );
+      }
+      else if (delta[j] > 0) {
+        // if it is positive, do the right shift
+        newPingRulesTable[i].mask = ( ( pingRulesTable[i].mask & (1 << i) ) >> abs(delta[j]) );
+        newPingRulesTable[i].value = ( ( pingRulesTable[i].value & (1 << i) ) >> abs(delta[j]) );
+      }
+      else if (delta[j] == 0) {
+        // if it is "0", no change
+        newPingRulesTable[i].mask = pingRulesTable[i].mask;
+        newPingRulesTable[i].value = pingRulesTable[i].value;
+      }
+      sumRule[i].mask =+ newPingRulesTable[i].mask;
+      sumRule[i].value =+ newPingRulesTable[i].value;
+    }
+  }
+
 
   // Initilize a trie
   Trie trie;

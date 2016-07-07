@@ -12,10 +12,10 @@
 using namespace std;
 
 // This function is caculating the log2 value
-static uint32_t mylog2 (uint32_t val) {
+static uint64_t mylog2 (uint64_t val) {
   if (val == 0) return UINT_MAX;
   if (val == 1) return 0;
-  uint32_t ret = 0;
+  uint64_t ret = 0;
   while (val > 1) {
     val >>= 1;
     ret++;
@@ -32,22 +32,25 @@ bool is_subset(Rule a, Rule b)
   return ( a.value & b.value == b.value ) && ( a.mask | b.mask == b.mask );
 }
 
+
+
+
 // Convert the input rule format Rule(value, mask) into the integer type in trie
-void convert_rule(vector<uint32_t>& rulesTable, Rule& rule)
+void convert_rule(vector<uint64_t>& rulesTable, Rule& rule)
 {
   // Store the wildcard postion into vector maskPosion
   vector<uint32_t> maskPosition;
   // Check the mask field from the lower bit
-  for(int i = 0; i < 32; i++) {
+  for(int i = 0; i < 64; i++) {
     // if this: get the position whose bit is 1 (have wildcard)
     if((rule.mask >> i) & 1 == 1) {
       maskPosition.push_back(i);
     }
   }
   uint32_t num = maskPosition.size(); // num is the number of wildcard
-  uint32_t base = rule.value & (~rule.mask); // Get the value field of each rule
+  uint64_t base = rule.value & (~rule.mask); // Get the value field of each rule
   for(int i = 0; i < (1 << num); i++) {
-    uint32_t newRule = base; // This is the base rule, smallest integer rule
+    uint64_t newRule = base; // This is the base rule, smallest integer rule
     for(int j = 0; j < num; j++) {
       if(((1 << j) & i) == 0) {
         // get the newRule for ruleTables
@@ -100,17 +103,17 @@ bool is_independent_node(trie_node *pNode)
 
 
 // Insert rules: original insert function, without expanding ** part.
-void Trie::insert_rule_value(uint32_t rule_value)
+void Trie::insert_rule_value(uint64_t rule_value)
 {
   int level;
   int index;
   trie_node* pRule;
   count++;
   pRule = root; // Created the first node in a trie
-  // Here is 32, because of the fixed length uint32_t
-  for (level=0; level<32; level++) {
+  // Here is 64, because of the fixed length uint64_t
+  for (level=0; level<64; level++) {
     // Get the index value of each bit, totally is 32
-    index = (rule_value >> (31-level)) & 1;
+    index = (rule_value >> (63-level)) & 1;
     // if the key is not present in the trie (is NULL), insert a new node
     if ( !pRule->children[index] ) {
       pRule->children[index] = new_node();
@@ -129,16 +132,16 @@ void Trie::insert_rule( Rule& rule )
   // Store the wildcard postion into vector maskPosion
   vector<uint32_t> maskPosition;
   // Check the mask field from the lower bit
-  for(int i = 0; i < 32; i++) {
+  for(int i = 0; i < 64; i++) {
     // if this: get the position whose bit is 1 (have wildcard)
     if((rule.mask >> i) & 1 == 1) {
       maskPosition.push_back(i);
     }
   }
   uint32_t num = maskPosition.size(); // num is the number of wildcard
-  uint32_t base = rule.value & (~rule.mask); // Get the value field of each rule
+  uint64_t base = rule.value & (~rule.mask); // Get the value field of each rule
   for(int i = 0; i < (1 << num); i++) {
-    uint32_t newRule = base; // This is the base rule, smallest integer rule
+    uint64_t newRule = base; // This is the base rule, smallest integer rule
     for(int j = 0; j < num; j++) {
       if(((1 << j) & i) == 0) {
         // get the newRule for ruleTables
@@ -167,11 +170,11 @@ void Trie::insert_prefix_rule_priority( Rule& rule )
 
   uint32_t mask_num = mylog2(rule.mask+1);
   // Has a bug here: when 32 bits are all wildcard, will overflow
-  uint32_t prefix_len = 32 - mask_num;
+  uint32_t prefix_len = 64 - mask_num;
 
   for (int level=0; level<prefix_len; level++) {
     // Get the index value of each bit, totally is 32
-    int index = (rule.value >> (31-level)) & 1;
+    int index = (rule.value >> (63-level)) & 1;
     // if the key is not present in the trie (is NULL), insert a new node
     if ( !pRule->children[index] ) {
       pRule->children[index] = new_node();
@@ -193,7 +196,7 @@ void Trie::insert_prefix_rule_priority( Rule& rule )
 }
 
 // Insert prefix rules with Rule(value, mask)
-void Trie::insert_prefix_rule(uint32_t value, uint32_t mask)
+void Trie::insert_prefix_rule(uint64_t value, uint64_t mask)
 {
   int level;
   int index;
@@ -205,11 +208,11 @@ void Trie::insert_prefix_rule(uint32_t value, uint32_t mask)
   // The length of wildcard = mask number
 
   uint32_t mask_num = mylog2(mask+1);
-  uint32_t layer = 32 - mask_num;
+  uint32_t layer = 64 - mask_num;
 
   for (level=0; level<layer; level++) {
     // Get the index value of each bit, totally is 32
-    index = (value >> (31-level)) & 1;
+    index = (value >> (63-level)) & 1;
     // if the key is not present in the trie (is NULL), insert a new node
     if ( !pRule->children[index] ) {
       pRule->children[index] = new_node();
@@ -222,15 +225,15 @@ void Trie::insert_prefix_rule(uint32_t value, uint32_t mask)
 }
 
 // Prefix rules lookup--search rules
-bool Trie::LPM_search_rule(uint32_t key)
+bool Trie::LPM_search_rule(uint64_t key)
 {
   trie_node* pRule;
   int index;  // The index of children, here just has 2 children
   int level;
   pRule = root;
 
-  for (level=0; level<32; level++) {
-    index = (key >> (31-level)) & 1;
+  for (level=0; level<64; level++) {
+    index = (key >> (63-level)) & 1;
 
     if ( !pRule->children[index] && pRule->priority == 0) {
       return 0;
@@ -254,13 +257,13 @@ bool Trie::LPM_search_rule(uint32_t key)
 
 // Prefix rules lookup--search rules
 // Return the match priority, show which rule is being matched
-uint32_t Trie::LPM1_search_rule(uint32_t key)
+uint32_t Trie::LPM1_search_rule(uint64_t key)
 {
   trie_node* pRule = root;
   uint32_t match = 0;
 
-  for (int level=0; level<32; level++) {
-    int index = (key >> (31-level)) & 1;
+  for (int level=0; level<64; level++) {
+    int index = (key >> (63-level)) & 1;
     // Choose child based on relelvant bit in key.
     // If child exists, recurse:
     pRule = pRule->children[index];
@@ -283,14 +286,14 @@ uint32_t Trie::LPM1_search_rule(uint32_t key)
 
 
 // Lookup--search rules
-bool Trie::search_rule(uint32_t key)
+bool Trie::search_rule(uint64_t key)
 {
   int level;
   int index;  // The index of children, here just has 2 children
   trie_node* pRule;
   pRule = root;
-  for (level=0; level<32; level++) {
-    index = (key >> (31-level)) & 1;
+  for (level=0; level<64; level++) {
+    index = (key >> (63-level)) & 1;
     if ( !pRule->children[index] ) {
       return 0;
     }
@@ -303,7 +306,7 @@ bool Trie::search_rule(uint32_t key)
 }
 
 
-bool Trie::remove(trie_node* pNode, uint32_t rule, int level, int len)
+bool Trie::remove(trie_node* pNode, uint64_t rule, int level, int len)
 {
   int index;
   if(pNode) {
@@ -318,7 +321,7 @@ bool Trie::remove(trie_node* pNode, uint32_t rule, int level, int len)
       }
     }
     else {
-      index = (rule >> (31-level)) & 1;
+      index = (rule >> (63-level)) & 1;
       if(remove(pNode->children[index], rule, level+1, len)) {
         delete pNode->children[index]; // Last node marked, delete it
         pNode->children[index] = NULL;
@@ -331,9 +334,9 @@ bool Trie::remove(trie_node* pNode, uint32_t rule, int level, int len)
 }
 
 // Delete rules
-void Trie::delete_rule(uint32_t rule)
+void Trie::delete_rule(uint64_t rule)
 {
-  int len = 32;
+  int len = 64;
   if( len > 0 ) {
     remove(root, rule, 0, len);
   }
