@@ -45,6 +45,8 @@ void convert_rule(vector<uint64_t>& rulesTable, Rule& rule);
 
 void detect_wildcard_mask(Rule& rule);
 
+
+
 struct trie_node
 {
   uint64_t priority; // Used to mark rule nodes, and also can show pripority
@@ -101,6 +103,11 @@ public:
   void insert_prefix_rule(uint64_t value, uint64_t mask);
 
   void insert_rule(Rule& rule);
+
+  void is_prefix(Rule& rule);
+
+  // Expanding the arbitrary rules into prefix rules
+  void expand_rule(Rule& rule);
 
   void insert_prefix_rule_priority(Rule& rule);
 

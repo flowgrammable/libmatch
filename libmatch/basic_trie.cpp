@@ -79,7 +79,7 @@ trie_node* new_node()
 // If the priority != 0, it is leaf node
 bool is_rule_node(trie_node *pNode)
 {
-  if(pNode->priority == 0) {
+  if (pNode->priority == 0) {
     return false;
   }
   else {
@@ -93,7 +93,7 @@ bool is_rule_node(trie_node *pNode)
 // If the node has children, it is not
 bool is_independent_node(trie_node *pNode)
 {
-  if( (pNode->children[0] == NULL) && (pNode->children[1] == NULL) ) {
+  if ( (pNode->children[0] == NULL) && (pNode->children[1] == NULL) ) {
     return true;
   }
   else {
@@ -153,6 +153,9 @@ void Trie::insert_rule( Rule& rule )
   }
 
 }
+
+
+
 
 
 // Insert prefix rules with Rule(value, mask, priority)
@@ -222,6 +225,67 @@ void Trie::insert_prefix_rule(uint64_t value, uint64_t mask)
   pRule->priority = count; // If the priority is not 0, the node is leaf node
 
   //cout << pRule->priority << " " << pRule->star_num << endl;
+}
+
+void Trie::expand_rule( Rule& rule)
+{
+  int boundary = 0;
+  for (int i=0; i<64; i++) {
+    // Find the first bit "0" from the least significant bit
+    // 10x1xx, so the mask is 001011
+    if ( ((rule.mask >> i) & 1) == 0 ) {
+      boundary = i;
+    }
+  }
+  vector<uint32_t> maskNewPosition;
+  for (int j=(boundary+1); j<64; j++) {
+    if ( ((rule.mask >> j) & 1) == 1 ) {
+      maskNewPosition.push_back(j);
+    }
+  }
+  // Get all the "1" in the new rule, besides the prefix part
+  // need to expand all the "1" part
+  uint32_t new_num = maskNewPosition.size(); // num is the number of wildcard
+  Rule newRule;
+
+  for(int i = 0; i < (1 << new_num); i++) {
+    newRule.value = rule.value;
+    // expand into the number of rules: depending on the number of wildcard
+    for(int j = 0; j < new_num; j++) {
+      if(((1 << j) & i) == 0) {
+        // get the newRule for ruleTables
+        newRule.value |= (1 << maskNewPosition.at(j));
+        newRule.mask = rule.mask;
+        newRule.priority = rule.priority;
+      }
+    }
+    insert_prefix_rule_priority(newRule);
+  }
+}
+
+/*
+ * Check whether the new rule is a prefix rule
+ * if yes, do the LPM insertion
+ * if not, do the expand rule function
+*/
+void Trie::is_prefix(Rule& rule)
+{
+  // Store the wildcard postion into vector maskPosion
+  vector<uint32_t> maskPosition;
+  // Check the mask field from the lower bit
+  for(int i = 0; i < 64; i++) {
+    // if this: get the position whose bit is 1 (have wildcard)
+    if((rule.mask >> i) & 1 == 1) {
+      maskPosition.push_back(i);
+    }
+  }
+  uint32_t num = maskPosition.size(); // num is the number of wildcard
+  if (rule.mask == (1 << num)-1) {
+    insert_prefix_rule_priority(rule);
+  }
+  else {
+    expand_rule(rule);
+  }
 }
 
 // Prefix rules lookup--search rules

@@ -20,12 +20,6 @@ using namespace std;
 using  ns = chrono::nanoseconds;
 using get_time = chrono::steady_clock ;
 
-typedef std::pair<int,int> mypair;
-/*
-bool comparator ( const mypair& l, const mypair& r)
-   { return l.first < r.first; }
-// forgetting the syntax here but intent is clear enough
-*/
 // Matches integer type
 Rule strTint(string rulestr)
 {
@@ -44,38 +38,6 @@ Rule strTint(string rulestr)
 
   return rule;
 }
-
-/*
- * Detect the wildcard position in mask part
- * Detect bit "1" in mask
- * void detect_wildcard_mask(Rule& rule)
-{
-  vector<uint64_t> maskPositionArray; // store all the "1" bit position, start from 0
-  // Check the mask field from the lower bit, total is 64bit, two fields
-  for(int i = 0; i < 64; i++) {
-    // Get an array with 0 and 1
-    if((rule.mask >> i) & 1 == 1) {
-      maskPositionArray.push_back(1);
-    }
-    else {
-      maskPositionArray.push_back(0);
-    }
-  }
-}
-*/
-
-
-/*
- * Find the intersection of each rule in rulesTable
- * FInd the maximal overlapping wildcard in mask
- * Return an array, a set of bit "1" position {4, 5, 6}
- * void findIntersection(vector<uint64_t>& maskArray)
-{
-
-}
-*/
-
-
 
 int main(int argc, char* argv[])
 {
@@ -166,7 +128,7 @@ int main(int argc, char* argv[])
   */
   // Create a new pingRulesTable for the new rearrangement rules
   vector<Rule> newPingRulesTable;
-  vector<Rule> sumRule;
+  vector<Rule> sumRulesTable;
   for (int i = 0; i < pingRulesTable.size(); i++) {
     for (int j = 0; j < 64; j++) {
       if (delta[j] < 0) {
@@ -185,42 +147,46 @@ int main(int argc, char* argv[])
         newPingRulesTable[i].mask = pingRulesTable[i].mask;
         newPingRulesTable[i].value = pingRulesTable[i].value;
       }
-      sumRule[i].mask =+ newPingRulesTable[i].mask;
-      sumRule[i].value =+ newPingRulesTable[i].value;
+      sumRulesTable[i].mask += newPingRulesTable[i].mask;
+      sumRulesTable[i].value += newPingRulesTable[i].value;
     }
   }
+
+  /*
+   * We get the new rearrangement rules table here, named sumRulesTabel
+   * Next, we will do the rules insertion
+   * Here, we just insert prefix rules, follow the LPM insertion function
+   * So we need to check whether each new rules is prefix rule
+   * If it is, then do the insertion
+   * if not, do the expansion algorithm to make it is prefix rule
+  */
 
 
   // Initilize a trie
   Trie trie;
 
-  // insert rules into trie
+  // insert new modified rules into trie (after rearrangement algorithm)
 
-  for (int k = 0; k < pingRulesTable.size(); k++) {
-    trie.insert_rule(pingRulesTable.at(k));
-    //trie.insert_prefix_rule_priority(pingRulesTable.at(k));
-
+  for (int k = 0; k < sumRulesTable.size(); k++) {
+    trie.is_prefix(sumRulesTable.at(k));
   }
-
-  //void Trie::insert_rule(uint32_t value, uint32_t mask)
 
   char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
 
   // Search the rules
   cout << "Begin test (keys=" << keyTable.size() <<
-          ", rules=" << pingRulesTable.size() << "):" << endl;
+          ", rules=" << sumRulesTable.size() << "):" << endl;
 
-  uint32_t checksum = 0;
-  uint32_t match = 0;
+  uint32_t checksum = 0; // show the sum of matching priority
+  uint32_t match = 0; // how many keys are being matched in these new rules
 
   //get time1
-  auto start = get_time::now(); //use auto keyword to minimize typing strokes :)
+  auto start = get_time::now(); // use auto keyword to minimize typing strokes :)
   for (int j=0; j<keyTable.size(); j++) {
     uint32_t priority = trie.LPM1_search_rule(keyTable[j]);
     //cout << j << " " << present << endl;
     checksum += priority;
-    match += (priority != 0);
-
+    match += (priority != 0); // when priority == 0, which means no matching
   }
 
   //get time2
@@ -229,8 +195,6 @@ int main(int argc, char* argv[])
   cout << "Checksum: " << checksum << endl;
   cout << "Total matches: " << match << endl;
   cout<<"Elapsed time is :  "<< chrono::duration_cast<ns>(diff).count()<<" ns "<<endl;
-
-
 
   return 0;
 }
