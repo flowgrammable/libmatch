@@ -90,35 +90,77 @@ int main(int argc, char* argv[])
   */
   vector<uint64_t> sumColumn;
   for (int j = 0; j < 64; j++) {
+    uint32_t score = 0;
     for (i = 0; i < pingRulesTable.size(); i++) {
-      sumColumn[j] = sumColumn[j] + ((pingRulesTable[i].mask >> j) & 1);
+      //cout << "mask score is" << " " << ((((pingRulesTable.at(i)).mask) >> j) & 1) << endl;
+      score += ((((pingRulesTable.at(i)).mask) >> j) & 1);
     }
+    //cout << "score is" << " " << score << endl;
+    sumColumn.push_back(score);
+    cout << sumColumn[j] << endl;
   }
+   cout << sumColumn.size() << endl;
+
   // Copy the sumCOlumn vector to a new vector
   vector<uint64_t> newSumColumn(sumColumn);
+  /*
+   * Checked the newSumColumn vector is the same with the sumColumn vector
+  cout << newSumColumn.size() << endl;
+
+  for (i = 0; i < newSumColumn.size(); i++) {
+    cout << newSumColumn[i] << endl;
+  }
+  */
 
   // Sort the newSumColumn vector in descending order
   std::sort(newSumColumn.begin(), newSumColumn.end(), std::greater<uint64_t>());
+  /*
+   * Checked the descending order is correct or not
+  for (i = 0; i < newSumColumn.size(); i++) {
+    cout << newSumColumn[i] << endl;
+  }
+  */
 
   // Construct the delta(): the rearrangement operation {left shift, right shift, and no change}
   // the element in delta vector, can be negative, positive and "0"
   vector<int> delta;
   // checkpoint is the index/subscript of the newSumColumn has the same value with the sumColumn
-  int checkpoint = 0;
+  uint32_t checkpoint = 0;
+  int gap = 0; // Gap is the difference between the original and new sumcolumn vectors
   for (int i = 0; i < sumColumn.size(); i++) {
+    //cout << "mark1" << " " << sumColumn[i] << endl;
     for (int j = 0; j < newSumColumn.size(); j++) {
+      //cout << newSumColumn[j] << endl;
       // Check the first equal element, if it is true, then return the checkpoint
-      if (newSumColumn[j] == sumColumn[i]) {
+      if (newSumColumn[j] != sumColumn[i]) {
+        continue;
+      }
+      else if (newSumColumn[j] == sumColumn[i]) {
         checkpoint = j;
+        newSumColumn[j] = 132; // make the matched column invalid
+        break;
       }
       else {
+        // Search all the 64 values, still didn't find the same value
         cout << "Error occurs" << endl;
       }
     }
     // Get the difference between the original vector data and the sorted vector data
     // Create the rearrangement operation
-    delta[i] = i - checkpoint;
+    gap = i - checkpoint;
+    //cout << "checkpoint is" << " " << checkpoint << endl;
+    //cout << "gap is" << " " << gap << endl;
+    delta.push_back(gap);
   }
+
+  /*
+   * Checked the delta vector
+
+  for (i = 0; i < delta.size(); i++) {
+    cout << delta[i] << endl;
+  }
+   */
+
 
   /*
    * Generate the new rule after the delta operations
