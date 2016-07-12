@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
   }
   file.close();
 
-  cout << pingRulesTable.size() << endl;
+  //cout << pingRulesTable.size() << endl;
 
  // Read in keys from file:
   ifstream file1 (argv[2]);
@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
     }
   }
   file1.close();
-  cout << keyTable.size() << endl;
+  //cout << keyTable.size() << endl;
 
   /*
    * Generate the two dimensional array (generate delta array) from the pingRulesTable array
@@ -173,11 +173,9 @@ int main(int argc, char* argv[])
   vector<Rule> sumRulesTable; // for a new rule
   Rule subRule; // for each bit of each rule
   Rule newRule; // for a new rule
-  //cout << "newRule value is" << " " << newRule.value << endl;
-  //cout << (0 >> (abs(-8))) << endl;
+
   for (int i = 0; i < pingRulesTable.size(); i++) {
     for (int j = 0; j < 64; j++) {
-      //cout << "delat is" << " " << delta[j] << endl;
       if (delta[j] < 0) {
         // if it is negative, do the left shift
         // from the lsb position, do the correct operations
@@ -185,44 +183,30 @@ int main(int argc, char* argv[])
         // since "1" is 32bit by default
         subRule.value = ( (( (pingRulesTable[i].value) & (uint64_t(1) << j) ) ) << (abs(delta[j])) );
         subRule.mask = ( (( (pingRulesTable[i].mask) & (uint64_t(1) << j) ) ) << (abs(delta[j])) );
-        //cout << pingRulesTable[i].mask << endl;
-        cout << "<0" << " " << j << " " << "mask is" << " " << subRule.mask << endl;
-
-        cout << "<0" << " " << j << " " << "value is" << " " << subRule.value << endl;
-
-        //newPingRulesTable[i].priority = pingRulesTable[i].priority;
       }
       else if (delta[j] > 0) {
         // if it is positive, do the right shift
         subRule.value = ( (( (pingRulesTable[i].value) & (uint64_t(1) << j) ) ) >> (abs(delta[j])) );
         subRule.mask = ( (( (pingRulesTable[i].mask) & (uint64_t(1) << j) ) ) >> (abs(delta[j])) );
-        cout << ">0" << " " << j << " " << "mask is" << " " << subRule.mask << endl;
-
-        cout << ">0" << " " << j << " " << "value is" << " " << subRule.value << endl;
-
       }
       else if (delta[j] == 0) {
         // if it is "0", no change
         subRule.value = (( (pingRulesTable[i].value) & (uint64_t(1) << j) ) );
         subRule.mask = (( (pingRulesTable[i].mask) & (uint64_t(1) << j) ) );
-        cout << "=" << " " << j << " " << "mask is" << " " << subRule.mask << endl;
-
-        cout << "=" << " " << j << " " << "value is" << " " << subRule.value << endl;
-
       }
-      newPingRulesTable.push_back(subRule);
-      newRule.value |= newPingRulesTable[j].value;
-      newRule.mask |= newPingRulesTable[j].mask;
+      newRule.value |= subRule.value;
+      newRule.mask |= subRule.mask;
       newRule.priority = pingRulesTable[i].priority;
-
     }
     sumRulesTable.push_back(newRule);
-
   }
-  // Check the rearranged new rules ( has the same size with the original rules = 131 )
+
+  /*
+   * // Check the rearranged new rules ( has the same size with the original rules = 131 )
   for (i = 0; i < sumRulesTable.size(); i++) {
     cout << sumRulesTable[i].value << " " << sumRulesTable[i].mask << " " << sumRulesTable[i].priority << endl;
   }
+  */
 
 
   /*
