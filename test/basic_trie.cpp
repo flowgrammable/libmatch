@@ -97,9 +97,9 @@ int main(int argc, char* argv[])
     }
     //cout << "score is" << " " << score << endl;
     sumColumn.push_back(score);
-    cout << sumColumn[j] << endl;
+    //cout << sumColumn[j] << endl;
   }
-   cout << sumColumn.size() << endl;
+   //cout << sumColumn.size() << endl;
 
   // Copy the sumCOlumn vector to a new vector
   vector<uint64_t> newSumColumn(sumColumn);
@@ -154,12 +154,12 @@ int main(int argc, char* argv[])
   }
 
   /*
-   * Checked the delta vector
+   *Checked the delta vector
 
   for (i = 0; i < delta.size(); i++) {
-    cout << delta[i] << endl;
+    cout << "i=" << i  << " " << delta[i] << endl;
   }
-   */
+  */
 
 
   /*
@@ -169,48 +169,61 @@ int main(int argc, char* argv[])
    * if the element value of delta vector is "0", which means no change
   */
   // Create a new pingRulesTable for the new rearrangement rules
-  vector<Rule> newPingRulesTable;
-  vector<Rule> sumRulesTable;
-  Rule subRule;
-  Rule newRule;
+  vector<Rule> newPingRulesTable; // for each bit of each rule
+  vector<Rule> sumRulesTable; // for a new rule
+  Rule subRule; // for each bit of each rule
+  Rule newRule; // for a new rule
+  //cout << "newRule value is" << " " << newRule.value << endl;
+  //cout << (0 >> (abs(-8))) << endl;
   for (int i = 0; i < pingRulesTable.size(); i++) {
     for (int j = 0; j < 64; j++) {
       //cout << "delat is" << " " << delta[j] << endl;
       if (delta[j] < 0) {
         // if it is negative, do the left shift
         // from the lsb position, do the correct operations
-        subRule.mask = ( ( (pingRulesTable[i].mask) & (1 << i) ) << (abs(delta[j])) );
-        //cout << "mask is" << " " << subRule.mask << endl;
-        subRule.value = ( ( (pingRulesTable[i].value) & (1 << i) ) << (abs(delta[j])) );
-        //cout << "value is" << " " << subRule.value << endl;
-        newPingRulesTable.push_back(subRule);
+        // Note: because here is 64 bit, if we just use 1 to do left shift, it will occur overflow
+        // since "1" is 32bit by default
+        subRule.value = ( (( (pingRulesTable[i].value) & (uint64_t(1) << j) ) ) << (abs(delta[j])) );
+        subRule.mask = ( (( (pingRulesTable[i].mask) & (uint64_t(1) << j) ) ) << (abs(delta[j])) );
+        //cout << pingRulesTable[i].mask << endl;
+        cout << "<0" << " " << j << " " << "mask is" << " " << subRule.mask << endl;
+
+        cout << "<0" << " " << j << " " << "value is" << " " << subRule.value << endl;
+
         //newPingRulesTable[i].priority = pingRulesTable[i].priority;
       }
       else if (delta[j] > 0) {
         // if it is positive, do the right shift
-        subRule.mask = ( ( (pingRulesTable[i].mask) & (1 << i) ) >> (abs(delta[j])) );
-        subRule.value = ( ( (pingRulesTable[i].value) & (1 << i) ) >> (abs(delta[j])) );
-        newPingRulesTable.push_back(subRule);
+        subRule.value = ( (( (pingRulesTable[i].value) & (uint64_t(1) << j) ) ) >> (abs(delta[j])) );
+        subRule.mask = ( (( (pingRulesTable[i].mask) & (uint64_t(1) << j) ) ) >> (abs(delta[j])) );
+        cout << ">0" << " " << j << " " << "mask is" << " " << subRule.mask << endl;
+
+        cout << ">0" << " " << j << " " << "value is" << " " << subRule.value << endl;
+
       }
       else if (delta[j] == 0) {
         // if it is "0", no change
-        subRule.mask = pingRulesTable[i].mask;
-        subRule.value = pingRulesTable[i].value;
-        newPingRulesTable.push_back(subRule);
+        subRule.value = (( (pingRulesTable[i].value) & (uint64_t(1) << j) ) );
+        subRule.mask = (( (pingRulesTable[i].mask) & (uint64_t(1) << j) ) );
+        cout << "=" << " " << j << " " << "mask is" << " " << subRule.mask << endl;
+
+        cout << "=" << " " << j << " " << "value is" << " " << subRule.value << endl;
+
       }
-      newRule.mask += newPingRulesTable[i].mask;
-      newRule.value += newPingRulesTable[i].value;
+      newPingRulesTable.push_back(subRule);
+      newRule.value |= newPingRulesTable[j].value;
+      newRule.mask |= newPingRulesTable[j].mask;
       newRule.priority = pingRulesTable[i].priority;
+
     }
     sumRulesTable.push_back(newRule);
+
   }
-  //cout << sumRulesTable.size() << endl;
-/*
- * Check the rearranged new rules ( has the same size with the original rules = 131 )
+  // Check the rearranged new rules ( has the same size with the original rules = 131 )
   for (i = 0; i < sumRulesTable.size(); i++) {
-    cout << sumRulesTable[i].mask << " " << sumRulesTable[i].value << " " << sumRulesTable[i].priority << endl;
+    cout << sumRulesTable[i].value << " " << sumRulesTable[i].mask << " " << sumRulesTable[i].priority << endl;
   }
-  */
+
 
   /*
    * We get the new rearrangement rules table here, named sumRulesTabel
@@ -220,7 +233,6 @@ int main(int argc, char* argv[])
    * If it is, then do the insertion
    * if not, do the expansion algorithm to make it is prefix rule
   */
-
 
   // Initilize a trie
   Trie trie;
