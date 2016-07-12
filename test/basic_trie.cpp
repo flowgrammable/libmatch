@@ -171,28 +171,46 @@ int main(int argc, char* argv[])
   // Create a new pingRulesTable for the new rearrangement rules
   vector<Rule> newPingRulesTable;
   vector<Rule> sumRulesTable;
+  Rule subRule;
+  Rule newRule;
   for (int i = 0; i < pingRulesTable.size(); i++) {
     for (int j = 0; j < 64; j++) {
+      //cout << "delat is" << " " << delta[j] << endl;
       if (delta[j] < 0) {
         // if it is negative, do the left shift
         // from the lsb position, do the correct operations
-        newPingRulesTable[i].mask = ( ( pingRulesTable[i].mask & (1 << i) ) << abs(delta[j]) );
-        newPingRulesTable[i].value = ( ( pingRulesTable[i].value & (1 << i) ) << abs(delta[j]) );
+        subRule.mask = ( ( (pingRulesTable[i].mask) & (1 << i) ) << (abs(delta[j])) );
+        //cout << "mask is" << " " << subRule.mask << endl;
+        subRule.value = ( ( (pingRulesTable[i].value) & (1 << i) ) << (abs(delta[j])) );
+        //cout << "value is" << " " << subRule.value << endl;
+        newPingRulesTable.push_back(subRule);
+        //newPingRulesTable[i].priority = pingRulesTable[i].priority;
       }
       else if (delta[j] > 0) {
         // if it is positive, do the right shift
-        newPingRulesTable[i].mask = ( ( pingRulesTable[i].mask & (1 << i) ) >> abs(delta[j]) );
-        newPingRulesTable[i].value = ( ( pingRulesTable[i].value & (1 << i) ) >> abs(delta[j]) );
+        subRule.mask = ( ( (pingRulesTable[i].mask) & (1 << i) ) >> (abs(delta[j])) );
+        subRule.value = ( ( (pingRulesTable[i].value) & (1 << i) ) >> (abs(delta[j])) );
+        newPingRulesTable.push_back(subRule);
       }
       else if (delta[j] == 0) {
         // if it is "0", no change
-        newPingRulesTable[i].mask = pingRulesTable[i].mask;
-        newPingRulesTable[i].value = pingRulesTable[i].value;
+        subRule.mask = pingRulesTable[i].mask;
+        subRule.value = pingRulesTable[i].value;
+        newPingRulesTable.push_back(subRule);
       }
-      sumRulesTable[i].mask += newPingRulesTable[i].mask;
-      sumRulesTable[i].value += newPingRulesTable[i].value;
+      newRule.mask += newPingRulesTable[i].mask;
+      newRule.value += newPingRulesTable[i].value;
+      newRule.priority = pingRulesTable[i].priority;
     }
+    sumRulesTable.push_back(newRule);
   }
+  //cout << sumRulesTable.size() << endl;
+/*
+ * Check the rearranged new rules ( has the same size with the original rules = 131 )
+  for (i = 0; i < sumRulesTable.size(); i++) {
+    cout << sumRulesTable[i].mask << " " << sumRulesTable[i].value << " " << sumRulesTable[i].priority << endl;
+  }
+  */
 
   /*
    * We get the new rearrangement rules table here, named sumRulesTabel
