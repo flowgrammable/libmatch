@@ -200,12 +200,12 @@ int main(int argc, char* argv[])
     sumRulesTable.push_back(newRule);
   }
 
-  /*
+
     // Check the rearranged new rules ( has the same size with the original rules = 131 )
   for (i = 0; i < sumRulesTable.size(); i++) {
     cout << sumRulesTable[i].value << " " << sumRulesTable[i].mask << " " << sumRulesTable[i].priority << endl;
   }
-  */
+
 
 
   /*
@@ -260,6 +260,7 @@ for (int k = 0; k < newKeyTable.size(); k++) {
   // insert new modified rules into trie (after rearrangement algorithm)
 
   for (int k = 0; k < sumRulesTable.size(); k++) {
+    cout << "k is" << " " << k << endl;
     trie.is_prefix(sumRulesTable.at(k));
   }
 

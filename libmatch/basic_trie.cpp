@@ -236,19 +236,31 @@ void Trie::expand_rule( Rule& rule)
     // 10x1xx, so the mask is 001011
     if ( ((rule.mask >> i) & 1) == 0 ) {
       boundary = i;
+      break;
       //cout << "boundary is" << " " << boundary << endl;
+    }
+    else {
+      continue;
     }
   }
   vector<uint32_t> maskNewPosition;
   for (int j=(boundary+1); j<64; j++) {
     if ( ((rule.mask >> j) & 1) == 1 ) {
-      maskNewPosition.push_back(j);
+      maskNewPosition.push_back(j); // recored the positions that should be expanded (the bit is "1")
+      continue; // record all the candidates in 64-bit
+    }
+    else {
+      continue; // check all the 64-bit
     }
   }
   // Get all the "1" in the new rule, besides the prefix part
   // need to expand all the "1" part
   uint32_t new_num = maskNewPosition.size(); // num is the number of wildcard
   //cout << new_num << endl;
+  if (new_num > 12) {
+    cout << " note return " << endl;
+    return;
+  }
   Rule expandedRule;
   vector<Rule> expandedPingRulesTable;
 
@@ -258,8 +270,9 @@ void Trie::expand_rule( Rule& rule)
   //cout << " mask is " << " " << rule.mask << " value is " << " " << rule.value
        //<< " priority is " << " " << rule.priority << endl;
 
-  for(int i = 0; i < (1 << new_num); i++) {
-    expandedRule.value = rule.value;
+  for(uint64_t i = 0; i < ( uint64_t(1) << new_num ); i++) {
+    uint64_t expand_count = 0;
+    expandedRule.value = rule.value; // base value
     // Show the last expandedRule value
     //cout << expandedRule.value << endl;
     // expand into the number of rules: depending on the number of wildcard
@@ -267,16 +280,26 @@ void Trie::expand_rule( Rule& rule)
     for(int j = 0; j < new_num; j++) {
       if(((1 << j) & i) == 0) {
         // get the expandedRule for ruleTables
-        expandedRule.value |= (1 << maskNewPosition.at(j));
-        expandedRule.mask = rule.mask;
-        expandedRule.priority = rule.priority;
+        expandedRule.value |= 0 * (uint64_t(1) << maskNewPosition.at(j));
+        expandedRule.mask = ( uint64_t(1) << boundary ) - 1; // mask value should be a prefix value after expanded
+        expandedRule.priority = rule.priority; // priority keeps the same
         //cout << " check the priority is " << " " << expandedRule.priority << endl;
-        expandedPingRulesTable.push_back(expandedRule);
       }
+      else {
+        // ((1 << j) & i) != 0
+        expandedRule.value |= 1 * (uint64_t(1) << maskNewPosition.at(j));
+        expandedRule.mask = ( uint64_t(1) << boundary ) - 1; // mask value should be a prefix value after expanded
+        expandedRule.priority = rule.priority; // priority keeps the same
+      }
+      expandedPingRulesTable.push_back(expandedRule);
     }
+
     //cout << expandedRule.value << " " << expandedRule.mask << " " << expandedRule.priority << endl;
     insert_prefix_rule_priority(expandedRule);
+    expand_count++;
   }
+  cout << expandedPingRulesTable.size() << endl;
+  //cout << "expanded count:" << " " << expand_count << endl;
   //cout << "expanded rule size is" << " " << expandedPingRulesTable.size() << endl;
 }
 
@@ -287,8 +310,8 @@ void Trie::expand_rule( Rule& rule)
 */
 void Trie::is_prefix(Rule& rule)
 {
-  //int expand_num = 0;
-  //int insert_num = 0;
+  int expand_num = 0;
+  int insert_num = 0;
   // Store the wildcard postion into vector maskPosion
   vector<uint32_t> maskPosition;
   // Check the mask field from the lower bit
@@ -301,11 +324,11 @@ void Trie::is_prefix(Rule& rule)
   uint32_t num = maskPosition.size(); // num is the number of wildcard
   if (rule.mask == (1 << num)-1) {
     insert_prefix_rule_priority(rule);
-    //insert_num ++;
+    insert_num ++;
   }
   else {
     expand_rule(rule);
-    //expand_num ++;
+    expand_num ++;
   }
   //cout << "expand num is:" << " " << expand_num << endl;
   //cout << "insert num is:" << " " << insert_num << endl;
