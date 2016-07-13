@@ -287,6 +287,8 @@ void Trie::expand_rule( Rule& rule)
 */
 void Trie::is_prefix(Rule& rule)
 {
+  //int expand_num = 0;
+  //int insert_num = 0;
   // Store the wildcard postion into vector maskPosion
   vector<uint32_t> maskPosition;
   // Check the mask field from the lower bit
@@ -299,10 +301,14 @@ void Trie::is_prefix(Rule& rule)
   uint32_t num = maskPosition.size(); // num is the number of wildcard
   if (rule.mask == (1 << num)-1) {
     insert_prefix_rule_priority(rule);
+    //insert_num ++;
   }
   else {
     expand_rule(rule);
+    //expand_num ++;
   }
+  //cout << "expand num is:" << " " << expand_num << endl;
+  //cout << "insert num is:" << " " << insert_num << endl;
 }
 
 // Prefix rules lookup--search rules

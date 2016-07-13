@@ -155,12 +155,10 @@ int main(int argc, char* argv[])
 
   /*
    *Checked the delta vector
-
   for (i = 0; i < delta.size(); i++) {
     cout << "i=" << i  << " " << delta[i] << endl;
   }
   */
-
 
   /*
    * Generate the new rule after the delta operations
@@ -169,13 +167,13 @@ int main(int argc, char* argv[])
    * if the element value of delta vector is "0", which means no change
   */
   // Create a new pingRulesTable for the new rearrangement rules
-  vector<Rule> newPingRulesTable; // for each bit of each rule
+  //vector<Rule> newPingRulesTable; // for each bit of each rule
   vector<Rule> sumRulesTable; // for a new rule
-  Rule subRule; // for each bit of each rule
-  Rule newRule; // for a new rule
 
   for (int i = 0; i < pingRulesTable.size(); i++) {
+    Rule newRule;
     for (int j = 0; j < 64; j++) {
+      Rule subRule;
       if (delta[j] < 0) {
         // if it is negative, do the left shift
         // from the lsb position, do the correct operations
@@ -196,18 +194,53 @@ int main(int argc, char* argv[])
       }
       newRule.value |= subRule.value;
       newRule.mask |= subRule.mask;
+      //cout << j << " " << newRule.mask << endl;
       newRule.priority = pingRulesTable[i].priority;
     }
     sumRulesTable.push_back(newRule);
   }
 
   /*
-   * // Check the rearranged new rules ( has the same size with the original rules = 131 )
+    // Check the rearranged new rules ( has the same size with the original rules = 131 )
   for (i = 0; i < sumRulesTable.size(); i++) {
     cout << sumRulesTable[i].value << " " << sumRulesTable[i].mask << " " << sumRulesTable[i].priority << endl;
   }
   */
 
+
+  /*
+   * Rearrange the keyTable according to the delta vector
+   * because the rules are being reordered by the delta vector
+  */
+
+  vector<uint64_t> newKeyTable; // for a new rule
+
+  for (int i = 0; i < keyTable.size(); i++) {
+    uint64_t newKey = 0; // new key after reordering
+    for (int j = 0; j < 64; j++) {
+      uint64_t subKey = 0; // subKey is the single bit value of each key
+      if (delta[j] < 0) {
+        subKey = ( (( (keyTable[i]) & (uint64_t(1) << j) ) ) << (abs(delta[j])) );
+      }
+      else if (delta[j] > 0) {
+        // if it is positive, do the right shift
+        subKey = ( (( (keyTable[i]) & (uint64_t(1) << j) ) ) >> (abs(delta[j])) );
+      }
+      else if (delta[j] == 0) {
+        // if it is "0", no change
+        subKey = (( (keyTable[i]) & (uint64_t(1) << j) ) );
+      }
+      newKey |= subKey;
+    }
+    newKeyTable.push_back(newKey);
+  }
+
+  //cout << newKeyTable.size() << endl;
+  /*
+for (int k = 0; k < newKeyTable.size(); k++) {
+  cout << newKeyTable[k] << endl;
+}
+*/
 
   /*
    * We get the new rearrangement rules table here, named sumRulesTabel
@@ -217,6 +250,9 @@ int main(int argc, char* argv[])
    * If it is, then do the insertion
    * if not, do the expansion algorithm to make it is prefix rule
   */
+
+
+
 
   // Initilize a trie
   Trie trie;
@@ -230,7 +266,7 @@ int main(int argc, char* argv[])
   char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
 
   // Search the rules
-  cout << "Begin test (keys=" << keyTable.size() <<
+  cout << "Begin test (keys=" << newKeyTable.size() <<
           ", rules=" << sumRulesTable.size() << "):" << endl;
 
   uint32_t checksum = 0; // show the sum of matching priority
@@ -238,8 +274,8 @@ int main(int argc, char* argv[])
 
   //get time1
   auto start = get_time::now(); // use auto keyword to minimize typing strokes :)
-  for (int j=0; j<keyTable.size(); j++) {
-    uint32_t priority = trie.LPM1_search_rule(keyTable[j]);
+  for (int j=0; j<newKeyTable.size(); j++) {
+    uint32_t priority = trie.LPM1_search_rule(newKeyTable[j]);
     //cout << j << " " << present << endl;
     checksum += priority;
     match += (priority != 0); // when priority == 0, which means no matching
