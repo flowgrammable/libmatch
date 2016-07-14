@@ -83,6 +83,11 @@ int main(int argc, char* argv[])
   file1.close();
   //cout << keyTable.size() << endl;
 
+  // Start to calculate the rearrangement configure time
+  // including the delta vector time
+
+  auto start_1 = get_time::now();
+
   /*
    * Generate the two dimensional array (generate delta array) from the pingRulesTable array
    * With all the bits in each rule, including "0" and "1"
@@ -200,12 +205,16 @@ int main(int argc, char* argv[])
     sumRulesTable.push_back(newRule);
   }
 
+  auto end_1 = get_time::now();
+  auto diff_1 = end_1 - start_1;
+  cout<<"Rules rearrangement configure time is:  "<< chrono::duration_cast<ns>(diff_1).count()<<" ns "<<endl;
 
+  /*
     // Check the rearranged new rules ( has the same size with the original rules = 131 )
   for (i = 0; i < sumRulesTable.size(); i++) {
     cout << sumRulesTable[i].value << " " << sumRulesTable[i].mask << " " << sumRulesTable[i].priority << endl;
   }
-
+  */
 
 
   /*
@@ -214,6 +223,9 @@ int main(int argc, char* argv[])
   */
 
   vector<uint64_t> newKeyTable; // for a new rule
+
+  // Calculate the key rearrangement configure time basing on the delta vector
+  auto start_2 = get_time::now();
 
   for (int i = 0; i < keyTable.size(); i++) {
     uint64_t newKey = 0; // new key after reordering
@@ -234,6 +246,10 @@ int main(int argc, char* argv[])
     }
     newKeyTable.push_back(newKey);
   }
+
+  auto end_2 = get_time::now();
+  auto diff_2 = end_2 - start_2;
+  cout<<"keys rearrangement configure time is:  "<< chrono::duration_cast<ns>(diff_2).count()<<" ns "<<endl;
 
   //cout << newKeyTable.size() << endl;
   /*
@@ -259,10 +275,18 @@ for (int k = 0; k < newKeyTable.size(); k++) {
 
   // insert new modified rules into trie (after rearrangement algorithm)
 
+  // Calculate the insertion configure time
+  // Inculduing the expanded configure time
+  auto start_3 = get_time::now();
+
   for (int k = 0; k < sumRulesTable.size(); k++) {
-    cout << "k is" << " " << k << endl;
+    cout << "k is" << " " << k << endl; // check which rule has been expanded
     trie.is_prefix(sumRulesTable.at(k));
   }
+
+  auto end_3 = get_time::now();
+  auto diff_3 = end_3 - start_3;
+  cout<<"Rules insertion configure time is:  "<< chrono::duration_cast<ns>(diff_3).count()<<" ns "<<endl;
 
   char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
 
@@ -287,7 +311,7 @@ for (int k = 0; k < newKeyTable.size(); k++) {
   auto diff = end - start;
   cout << "Checksum: " << checksum << endl;
   cout << "Total matches: " << match << endl;
-  cout<<"Elapsed time is :  "<< chrono::duration_cast<ns>(diff).count()<<" ns "<<endl;
+  cout<<"Elapsed time is: "<< chrono::duration_cast<ns>(diff).count()<<" ns "<<endl;
 
   return 0;
 }

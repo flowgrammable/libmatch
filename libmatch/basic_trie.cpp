@@ -257,10 +257,13 @@ void Trie::expand_rule( Rule& rule)
   // need to expand all the "1" part
   uint32_t new_num = maskNewPosition.size(); // num is the number of wildcard
   //cout << new_num << endl;
+
+   // check the bad_alloc threshold
   if (new_num > 12) {
     cout << " note return " << endl;
     return;
   }
+
   Rule expandedRule;
   vector<Rule> expandedPingRulesTable;
 
@@ -298,7 +301,8 @@ void Trie::expand_rule( Rule& rule)
     insert_prefix_rule_priority(expandedRule);
     expand_count++;
   }
-  cout << expandedPingRulesTable.size() << endl;
+  cout << expandedPingRulesTable.size() << endl; // check the expanded rule size, should be the power of 2
+
   //cout << "expanded count:" << " " << expand_count << endl;
   //cout << "expanded rule size is" << " " << expandedPingRulesTable.size() << endl;
 }
