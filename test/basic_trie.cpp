@@ -39,6 +39,124 @@ Rule strTint(string rulestr)
   return rule;
 }
 
+// Initilize a trie
+Trie trie;
+
+void expand_rule( Rule& rule )
+{
+  //cout << " The priority is " << " " << rule.priority << endl;
+  int boundary = 0;
+  for (int i=0; i<64; i++) {
+    // Find the first bit "0" from the least significant bit
+    // 10x1xx, so the mask is 001011
+    if ( ((rule.mask >> i) & 1) == 0 ) {
+      boundary = i;
+      break;
+      //cout << "boundary is" << " " << boundary << endl;
+    }
+    else {
+      continue;
+    }
+  }
+  vector<uint32_t> maskNewPosition;
+  for (int j=(boundary+1); j<64; j++) {
+    if ( ((rule.mask >> j) & 1) == 1 ) {
+      maskNewPosition.push_back(j); // recored the positions that should be expanded (the bit is "1")
+      continue; // record all the candidates in 64-bit
+    }
+    else {
+      continue; // check all the 64-bit
+    }
+  }
+  // Get all the "1" in the new rule, besides the prefix part
+  // need to expand all the "1" part
+  uint32_t new_num = maskNewPosition.size(); // num is the number of wildcard
+  //cout << new_num << endl;
+
+   // check the bad_alloc threshold
+   // want to delete the bad rules
+  if (new_num > 12) {
+    // delete the rules in sumRulesTable (bad rules cause bad_alloc)
+    //pingRulesTable.erase(pingRulesTable.at(k));
+    cout << " note return " << endl;
+    return;
+  }
+
+  Rule expandedRule;
+  vector<Rule> expandedPingRulesTable;
+
+  // From the priority = 40 rule, starts having wildcard, not the prifix rules,
+  // need to be expanded
+
+  //cout << " mask is " << " " << rule.mask << " value is " << " " << rule.value
+  //<< " priority is " << " " << rule.priority << endl;
+  uint64_t expand_count = 0;
+  for(uint64_t i = 0; i < ( uint64_t(1) << new_num ); i++) {
+
+    expandedRule.value = rule.value; // base value
+    // Show the last expandedRule value
+    //cout << expandedRule.value << endl;
+    // expand into the number of rules: depending on the number of wildcard
+    //cout << " number of wildcard: " << " " << new_num << endl;
+    for(int j = 0; j < new_num; j++) {
+      if(((1 << j) & i) == 0) {
+        // get the expandedRule for ruleTables
+        expandedRule.value |= 0 * (uint64_t(1) << maskNewPosition.at(j));
+        expandedRule.mask = ( uint64_t(1) << boundary ) - 1; // mask value should be a prefix value after expanded
+        expandedRule.priority = rule.priority; // priority keeps the same
+        //cout << " check the priority is " << " " << expandedRule.priority << endl;
+      }
+      else {
+        // ((1 << j) & i) != 0
+        expandedRule.value |= 1 * (uint64_t(1) << maskNewPosition.at(j));
+        expandedRule.mask = ( uint64_t(1) << boundary ) - 1; // mask value should be a prefix value after expanded
+        expandedRule.priority = rule.priority; // priority keeps the same
+      }
+      expandedPingRulesTable.push_back(expandedRule);
+    }
+
+    //cout << expandedRule.value << " " << expandedRule.mask << " " << expandedRule.priority << endl;
+    trie.insert_prefix_rule_priority(expandedRule);
+    expand_count++;
+  }
+  cout << expandedPingRulesTable.size() << endl; // check the expanded rule size, should be the power of 2
+
+  cout << "expanded count:" << " " << expand_count << endl;
+  //cout << "expanded rule size is" << " " << expandedPingRulesTable.size() << endl;
+}
+
+/*
+ * Check whether the new rule is a prefix rule
+ * if yes, do the LPM insertion
+ * if not, do the expand rule function
+*/
+void is_prefix(Rule& rule)
+{
+  int expandRule_num = 0;
+  int insertRule_num = 0;
+  // Store the wildcard postion into vector maskPosion
+  vector<uint32_t> maskPosition;
+  // Check the mask field from the lower bit
+  for(int i = 0; i < 64; i++) {
+    // if this: get the position whose bit is 1 (have wildcard)
+    if((rule.mask >> i) & 1 == 1) {
+      maskPosition.push_back(i);
+    }
+  }
+  uint32_t num = maskPosition.size(); // num is the number of wildcard
+  if (rule.mask == (1 << num)-1) {
+    trie.insert_prefix_rule_priority(rule);
+    insertRule_num ++;
+  }
+  else {
+    expand_rule(rule);
+    expandRule_num ++;
+  }
+  cout << "expand rule num is:" << " " << expandRule_num << endl;
+  cout << "insert rule num is:" << " " << insertRule_num << endl;
+}
+
+
 int main(int argc, char* argv[])
 {
   ifstream file (argv[1]);
@@ -269,10 +387,6 @@ for (int k = 0; k < newKeyTable.size(); k++) {
 
 
 
-
-  // Initilize a trie
-  Trie trie;
-
   // insert new modified rules into trie (after rearrangement algorithm)
 
   // Calculate the insertion configure time
@@ -281,7 +395,7 @@ for (int k = 0; k < newKeyTable.size(); k++) {
 
   for (int k = 0; k < sumRulesTable.size(); k++) {
     cout << "k is" << " " << k << endl; // check which rule has been expanded
-    trie.is_prefix(sumRulesTable.at(k));
+    is_prefix(sumRulesTable.at(k));
   }
 
   auto end_3 = get_time::now();
