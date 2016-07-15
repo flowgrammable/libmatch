@@ -83,6 +83,8 @@ public:
   trie_node* root;
   int count; // The number of rules in a trie
   int node_count; // The number of nodes in a trie
+  uint64_t expand_count = 0; // Make this variable global
+  uint32_t new_num = 0; // Make this variable global, can be access
 
   // Trie constructor
   Trie()
@@ -104,8 +106,6 @@ public:
 
   void insert_rule(Rule& rule);
 
-  void is_prefix(Rule& rule);
-
   // Expanding the arbitrary rules into prefix rules
   void expand_rule(Rule& rule);
 
@@ -119,6 +119,9 @@ public:
   bool prefix_search_rule(uint64_t key);
   bool LPM_search_rule(uint64_t key);
   uint32_t LPM1_search_rule(uint64_t key);
+
+  // New: delete the Rule format rules
+  void resetRule(Rule& rule);
 
   // Delete rules in the trie
   // When deleting nodes, needs to satisfy two conditions

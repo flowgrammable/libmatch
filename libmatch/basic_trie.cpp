@@ -155,6 +155,88 @@ void Trie::insert_rule( Rule& rule )
 }
 
 
+void Trie::expand_rule( Rule& rule )
+{
+  //uint64_t expand_count_sum = 0;
+  //cout << " The priority is " << " " << rule.priority << endl;
+  int boundary = 0;
+  for (int i=0; i<64; i++) {
+    // Find the first bit "0" from the least significant bit
+    // 10x1xx, so the mask is 001011
+    if ( ((rule.mask >> i) & 1) == 0 ) {
+      boundary = i;
+      break;
+      //cout << "boundary is" << " " << boundary << endl;
+    }
+    else {
+      continue;
+    }
+  }
+  vector<uint32_t> maskNewPosition;
+  for (int j=(boundary+1); j<64; j++) {
+    if ( ((rule.mask >> j) & 1) == 1 ) {
+      maskNewPosition.push_back(j); // recored the positions that should be expanded (the bit is "1")
+      continue; // record all the candidates in 64-bit
+    }
+    else {
+      continue; // check all the 64-bit
+    }
+  }
+  // Get all the "1" in the new rule, besides the prefix part
+  // need to expand all the "1" part
+  new_num = maskNewPosition.size(); // num is the number of wildcard
+  //cout << new_num << endl;
+
+  Rule expandedRule;
+  vector<Rule> expandedPingRulesTable;
+
+  // From the priority = 40 rule, starts having wildcard, not the prifix rules,
+  // need to be expanded
+
+  //cout << " mask is " << " " << rule.mask << " value is " << " " << rule.value
+  //<< " priority is " << " " << rule.priority << endl;
+  //uint64_t expand_count = 0;
+  for(uint64_t i = 0; i < ( uint64_t(1) << new_num ); i++) {
+
+    expandedRule.value = rule.value; // base value
+    // Show the last expandedRule value
+    //cout << expandedRule.value << endl;
+    // expand into the number of rules: depending on the number of wildcard
+    //cout << " number of wildcard: " << " " << new_num << endl;
+    for(int j = 0; j < new_num; j++) {
+      // Get the weight on all the new_num bit
+      // which produce every conbination
+      // ex. for the first combination value is "0"
+      // so on each new_num bit, the weight are all 0
+      // ex. for the second conbination value is "1"
+      // then the "00001", so the weight of the first bit of new_num bits is (uint64_t(1) << 0)
+      if(((1 << j) & i) == 0) {
+        // get the expandedRule for ruleTables
+        expandedRule.value |= 0 * (uint64_t(1) << maskNewPosition.at(j));
+        expandedRule.mask = ( uint64_t(1) << boundary ) - 1; // mask value should be a prefix value after expanded
+        expandedRule.priority = rule.priority; // priority keeps the same
+        //cout << " check the priority is " << " " << expandedRule.priority << endl;
+      }
+      else {
+        // ((1 << j) & i) != 0
+        expandedRule.value |= 1 * (uint64_t(1) << maskNewPosition.at(j));
+        expandedRule.mask = ( uint64_t(1) << boundary ) - 1; // mask value should be a prefix value after expanded
+        expandedRule.priority = rule.priority; // priority keeps the same
+      }
+    }
+    // Every combinations on new_num bit
+    expandedPingRulesTable.push_back(expandedRule);
+    insert_prefix_rule_priority(expandedRule);
+    expand_count++;
+
+  }
+
+  //cout << expandedPingRulesTable.size() << endl; // check the expanded rule size, should be the power of 2
+
+  //cout << "expanded count:" << " " << expand_count << endl;
+  //cout << " total expanded count:" << " " << expand_count_sum << endl;
+
+}
 
 
 
@@ -307,6 +389,13 @@ bool Trie::search_rule(uint64_t key)
   // If return 1, match hit
   return (0 != pRule && pRule->priority);
 
+}
+
+void Trie::resetRule(Rule& rule)
+{
+  rule.value = 0;
+  rule.mask = 0;
+  rule.priority = 0;
 }
 
 

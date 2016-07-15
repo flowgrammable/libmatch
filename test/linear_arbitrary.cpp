@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
   //get time2
   cout << "Checksum: " << checksum << endl;
   cout << "Total matches: " << match << endl;
-  cout<<"Elapsed time is :  "<< chrono::duration_cast<ns>(diff).count()<<" ns "<<endl;
+  cout<<"Search time is :  "<< chrono::duration_cast<ns>(diff).count()<<" ns "<<endl;
 
 
 
