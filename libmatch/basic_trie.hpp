@@ -84,7 +84,9 @@ public:
   int count; // The number of rules in a trie
   int node_count; // The number of nodes in a trie
   uint64_t expand_count = 0; // Make this variable global
-  uint32_t new_num = 0; // Make this variable global, can be access
+  //uint32_t new_num = 0; // Make this variable global, can be access
+  //vector<uint32_t> maskNewPosition;
+  //int boundary = 0;
 
   // Trie constructor
   Trie()
@@ -105,6 +107,8 @@ public:
   void insert_prefix_rule(uint64_t value, uint64_t mask);
 
   void insert_rule(Rule& rule);
+
+  uint32_t get_new_num(Rule& rule);
 
   // Expanding the arbitrary rules into prefix rules
   void expand_rule(Rule& rule);

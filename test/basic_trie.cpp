@@ -49,31 +49,7 @@ Trie trie;
  * if not, do the expand rule function
 */
 
-/*
-void is_prefix(Rule& rule)
-{
 
-  // Store the wildcard postion into vector maskPosion
-  vector<uint32_t> maskPosition;
-  // Check the mask field from the lower bit
-  for(int i = 0; i < 64; i++) {
-    // if this: get the position whose bit is 1 (have wildcard)
-    if((rule.mask >> i) & 1 == 1) {
-      maskPosition.push_back(i);
-    }
-  }
-  uint32_t num = maskPosition.size(); // num is the number of wildcard
-  if (rule.mask == (1 << num)-1) {
-    trie.insert_prefix_rule_priority(rule);
-    insertRule_num ++;
-  }
-  else {
-    trie.expand_rule(rule);
-    expandRule_num ++;
-  }
-
-}
-*/
 
 bool is_prefix(Rule& rule)
 {
@@ -333,40 +309,42 @@ for (int k = 0; k < newKeyTable.size(); k++) {
   auto start_3 = get_time::now();
   int expandRule_num = 0;
   int insertRule_num = 0;
-  //uint64_t sum_expand = 0;
+  int deleteRule_num = 0;
+
 
   for (int k = 0; k < sumRulesTable.size(); k++) {
-    //cout << "k is" << " " << k << endl; // check which rule has been expanded
-    //is_prefix(sumRulesTable.at(k));
     if ( is_prefix(sumRulesTable.at(k)) ) {
       trie.insert_prefix_rule_priority(sumRulesTable.at(k));
       insertRule_num ++;
     }
-    else {
+
+    else if ( trie.get_new_num(sumRulesTable.at(k)) < 12 ) {
       trie.expand_rule(sumRulesTable.at(k));
       expandRule_num ++;
-      // check the bad_alloc threshold
-      // want to delete the bad rules
-      if (trie.new_num > 12) {
-        // delete the rules in sumRulesTable (bad rules cause bad_alloc)
-        trie.resetRule(pingRulesTable.at(k));
-        cout << " note return " << endl;
-      }
+    }
+
+
+    else {
+      pingRulesTable[k].value = 0;
+      pingRulesTable[k].mask = 0;
+      cout << pingRulesTable[k].value << "test" << endl;
+      deleteRule_num ++;
+      continue;
     }
   }
-  // Make the varialbe "expand_count" global public
-  // then we can access this variable outside of class
 
   cout << "Original num of rules in pingRulesTable is:" << " " << pingRulesTable.size() << endl;
 
-  for (int q = 0; q < pingRulesTable.size(); q++)
-  {
-    if ( pingRulesTable[q].value == 0 ) {
-      pingRulesTable.erase(pingRulesTable.begin() + q);
-    }
-  }
+  // Construct the new rule table, remove the unsatisfied rules
+  ofstream arrayData("newRule.txt"); // File Creation(on C drive)
 
-  cout << "New num of rules in pingRulesTable is:" << " " << pingRulesTable.size() << endl;
+      for(int k = 0; k < pingRulesTable.size(); k++)
+      {
+        if ( pingRulesTable[k].value != 0 ) {
+          arrayData << pingRulesTable[k].value << " "
+                  << pingRulesTable[k].mask << endl; //Outputs array to txtFile
+        }
+      }
 
   auto end_3 = get_time::now();
   auto diff_3 = end_3 - start_3;
@@ -374,6 +352,7 @@ for (int k = 0; k < newKeyTable.size(); k++) {
   cout << "Total expanded count is:" << " " << trie.expand_count << endl;
   cout << "Expand rule num is:" << " " << expandRule_num << endl;
   cout << "Insert rule num is:" << " " << insertRule_num << endl;
+  cout << "Delete rule num is:" << " " << deleteRule_num << endl;
   cout << "Total insert rule num is:" << " " << trie.count << endl;
   cout << "Total insert trie_node count is:" << " " << trie.node_count << endl;
 
@@ -401,7 +380,7 @@ for (int k = 0; k < newKeyTable.size(); k++) {
   auto diff = end - start;
   cout << "Checksum: " << checksum << endl;
   cout << "Total matches: " << match << endl;
-  cout<<"Search time is: "<< chrono::duration_cast<ns>(diff).count()<<" ns "<<endl;
+  cout <<"Search time is: "<< chrono::duration_cast<ns>(diff).count()<<" ns "<<endl;
 
   return 0;
 }

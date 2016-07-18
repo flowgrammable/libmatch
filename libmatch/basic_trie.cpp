@@ -154,11 +154,8 @@ void Trie::insert_rule( Rule& rule )
 
 }
 
-
-void Trie::expand_rule( Rule& rule )
+uint32_t Trie::get_new_num(Rule& rule)
 {
-  //uint64_t expand_count_sum = 0;
-  //cout << " The priority is " << " " << rule.priority << endl;
   int boundary = 0;
   for (int i=0; i<64; i++) {
     // Find the first bit "0" from the least significant bit
@@ -184,8 +181,52 @@ void Trie::expand_rule( Rule& rule )
   }
   // Get all the "1" in the new rule, besides the prefix part
   // need to expand all the "1" part
-  new_num = maskNewPosition.size(); // num is the number of wildcard
+  uint32_t new_num = maskNewPosition.size(); // num is the number of wildcard
   //cout << new_num << endl;
+  return new_num;
+}
+
+
+void Trie::expand_rule( Rule& rule )
+{
+
+  //uint64_t expand_count_sum = 0;
+  //cout << " The priority is " << " " << rule.priority << endl;
+  int boundary1 = 0;
+  for (int i=0; i<64; i++) {
+    // Find the first bit "0" from the least significant bit
+    // 10x1xx, so the mask is 001011
+    if ( ((rule.mask >> i) & 1) == 0 ) {
+      boundary1 = i;
+      break;
+      //cout << "boundary is" << " " << boundary << endl;
+    }
+    else {
+      continue;
+    }
+  }
+  vector<uint32_t> maskNewPosition1;
+  for (int j=(boundary1+1); j<64; j++) {
+    if ( ((rule.mask >> j) & 1) == 1 ) {
+      maskNewPosition1.push_back(j); // recored the positions that should be expanded (the bit is "1")
+      continue; // record all the candidates in 64-bit
+    }
+    else {
+      continue; // check all the 64-bit
+    }
+  }
+  // Get all the "1" in the new rule, besides the prefix part
+  // need to expand all the "1" part
+  uint32_t new_num1 = maskNewPosition1.size(); // num is the number of wildcard
+  //cout << new_num1 << endl;
+
+  /*
+
+  if (new_num > 11) {
+    cout << "return" << endl;
+    return;
+  }
+  */
 
   Rule expandedRule;
   vector<Rule> expandedPingRulesTable;
@@ -196,14 +237,14 @@ void Trie::expand_rule( Rule& rule )
   //cout << " mask is " << " " << rule.mask << " value is " << " " << rule.value
   //<< " priority is " << " " << rule.priority << endl;
   //uint64_t expand_count = 0;
-  for(uint64_t i = 0; i < ( uint64_t(1) << new_num ); i++) {
+  for(uint64_t i = 0; i < ( uint64_t(1) << new_num1 ); i++) {
 
     expandedRule.value = rule.value; // base value
     // Show the last expandedRule value
     //cout << expandedRule.value << endl;
     // expand into the number of rules: depending on the number of wildcard
     //cout << " number of wildcard: " << " " << new_num << endl;
-    for(int j = 0; j < new_num; j++) {
+    for(int j = 0; j < new_num1; j++) {
       // Get the weight on all the new_num bit
       // which produce every conbination
       // ex. for the first combination value is "0"
@@ -212,15 +253,15 @@ void Trie::expand_rule( Rule& rule )
       // then the "00001", so the weight of the first bit of new_num bits is (uint64_t(1) << 0)
       if(((1 << j) & i) == 0) {
         // get the expandedRule for ruleTables
-        expandedRule.value |= 0 * (uint64_t(1) << maskNewPosition.at(j));
-        expandedRule.mask = ( uint64_t(1) << boundary ) - 1; // mask value should be a prefix value after expanded
+        expandedRule.value |= 0 * (uint64_t(1) << maskNewPosition1.at(j));
+        expandedRule.mask = ( uint64_t(1) << boundary1 ) - 1; // mask value should be a prefix value after expanded
         expandedRule.priority = rule.priority; // priority keeps the same
         //cout << " check the priority is " << " " << expandedRule.priority << endl;
       }
       else {
         // ((1 << j) & i) != 0
-        expandedRule.value |= 1 * (uint64_t(1) << maskNewPosition.at(j));
-        expandedRule.mask = ( uint64_t(1) << boundary ) - 1; // mask value should be a prefix value after expanded
+        expandedRule.value |= 1 * (uint64_t(1) << maskNewPosition1.at(j));
+        expandedRule.mask = ( uint64_t(1) << boundary1 ) - 1; // mask value should be a prefix value after expanded
         expandedRule.priority = rule.priority; // priority keeps the same
       }
     }
