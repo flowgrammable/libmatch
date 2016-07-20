@@ -86,9 +86,15 @@ int main(int argc, char* argv[])
 
   // Insert rules into linear arbitrary table:
   linearTable table;
+
+  auto start1 = get_time::now();
+
   for (int i=0; i<inputRules.size(); i++) {
     table.insert_rule(inputRules.at(i));
   }
+
+  auto end1 = get_time::now();
+  auto diff1 = end1 - start1;
 
   char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
 
@@ -113,7 +119,8 @@ int main(int argc, char* argv[])
   //get time2
   cout << "Checksum: " << checksum << endl;
   cout << "Total matches: " << match << endl;
-  cout<<"Search time is :  "<< chrono::duration_cast<ns>(diff).count()<<" ns "<<endl;
+  cout << "Insertion time is: " << chrono::duration_cast<ns>(diff1).count() << " ns " << endl;
+  cout << "Search time is: "<< chrono::duration_cast<ns>(diff).count() << " ns " << endl;
 
 
 

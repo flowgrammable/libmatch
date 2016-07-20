@@ -363,13 +363,13 @@ for (int k = 0; k < newKeyTable.size(); k++) {
   cout << "Begin test (keys=" << newKeyTable.size() <<
           ", rules=" << sumRulesTable.size() << "):" << endl;
 
-  uint32_t checksum = 0; // show the sum of matching priority
-  uint32_t match = 0; // how many keys are being matched in these new rules
+  uint64_t checksum = 0; // show the sum of matching priority
+  uint64_t match = 0; // how many keys are being matched in these new rules
 
   //get time1
   auto start = get_time::now(); // use auto keyword to minimize typing strokes :)
-  for (int j=0; j<newKeyTable.size(); j++) {
-    uint32_t priority = trie.LPM1_search_rule(newKeyTable[j]);
+  for (int j = 0; j < newKeyTable.size(); j++) {
+    uint64_t priority = trie.LPM1_search_rule(newKeyTable[j]);
     //cout << j << " " << present << endl;
     checksum += priority;
     match += (priority != 0); // when priority == 0, which means no matching
