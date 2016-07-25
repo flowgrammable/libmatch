@@ -42,15 +42,27 @@ Rule strTint(string rulestr)
 // Initilize a trie
 Trie trie;
 
+/*
+ * Check whether the neighbouring rules are cross pattern
+ * if yes, continue the rules
+ * if not, spearate the group
+*/
+bool is_cross_pattern(Rule a, Rule b)
+{
+  if (a.mask & b.mask == 0) {
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
 
 /*
  * Check whether the new rule is a prefix rule
  * if yes, do the LPM insertion
  * if not, do the expand rule function
 */
-
-
-
 bool is_prefix(Rule& rule)
 {
   // Store the wildcard postion into vector maskPosion
