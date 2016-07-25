@@ -43,13 +43,13 @@ Rule strTint(string rulestr)
 Trie trie;
 
 /*
- * Check whether the neighbouring rules are cross pattern
+ * Check whether the neighbouring rules are cross pattern (has intersection)
  * if yes, continue the rules
  * if not, spearate the group
 */
-bool is_cross_pattern(Rule a, Rule b)
+bool is_cross_pattern(Rule const& a, Rule const& b)
 {
-  if (a.mask & b.mask == 0) {
+  if (a.mask && b.mask == 0) {
     return false;
   }
   else {
@@ -128,6 +128,51 @@ int main(int argc, char* argv[])
   file1.close();
   //cout << keyTable.size() << endl;
 
+  /*
+   * Grouping algorithm
+   * Use the is_cross_pattern function to check the grouping number
+  */
+
+
+  vector<uint32_t> groupVector;
+
+  for (int i = 0; i < pingRulesTable.size(); i++) {
+    if (is_cross_pattern( pingRulesTable[i], pingRulesTable[i+1] )) {
+      continue;
+    }
+    else {
+      groupVector.push_back(i);
+      continue;
+    }
+  }
+  cout << "Group num is:" << " " << groupVector.size() << endl;
+
+  vector< vector<Rule> > bigArray;
+
+  // Create a new sub group by copying the related rules
+  for (int j = 0; j < groupVector.size(); j++) {
+    bigArray.push_back(vector<Rule> ());
+  }
+
+  for (int j = 0; j < groupVector.size(); j++) {
+    if (j == 0) {
+      for (int i = 0; i < (groupVector[j] + 1); i++) {
+        bigArray[j].push_back(pingRulesTable.at(i));
+      }
+      continue;
+    }
+    else {
+      for (int k = (groupVector[j-1] + 1); k < (groupVector[j] + 1); k++) {
+        bigArray[j].push_back(pingRulesTable.at(k));
+      }
+      continue;
+    }
+  }
+
+  for (int j = 0; j < groupVector.size(); j++) {
+   cout << bigArray[j].size() << " " << groupVector[j] + 1 << " " << "check is the same or not" << endl;
+  }
+
   // Start to calculate the rearrangement configure time
   // including the delta vector time
 
@@ -142,21 +187,16 @@ int main(int argc, char* argv[])
   for (int j = 0; j < 64; j++) {
     uint32_t score = 0;
     for (i = 0; i < pingRulesTable.size(); i++) {
-      //cout << "mask score is" << " " << ((((pingRulesTable.at(i)).mask) >> j) & 1) << endl;
       score += ((((pingRulesTable.at(i)).mask) >> j) & 1);
     }
-    //cout << "score is" << " " << score << endl;
     sumColumn.push_back(score);
-    //cout << sumColumn[j] << endl;
   }
-   //cout << sumColumn.size() << endl;
 
-  // Copy the sumCOlumn vector to a new vector
+  // Copy the sumColumn vector to a new vector
   vector<uint64_t> newSumColumn(sumColumn);
   /*
    * Checked the newSumColumn vector is the same with the sumColumn vector
   cout << newSumColumn.size() << endl;
-
   for (i = 0; i < newSumColumn.size(); i++) {
     cout << newSumColumn[i] << endl;
   }
