@@ -83,6 +83,164 @@ bool is_prefix(Rule& rule)
   }
 }
 
+/*
+ * Generate the two dimensional array (generate delta array) from the pingRulesTable array
+ * With all the bits in each rule, including "0" and "1"
+ * Caculate the score--the sum of column
+*/
+vector<int> generate_delta(vector<Rule>& ruleList)
+{
+  vector<uint64_t> sumColumn;
+  for (int j = 0; j < 64; j++) {
+    uint32_t score = 0;
+    for (i = 0; i < ruleList.size(); i++) {
+      score += ((((ruleList.at(i)).mask) >> j) & 1);
+    }
+    sumColumn.push_back(score);
+  }
+
+  // Copy the sumColumn vector to a new vector
+  vector<uint64_t> newSumColumn(sumColumn);
+  /*
+   * Checked the newSumColumn vector is the same with the sumColumn vector
+  cout << newSumColumn.size() << endl;
+  for (i = 0; i < newSumColumn.size(); i++) {
+    cout << newSumColumn[i] << endl;
+  }
+  */
+
+  // Sort the newSumColumn vector in descending order
+  std::sort(newSumColumn.begin(), newSumColumn.end(), std::greater<uint64_t>());
+  /*
+   * Checked the descending order is correct or not
+  for (i = 0; i < newSumColumn.size(); i++) {
+    cout << newSumColumn[i] << endl;
+  }
+  */
+
+  // Construct the delta(): the rearrangement operation {left shift, right shift, and no change}
+  // the element in delta vector, can be negative, positive and "0"
+  vector<int> delta;
+  // checkpoint is the index/subscript of the newSumColumn has the same value with the sumColumn
+  uint32_t checkpoint = 0;
+  int gap = 0; // Gap is the difference between the original and new sumcolumn vectors
+  for (int i = 0; i < sumColumn.size(); i++) {
+    //cout << "mark1" << " " << sumColumn[i] << endl;
+    for (int j = 0; j < newSumColumn.size(); j++) {
+      //cout << newSumColumn[j] << endl;
+      // Check the first equal element, if it is true, then return the checkpoint
+      if (newSumColumn[j] != sumColumn[i]) {
+        continue;
+      }
+      else if (newSumColumn[j] == sumColumn[i]) {
+        checkpoint = j;
+        newSumColumn[j] = 132; // make the matched column invalid
+        break;
+      }
+      else {
+        // Search all the 64 values, still didn't find the same value
+        cout << "Error occurs" << endl;
+      }
+    }
+    // Get the difference between the original vector data and the sorted vector data
+    // Create the rearrangement operation
+    gap = i - checkpoint;
+    //cout << "checkpoint is" << " " << checkpoint << endl;
+    //cout << "gap is" << " " << gap << endl;
+    delta.push_back(gap);
+  }
+  return delta;
+  /*
+   *Checked the delta vector
+  for (i = 0; i < delta.size(); i++) {
+    cout << "i=" << i  << " " << delta[i] << endl;
+  }
+  */
+}
+
+/*
+ * Generate the new rule after the delta operations
+ * if the element value of delta vector is negative, which means left shift
+ * if the element value of delta vector is positive, which means right shift
+ * if the element value of delta vector is "0", which means no change
+*/
+// Create a new pingRulesTable for the new rearrangement rules
+//vector<Rule> newPingRulesTable; // for each bit of each rule
+vector<Rule> rules_rearrange(vector<Rule>& oldRuleList, vector<int> delta_array)
+{
+  vector<Rule> sumRulesTable; // for a new rule
+
+  for (int i = 0; i < oldRuleList.size(); i++) {
+    Rule newRule;
+    for (int j = 0; j < 64; j++) {
+      Rule subRule;
+      if (delta_array[j] < 0) {
+        // if it is negative, do the left shift
+        // from the lsb position, do the correct operations
+        // Note: because here is 64 bit, if we just use 1 to do left shift, it will occur overflow
+        // since "1" is 32bit by default
+        subRule.value = ( (( (oldRuleList[i].value) & (uint64_t(1) << j) ) ) << (abs(delta_array[j])) );
+        subRule.mask = ( (( (oldRuleList[i].mask) & (uint64_t(1) << j) ) ) << (abs(delta_array[j])) );
+      }
+      else if (delta_array[j] > 0) {
+        // if it is positive, do the right shift
+        subRule.value = ( (( (oldRuleList[i].value) & (uint64_t(1) << j) ) ) >> (abs(delta_array[j])) );
+        subRule.mask = ( (( (oldRuleList[i].mask) & (uint64_t(1) << j) ) ) >> (abs(delta_array[j])) );
+      }
+      else if (delta_array[j] == 0) {
+        // if it is "0", no change
+        subRule.value = (( (oldRuleList[i].value) & (uint64_t(1) << j) ) );
+        subRule.mask = (( (oldRuleList[i].mask) & (uint64_t(1) << j) ) );
+      }
+      newRule.value |= subRule.value;
+      newRule.mask |= subRule.mask;
+      //cout << j << " " << newRule.mask << endl;
+      newRule.priority = oldRuleList[i].priority;
+    }
+    sumRulesTable.push_back(newRule);
+  }
+  return sumRulesTable;
+}
+
+/*
+ * Rearrange the keyTable according to the delta vector
+ * because the rules are being reordered by the delta vector
+*/
+
+vector<uint64_t> keys_rearrange(vector<uint64_t>& oldKeyList, vector<int> delta_array)
+{
+  vector<uint64_t> newKeyTable; // for a new rule
+
+  // Calculate the key rearrangement configure time basing on the delta vector
+
+  for (int i = 0; i < oldKeyList.size(); i++) {
+    uint64_t newKey = 0; // new key after reordering
+    for (int j = 0; j < 64; j++) {
+      uint64_t subKey = 0; // subKey is the single bit value of each key
+      if (delta_array[j] < 0) {
+        subKey = ( (( (oldKeyList[i]) & (uint64_t(1) << j) ) ) << (abs(delta_array[j])) );
+      }
+      else if (delta_array[j] > 0) {
+        // if it is positive, do the right shift
+        subKey = ( (( (oldKeyList[i]) & (uint64_t(1) << j) ) ) >> (abs(delta_array[j])) );
+      }
+      else if (delta_array[j] == 0) {
+        // if it is "0", no change
+        subKey = (( (oldKeyList[i]) & (uint64_t(1) << j) ) );
+      }
+      newKey |= subKey;
+    }
+    newKeyTable.push_back(newKey);
+  }
+  return newKeyTable;
+  //cout << newKeyTable.size() << endl;
+  /*
+  for (int k = 0; k < newKeyTable.size(); k++) {
+  cout << newKeyTable[k] << endl;
+  }
+  */
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -176,123 +334,69 @@ int main(int argc, char* argv[])
   // Start to calculate the rearrangement configure time
   // including the delta vector time
 
-  auto start_1 = get_time::now();
+  //auto start_1 = get_time::now();
 
-  /*
-   * Generate the two dimensional array (generate delta array) from the pingRulesTable array
-   * With all the bits in each rule, including "0" and "1"
-   * Caculate the score--the sum of column
-  */
-  vector<uint64_t> sumColumn;
-  for (int j = 0; j < 64; j++) {
-    uint32_t score = 0;
-    for (i = 0; i < pingRulesTable.size(); i++) {
-      score += ((((pingRulesTable.at(i)).mask) >> j) & 1);
-    }
-    sumColumn.push_back(score);
-  }
+  int expandRule_num = 0;
+  int insertRule_num = 0;
+  int deleteRule_num = 0;
 
-  // Copy the sumColumn vector to a new vector
-  vector<uint64_t> newSumColumn(sumColumn);
-  /*
-   * Checked the newSumColumn vector is the same with the sumColumn vector
-  cout << newSumColumn.size() << endl;
-  for (i = 0; i < newSumColumn.size(); i++) {
-    cout << newSumColumn[i] << endl;
-  }
-  */
-
-  // Sort the newSumColumn vector in descending order
-  std::sort(newSumColumn.begin(), newSumColumn.end(), std::greater<uint64_t>());
-  /*
-   * Checked the descending order is correct or not
-  for (i = 0; i < newSumColumn.size(); i++) {
-    cout << newSumColumn[i] << endl;
-  }
-  */
-
-  // Construct the delta(): the rearrangement operation {left shift, right shift, and no change}
-  // the element in delta vector, can be negative, positive and "0"
-  vector<int> delta;
-  // checkpoint is the index/subscript of the newSumColumn has the same value with the sumColumn
-  uint32_t checkpoint = 0;
-  int gap = 0; // Gap is the difference between the original and new sumcolumn vectors
-  for (int i = 0; i < sumColumn.size(); i++) {
-    //cout << "mark1" << " " << sumColumn[i] << endl;
-    for (int j = 0; j < newSumColumn.size(); j++) {
-      //cout << newSumColumn[j] << endl;
-      // Check the first equal element, if it is true, then return the checkpoint
-      if (newSumColumn[j] != sumColumn[i]) {
-        continue;
+  for (int j = 0; j < groupVector.size(); j++) {
+    vector<int> delta_need = generate_delta(bigArray[j]);
+    rules_rearrange(bigArray[j], delta_need);
+    keys_rearrange(keyTable, delta_need);
+    // Doing the rule insertion
+    for (int k = 0; k < sumRulesTable.size(); k++) {
+      if ( is_prefix(sumRulesTable.at(k)) ) {
+        trie.insert_prefix_rule_priority(sumRulesTable.at(k));
+        insertRule_num ++;
       }
-      else if (newSumColumn[j] == sumColumn[i]) {
-        checkpoint = j;
-        newSumColumn[j] = 132; // make the matched column invalid
-        break;
+
+      else if ( trie.get_new_num(sumRulesTable.at(k)) < 12 ) {
+        trie.expand_rule(sumRulesTable.at(k));
+        expandRule_num ++;
       }
       else {
-        // Search all the 64 values, still didn't find the same value
-        cout << "Error occurs" << endl;
+        pingRulesTable[k].value = 0;
+        pingRulesTable[k].mask = 0;
+        cout << pingRulesTable[k].value << "test" << endl;
+        deleteRule_num ++;
+        continue;
       }
     }
-    // Get the difference between the original vector data and the sorted vector data
-    // Create the rearrangement operation
-    gap = i - checkpoint;
-    //cout << "checkpoint is" << " " << checkpoint << endl;
-    //cout << "gap is" << " " << gap << endl;
-    delta.push_back(gap);
-  }
+    // Doing the rule searching
+    char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
 
-  /*
-   *Checked the delta vector
-  for (i = 0; i < delta.size(); i++) {
-    cout << "i=" << i  << " " << delta[i] << endl;
-  }
-  */
+    // Search the rules
+    cout << "Begin test (keys=" << newKeyTable.size() <<
+            ", rules=" << sumRulesTable.size() << "):" << endl;
 
-  /*
-   * Generate the new rule after the delta operations
-   * if the element value of delta vector is negative, which means left shift
-   * if the element value of delta vector is positive, which means right shift
-   * if the element value of delta vector is "0", which means no change
-  */
-  // Create a new pingRulesTable for the new rearrangement rules
-  //vector<Rule> newPingRulesTable; // for each bit of each rule
-  vector<Rule> sumRulesTable; // for a new rule
+    uint64_t checksum = 0; // show the sum of matching priority
+    uint64_t match = 0; // how many keys are being matched in these new rules
 
-  for (int i = 0; i < pingRulesTable.size(); i++) {
-    Rule newRule;
-    for (int j = 0; j < 64; j++) {
-      Rule subRule;
-      if (delta[j] < 0) {
-        // if it is negative, do the left shift
-        // from the lsb position, do the correct operations
-        // Note: because here is 64 bit, if we just use 1 to do left shift, it will occur overflow
-        // since "1" is 32bit by default
-        subRule.value = ( (( (pingRulesTable[i].value) & (uint64_t(1) << j) ) ) << (abs(delta[j])) );
-        subRule.mask = ( (( (pingRulesTable[i].mask) & (uint64_t(1) << j) ) ) << (abs(delta[j])) );
-      }
-      else if (delta[j] > 0) {
-        // if it is positive, do the right shift
-        subRule.value = ( (( (pingRulesTable[i].value) & (uint64_t(1) << j) ) ) >> (abs(delta[j])) );
-        subRule.mask = ( (( (pingRulesTable[i].mask) & (uint64_t(1) << j) ) ) >> (abs(delta[j])) );
-      }
-      else if (delta[j] == 0) {
-        // if it is "0", no change
-        subRule.value = (( (pingRulesTable[i].value) & (uint64_t(1) << j) ) );
-        subRule.mask = (( (pingRulesTable[i].mask) & (uint64_t(1) << j) ) );
-      }
-      newRule.value |= subRule.value;
-      newRule.mask |= subRule.mask;
-      //cout << j << " " << newRule.mask << endl;
-      newRule.priority = pingRulesTable[i].priority;
+    //get time1
+    //auto start = get_time::now(); // use auto keyword to minimize typing strokes :)
+    for (int j = 0; j < newKeyTable.size(); j++) {
+      uint64_t priority = trie.LPM1_search_rule(newKeyTable[j]);
+      //cout << j << " " << present << endl;
+      checksum += priority;
+      match += (priority != 0); // when priority == 0, which means no matching
     }
-    sumRulesTable.push_back(newRule);
+
   }
 
-  auto end_1 = get_time::now();
-  auto diff_1 = end_1 - start_1;
-  cout<<"Rules rearrangement configure time is:  "<< chrono::duration_cast<ns>(diff_1).count()<<" ns "<<endl;
+
+
+
+
+
+
+
+
+
+
+  //auto end_1 = get_time::now();
+  //auto diff_1 = end_1 - start_1;
+  //cout<<"Rules rearrangement configure time is:  "<< chrono::duration_cast<ns>(diff_1).count()<<" ns "<<endl;
 
   /*
     // Check the rearranged new rules ( has the same size with the original rules = 131 )
@@ -302,46 +406,7 @@ int main(int argc, char* argv[])
   */
 
 
-  /*
-   * Rearrange the keyTable according to the delta vector
-   * because the rules are being reordered by the delta vector
-  */
 
-  vector<uint64_t> newKeyTable; // for a new rule
-
-  // Calculate the key rearrangement configure time basing on the delta vector
-  auto start_2 = get_time::now();
-
-  for (int i = 0; i < keyTable.size(); i++) {
-    uint64_t newKey = 0; // new key after reordering
-    for (int j = 0; j < 64; j++) {
-      uint64_t subKey = 0; // subKey is the single bit value of each key
-      if (delta[j] < 0) {
-        subKey = ( (( (keyTable[i]) & (uint64_t(1) << j) ) ) << (abs(delta[j])) );
-      }
-      else if (delta[j] > 0) {
-        // if it is positive, do the right shift
-        subKey = ( (( (keyTable[i]) & (uint64_t(1) << j) ) ) >> (abs(delta[j])) );
-      }
-      else if (delta[j] == 0) {
-        // if it is "0", no change
-        subKey = (( (keyTable[i]) & (uint64_t(1) << j) ) );
-      }
-      newKey |= subKey;
-    }
-    newKeyTable.push_back(newKey);
-  }
-
-  auto end_2 = get_time::now();
-  auto diff_2 = end_2 - start_2;
-  cout<<"keys rearrangement configure time is:  "<< chrono::duration_cast<ns>(diff_2).count()<<" ns "<<endl;
-
-  //cout << newKeyTable.size() << endl;
-  /*
-for (int k = 0; k < newKeyTable.size(); k++) {
-  cout << newKeyTable[k] << endl;
-}
-*/
 
   /*
    * We get the new rearrangement rules table here, named sumRulesTabel
@@ -358,37 +423,13 @@ for (int k = 0; k < newKeyTable.size(); k++) {
 
   // Calculate the insertion configure time
   // Inculduing the expanded configure time
-  auto start_3 = get_time::now();
-  int expandRule_num = 0;
-  int insertRule_num = 0;
-  int deleteRule_num = 0;
+  //auto start_3 = get_time::now();
 
-
-  for (int k = 0; k < sumRulesTable.size(); k++) {
-    if ( is_prefix(sumRulesTable.at(k)) ) {
-      trie.insert_prefix_rule_priority(sumRulesTable.at(k));
-      insertRule_num ++;
-    }
-
-    else if ( trie.get_new_num(sumRulesTable.at(k)) < 12 ) {
-      trie.expand_rule(sumRulesTable.at(k));
-      expandRule_num ++;
-    }
-
-
-    else {
-      pingRulesTable[k].value = 0;
-      pingRulesTable[k].mask = 0;
-      cout << pingRulesTable[k].value << "test" << endl;
-      deleteRule_num ++;
-      continue;
-    }
-  }
-
-  cout << "Original num of rules in pingRulesTable is:" << " " << pingRulesTable.size() << endl;
+  //cout << "Original num of rules in pingRulesTable is:" << " " << pingRulesTable.size() << endl;
 
   // Construct the new rule table, remove the unsatisfied rules
-  ofstream arrayData("newRule.txt"); // File Creation(on C drive)
+  //ofstream arrayData("newRule.txt"); // File Creation(on C drive)
+  /*
 
       for(int k = 0; k < pingRulesTable.size(); k++)
       {
@@ -397,10 +438,11 @@ for (int k = 0; k < newKeyTable.size(); k++) {
                   << pingRulesTable[k].mask << endl; //Outputs array to txtFile
         }
       }
+      */
 
-  auto end_3 = get_time::now();
-  auto diff_3 = end_3 - start_3;
-  cout<<"Rules insertion configure time is:  "<< chrono::duration_cast<ns>(diff_3).count()<<" ns "<<endl;
+ // auto end_3 = get_time::now();
+  //auto diff_3 = end_3 - start_3;
+  //cout<<"Rules insertion configure time is:  "<< chrono::duration_cast<ns>(diff_3).count()<<" ns "<<endl;
   cout << "Total expanded count is:" << " " << trie.expand_count << endl;
   cout << "Expand rule num is:" << " " << expandRule_num << endl;
   cout << "Insert rule num is:" << " " << insertRule_num << endl;
@@ -413,7 +455,7 @@ for (int k = 0; k < newKeyTable.size(); k++) {
 
   // Search the rules
   cout << "Begin test (keys=" << newKeyTable.size() <<
-          ", rules=" << sumRulesTable.size() << "):" << endl;
+          ", rules=" << pingRulesTable.size() << "):" << endl;
 
   uint64_t checksum = 0; // show the sum of matching priority
   uint64_t match = 0; // how many keys are being matched in these new rules
