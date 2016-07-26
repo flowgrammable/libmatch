@@ -279,8 +279,6 @@ int main(int argc, char* argv[])
    * Grouping algorithm
    * Use the is_cross_pattern function to check the grouping number
   */
-
-
   vector<uint32_t> groupVector;
 
   for (int i = 0; i < pingRulesTable.size(); i++) {
@@ -317,16 +315,11 @@ int main(int argc, char* argv[])
       continue;
     }
   }
-
+  /*
   for (int j = 0; j < groupVector.size(); j++) {
    cout << bigArray[j].size() << " " << groupVector[j] + 1 << " " << "check is the same or not" << endl;
   }
-
-  // Start to calculate the rearrangement configure time
-  // including the delta vector time
-
-  //auto start_1 = get_time::now();
-
+  */
 
   // Start to build the newRules in each group
   /*
@@ -348,7 +341,10 @@ int main(int argc, char* argv[])
   uint64_t sum_trie_expand_count = 0;
   uint64_t sum_trie_count = 0;
   uint64_t sum_trie_node_count = 0;
-
+  uint64_t sum_rule_rearrange_time = 0;
+  uint64_t sum_rule_insertion_time = 0;
+  uint64_t sum_key_rearrange_time = 0;
+  uint64_t sum_key_search_time = 0;
   //get time1
   auto start = get_time::now(); // use auto keyword to minimize typing strokes :)
 
@@ -358,9 +354,22 @@ int main(int argc, char* argv[])
     // Initilize a trie
     // Each group is a seperate trie
     Trie trie;
+    auto start1 = get_time::now();
     vector<int> delta_need = generate_delta(bigArray[j]);
     vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
+    auto end1 = get_time::now();
+    auto diff1 = end1 - start1;
+    //cout << "Rules rearrange configure time is:" << chrono::duration_cast<ns>(diff1).count() << " ns " << endl;
+    sum_rule_rearrange_time += chrono::duration_cast<ns>(diff1).count();
+    /*
+     * Checked the num of groups: new rules
+    for (int k = 0; k < newSumRuleTable.size(); k++) {
+      cout << newSumRuleTable[k].value << " " << newSumRuleTable[k].mask
+           << " " << newSumRuleTable[k].priority << endl;
+    }
+    */
     // Doing the rule insertion
+    auto start2 = get_time::now();
     for (int k = 0; k < newSumRuleTable.size(); k++) {
       if ( is_prefix(newSumRuleTable.at(k)) ) {
         trie.insert_prefix_rule_priority(newSumRuleTable.at(k));
@@ -378,20 +387,35 @@ int main(int argc, char* argv[])
         continue;
       }
     }
+    auto end2 = get_time::now();
+    auto diff2 = end2 - start2;
+    //cout << "Rules insertion configure time is:" << chrono::duration_cast<ns>(diff2).count() << " ns " << endl;
+    sum_rule_insertion_time += chrono::duration_cast<ns>(diff2).count();
     // Finished the rearranged rule insertion for each subtrie
     // Doing the rule searching
     char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
 
     // Search the rules
+    /*
     cout << "Begin test (keys=" << keyTable.size() <<
-            ", rules=" << pingRulesTable.size() << "):" << endl;
-
+            ", sub rules=" << newSumRuleTable.size() << "):" << endl;
+    */
     for (int i = 0; i < keyTable.size(); i++) {
       // Check each key
-      keys_rearrange(keyTable[i], delta_need);
-      uint64_t priority = trie.LPM1_search_rule(keyTable[i]);
+      auto start3 = get_time::now();
+      uint64_t newGenKey = keys_rearrange(keyTable[i], delta_need);
+      auto end3 = get_time::now();
+      auto diff3 = end3 - start3;
+      sum_key_rearrange_time += chrono::duration_cast<ns>(diff3).count();
+      auto start4 = get_time::now();
+      uint64_t priority = trie.LPM1_search_rule(newGenKey);
+      auto end4 = get_time::now();
+      auto diff4 = end4 - start4;
+      sum_key_search_time += chrono::duration_cast<ns>(diff4).count();
       match += (priority != 0); // when priority == 0, which means no matching
       if (priority == 0) {
+        // not matching
+        // Go to check the next keys through this current group of rules
         continue;
       }
       else {
@@ -400,6 +424,9 @@ int main(int argc, char* argv[])
         // Avoid the duplication searching
         // Delete the element keyTable[i]
         keyTable.erase(keyTable.begin() + i);
+        // Make sure the index is correct
+        // Because we delete one key, so need to decrease index too
+        i = i - 1;
         continue;
       }
     }
@@ -412,16 +439,10 @@ int main(int argc, char* argv[])
   auto end = get_time::now();
   auto diff = end - start;
 
-
-
-  //auto end_1 = get_time::now();
-  //auto diff_1 = end_1 - start_1;
-  //cout<<"Rules rearrangement configure time is:  "<< chrono::duration_cast<ns>(diff_1).count()<<" ns "<<endl;
-
-
-  // auto end_3 = get_time::now();
-  //auto diff_3 = end_3 - start_3;
-  //cout<<"Rules insertion configure time is:  "<< chrono::duration_cast<ns>(diff_3).count()<<" ns "<<endl;
+  cout << "Total rules rearrange configure time is:" << sum_rule_rearrange_time << " ns " << endl;
+  cout << "Total rules insertion configure time is:" << sum_rule_insertion_time << " ns " << endl;
+  cout << "Total keys rearrange configure time is:" << sum_key_rearrange_time << " ns " << endl;
+  cout << "Total keys search time is:" << sum_key_search_time << " ns " << endl;
   cout << "Total expanded count is:" << " " << sum_trie_expand_count << endl;
   cout << "Expand rule num is:" << " " << expandRule_num << endl;
   cout << "Insert rule num is:" << " " << insertRule_num << endl;
@@ -430,7 +451,7 @@ int main(int argc, char* argv[])
   cout << "Total insert trie_node count is:" << " " << sum_trie_node_count << endl;
   cout << "Checksum: " << checksum << endl;
   cout << "Total matches: " << match << endl;
-  cout <<"Search time is: "<< chrono::duration_cast<ns>(diff).count()<<" ns "<<endl;
+  cout << "Total runtime is: "<< chrono::duration_cast<ns>(diff).count()<<" ns "<<endl;
 
   return 0;
 }
