@@ -39,8 +39,7 @@ Rule strTint(string rulestr)
   return rule;
 }
 
-// Initilize a trie
-Trie trie;
+
 
 /*
  * Check whether the neighbouring rules are cross pattern (has intersection)
@@ -93,7 +92,7 @@ vector<int> generate_delta(vector<Rule>& ruleList)
   vector<uint64_t> sumColumn;
   for (int j = 0; j < 64; j++) {
     uint32_t score = 0;
-    for (i = 0; i < ruleList.size(); i++) {
+    for (int i = 0; i < ruleList.size(); i++) {
       score += ((((ruleList.at(i)).mask) >> j) & 1);
     }
     sumColumn.push_back(score);
@@ -203,42 +202,32 @@ vector<Rule> rules_rearrange(vector<Rule>& oldRuleList, vector<int> delta_array)
 }
 
 /*
- * Rearrange the keyTable according to the delta vector
+ * Rearrange each key in the keyTable according to the delta vector
  * because the rules are being reordered by the delta vector
 */
 
-vector<uint64_t> keys_rearrange(vector<uint64_t>& oldKeyList, vector<int> delta_array)
+uint64_t keys_rearrange(uint64_t key, vector<int> delta_array)
 {
-  vector<uint64_t> newKeyTable; // for a new rule
-
   // Calculate the key rearrangement configure time basing on the delta vector
 
-  for (int i = 0; i < oldKeyList.size(); i++) {
-    uint64_t newKey = 0; // new key after reordering
-    for (int j = 0; j < 64; j++) {
-      uint64_t subKey = 0; // subKey is the single bit value of each key
-      if (delta_array[j] < 0) {
-        subKey = ( (( (oldKeyList[i]) & (uint64_t(1) << j) ) ) << (abs(delta_array[j])) );
-      }
-      else if (delta_array[j] > 0) {
-        // if it is positive, do the right shift
-        subKey = ( (( (oldKeyList[i]) & (uint64_t(1) << j) ) ) >> (abs(delta_array[j])) );
-      }
-      else if (delta_array[j] == 0) {
-        // if it is "0", no change
-        subKey = (( (oldKeyList[i]) & (uint64_t(1) << j) ) );
-      }
-      newKey |= subKey;
+  uint64_t newKey = 0; // new key after reordering
+  for (int j = 0; j < 64; j++) {
+    uint64_t subKey = 0; // subKey is the single bit value of each key
+    if (delta_array[j] < 0) {
+      subKey = ( (( key & (uint64_t(1) << j) ) ) << (abs(delta_array[j])) );
     }
-    newKeyTable.push_back(newKey);
+    else if (delta_array[j] > 0) {
+      // if it is positive, do the right shift
+      subKey = ( (( key & (uint64_t(1) << j) ) ) >> (abs(delta_array[j])) );
+    }
+    else if (delta_array[j] == 0) {
+      // if it is "0", no change
+      subKey = (( key & (uint64_t(1) << j) ) );
+    }
+    newKey |= subKey;
   }
-  return newKeyTable;
-  //cout << newKeyTable.size() << endl;
-  /*
-  for (int k = 0; k < newKeyTable.size(); k++) {
-  cout << newKeyTable[k] << endl;
-  }
-  */
+  return newKey;
+  //cout << newKey << endl;
 }
 
 
@@ -305,8 +294,10 @@ int main(int argc, char* argv[])
   }
   cout << "Group num is:" << " " << groupVector.size() << endl;
 
+  /* Create all the subgroups
+   * The big array is called bigArray
+  */
   vector< vector<Rule> > bigArray;
-
   // Create a new sub group by copying the related rules
   for (int j = 0; j < groupVector.size(); j++) {
     bigArray.push_back(vector<Rule> ());
@@ -336,23 +327,47 @@ int main(int argc, char* argv[])
 
   //auto start_1 = get_time::now();
 
+
+  // Start to build the newRules in each group
+  /*
+   * We get the new rearrangement rules table here, named sumRulesTabel
+   * Next, we will do the rules insertion
+   * Here, we just insert prefix rules, follow the LPM insertion function
+   * So we need to check whether each new rules is prefix rule
+   * If it is, then do the insertion
+   * if not, do the expansion algorithm to make it is prefix rule
+  */
+
   int expandRule_num = 0;
   int insertRule_num = 0;
   int deleteRule_num = 0;
 
+  uint64_t checksum = 0; // show the sum of matching priority
+  uint64_t match = 0; // how many keys are being matched in these new rules
+
+  uint64_t sum_trie_expand_count = 0;
+  uint64_t sum_trie_count = 0;
+  uint64_t sum_trie_node_count = 0;
+
+  //get time1
+  auto start = get_time::now(); // use auto keyword to minimize typing strokes :)
+
+
+  // Start to search each key here
   for (int j = 0; j < groupVector.size(); j++) {
+    // Initilize a trie
+    // Each group is a seperate trie
+    Trie trie;
     vector<int> delta_need = generate_delta(bigArray[j]);
-    rules_rearrange(bigArray[j], delta_need);
-    keys_rearrange(keyTable, delta_need);
+    vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
     // Doing the rule insertion
-    for (int k = 0; k < sumRulesTable.size(); k++) {
-      if ( is_prefix(sumRulesTable.at(k)) ) {
-        trie.insert_prefix_rule_priority(sumRulesTable.at(k));
+    for (int k = 0; k < newSumRuleTable.size(); k++) {
+      if ( is_prefix(newSumRuleTable.at(k)) ) {
+        trie.insert_prefix_rule_priority(newSumRuleTable.at(k));
         insertRule_num ++;
       }
-
-      else if ( trie.get_new_num(sumRulesTable.at(k)) < 12 ) {
-        trie.expand_rule(sumRulesTable.at(k));
+      else if ( trie.get_new_num(newSumRuleTable.at(k)) < 12 ) {
+        trie.expand_rule(newSumRuleTable.at(k));
         expandRule_num ++;
       }
       else {
@@ -363,34 +378,39 @@ int main(int argc, char* argv[])
         continue;
       }
     }
+    // Finished the rearranged rule insertion for each subtrie
     // Doing the rule searching
     char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
 
     // Search the rules
-    cout << "Begin test (keys=" << newKeyTable.size() <<
-            ", rules=" << sumRulesTable.size() << "):" << endl;
+    cout << "Begin test (keys=" << keyTable.size() <<
+            ", rules=" << pingRulesTable.size() << "):" << endl;
 
-    uint64_t checksum = 0; // show the sum of matching priority
-    uint64_t match = 0; // how many keys are being matched in these new rules
-
-    //get time1
-    //auto start = get_time::now(); // use auto keyword to minimize typing strokes :)
-    for (int j = 0; j < newKeyTable.size(); j++) {
-      uint64_t priority = trie.LPM1_search_rule(newKeyTable[j]);
-      //cout << j << " " << present << endl;
-      checksum += priority;
+    for (int i = 0; i < keyTable.size(); i++) {
+      // Check each key
+      keys_rearrange(keyTable[i], delta_need);
+      uint64_t priority = trie.LPM1_search_rule(keyTable[i]);
       match += (priority != 0); // when priority == 0, which means no matching
+      if (priority == 0) {
+        continue;
+      }
+      else {
+        checksum += priority;
+        // Delete the matched keys from the keyTable
+        // Avoid the duplication searching
+        // Delete the element keyTable[i]
+        keyTable.erase(keyTable.begin() + i);
+        continue;
+      }
     }
-
+    sum_trie_expand_count += trie.expand_count;
+    sum_trie_count += trie.count;
+    sum_trie_node_count += trie.node_count;
   }
 
-
-
-
-
-
-
-
+  //get time2
+  auto end = get_time::now();
+  auto diff = end - start;
 
 
 
@@ -398,80 +418,16 @@ int main(int argc, char* argv[])
   //auto diff_1 = end_1 - start_1;
   //cout<<"Rules rearrangement configure time is:  "<< chrono::duration_cast<ns>(diff_1).count()<<" ns "<<endl;
 
-  /*
-    // Check the rearranged new rules ( has the same size with the original rules = 131 )
-  for (i = 0; i < sumRulesTable.size(); i++) {
-    cout << sumRulesTable[i].value << " " << sumRulesTable[i].mask << " " << sumRulesTable[i].priority << endl;
-  }
-  */
 
-
-
-
-  /*
-   * We get the new rearrangement rules table here, named sumRulesTabel
-   * Next, we will do the rules insertion
-   * Here, we just insert prefix rules, follow the LPM insertion function
-   * So we need to check whether each new rules is prefix rule
-   * If it is, then do the insertion
-   * if not, do the expansion algorithm to make it is prefix rule
-  */
-
-
-
-  // insert new modified rules into trie (after rearrangement algorithm)
-
-  // Calculate the insertion configure time
-  // Inculduing the expanded configure time
-  //auto start_3 = get_time::now();
-
-  //cout << "Original num of rules in pingRulesTable is:" << " " << pingRulesTable.size() << endl;
-
-  // Construct the new rule table, remove the unsatisfied rules
-  //ofstream arrayData("newRule.txt"); // File Creation(on C drive)
-  /*
-
-      for(int k = 0; k < pingRulesTable.size(); k++)
-      {
-        if ( pingRulesTable[k].value != 0 ) {
-          arrayData << pingRulesTable[k].value << " "
-                  << pingRulesTable[k].mask << endl; //Outputs array to txtFile
-        }
-      }
-      */
-
- // auto end_3 = get_time::now();
+  // auto end_3 = get_time::now();
   //auto diff_3 = end_3 - start_3;
   //cout<<"Rules insertion configure time is:  "<< chrono::duration_cast<ns>(diff_3).count()<<" ns "<<endl;
-  cout << "Total expanded count is:" << " " << trie.expand_count << endl;
+  cout << "Total expanded count is:" << " " << sum_trie_expand_count << endl;
   cout << "Expand rule num is:" << " " << expandRule_num << endl;
   cout << "Insert rule num is:" << " " << insertRule_num << endl;
   cout << "Delete rule num is:" << " " << deleteRule_num << endl;
-  cout << "Total insert rule num is:" << " " << trie.count << endl;
-  cout << "Total insert trie_node count is:" << " " << trie.node_count << endl;
-
-
-  char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
-
-  // Search the rules
-  cout << "Begin test (keys=" << newKeyTable.size() <<
-          ", rules=" << pingRulesTable.size() << "):" << endl;
-
-  uint64_t checksum = 0; // show the sum of matching priority
-  uint64_t match = 0; // how many keys are being matched in these new rules
-
-  //get time1
-  auto start = get_time::now(); // use auto keyword to minimize typing strokes :)
-  for (int j = 0; j < newKeyTable.size(); j++) {
-    uint64_t priority = trie.LPM1_search_rule(newKeyTable[j]);
-    //cout << j << " " << present << endl;
-    checksum += priority;
-    match += (priority != 0); // when priority == 0, which means no matching
-  }
-
-  //get time2
-  auto end = get_time::now();
-  auto diff = end - start;
+  cout << "Total insert rule num is:" << " " << sum_trie_count << endl;
+  cout << "Total insert trie_node count is:" << " " << sum_trie_node_count << endl;
   cout << "Checksum: " << checksum << endl;
   cout << "Total matches: " << match << endl;
   cout <<"Search time is: "<< chrono::duration_cast<ns>(diff).count()<<" ns "<<endl;
