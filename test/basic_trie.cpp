@@ -268,15 +268,20 @@ int main(int argc, char* argv[])
     //cout << (pingRulesTable[i].mask && pingRulesTable[i+1].mask) << endl;
     if (i != pingRulesTable.size() - 1) {
       if ( pingRulesTable[i].mask && pingRulesTable[i+1].mask ) {
-        groupVector.push_back(i);
+        if (pingRulesTable[i].mask & pingRulesTable[i+1].mask == 0) {
+          groupVector.push_back(i);
+        }
+        else {
+          continue;
+        }
       }
       else {
         continue;
       }
     }
     else {
-        groupVector.push_back(i);
-      }
+      groupVector.push_back(i);
+    }
   }
 
   cout << "Group num is:" << " " << groupVector.size() << endl;
