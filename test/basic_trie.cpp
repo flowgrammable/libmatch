@@ -45,17 +45,19 @@ Rule strTint(string rulestr)
  * Check whether the neighbouring rules are cross pattern (has intersection)
  * if yes, continue the rules
  * if not, spearate the group
-*/
-bool is_cross_pattern(Rule const& a, Rule const& b)
+
+bool is_split(Rule const& a, Rule const& b)
 {
+
   if (a.mask && b.mask == 0) {
     return false;
   }
+
   else {
     return true;
   }
 }
-
+*/
 
 /*
  * Check whether the new rule is a prefix rule
@@ -282,15 +284,28 @@ int main(int argc, char* argv[])
   vector<uint32_t> groupVector;
 
   for (int i = 0; i < pingRulesTable.size(); i++) {
-    if (is_cross_pattern( pingRulesTable[i], pingRulesTable[i+1] )) {
-      continue;
+    //cout << i << " " << "a.mask:" << " " << pingRulesTable[i].mask << " " << "b.mask:" << " " << pingRulesTable[i+1].mask << endl;
+    //cout << (pingRulesTable[i].mask && pingRulesTable[i+1].mask) << endl;
+    if (i != pingRulesTable.size() - 1) {
+      if ( pingRulesTable[i].mask && pingRulesTable[i+1].mask ) {
+        groupVector.push_back(i);
+      }
+      else {
+        continue;
+      }
     }
     else {
-      groupVector.push_back(i);
-      continue;
-    }
+        groupVector.push_back(i);
+      }
   }
+
   cout << "Group num is:" << " " << groupVector.size() << endl;
+/*
+  for (int j = 0; j < groupVector.size(); j++) {
+   cout << j << " " << groupVector[j] << " " << pingRulesTable.size() << endl;
+  }
+  */
+
 
   /* Create all the subgroups
    * The big array is called bigArray
@@ -315,11 +330,12 @@ int main(int argc, char* argv[])
       continue;
     }
   }
-  /*
+
   for (int j = 0; j < groupVector.size(); j++) {
-   cout << bigArray[j].size() << " " << groupVector[j] + 1 << " " << "check is the same or not" << endl;
+   cout << "Group" << " " << j+1 << " " <<  bigArray[j].size() << " "
+        << groupVector[j] + 1 << " " << "check is the same or not" << endl;
   }
-  */
+
 
   // Start to build the newRules in each group
   /*
