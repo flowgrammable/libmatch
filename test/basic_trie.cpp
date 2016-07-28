@@ -39,26 +39,6 @@ Rule strTint(string rulestr)
   return rule;
 }
 
-
-
-/*
- * Check whether the neighbouring rules are cross pattern (has intersection)
- * if yes, continue the rules
- * if not, spearate the group
-
-bool is_split(Rule const& a, Rule const& b)
-{
-
-  if (a.mask && b.mask == 0) {
-    return false;
-  }
-
-  else {
-    return true;
-  }
-}
-*/
-
 /*
  * Check whether the new rule is a prefix rule
  * if yes, do the LPM insertion
@@ -375,7 +355,6 @@ int main(int argc, char* argv[])
     vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
     auto end1 = get_time::now();
     auto diff1 = end1 - start1;
-    //cout << "Rules rearrange configure time is:" << chrono::duration_cast<ns>(diff1).count() << " ns " << endl;
     sum_rule_rearrange_time += chrono::duration_cast<ns>(diff1).count();
     /*
      * Checked the num of groups: new rules
@@ -405,7 +384,6 @@ int main(int argc, char* argv[])
     }
     auto end2 = get_time::now();
     auto diff2 = end2 - start2;
-    //cout << "Rules insertion configure time is:" << chrono::duration_cast<ns>(diff2).count() << " ns " << endl;
     sum_rule_insertion_time += chrono::duration_cast<ns>(diff2).count();
     // Finished the rearranged rule insertion for each subtrie
     // Doing the rule searching
