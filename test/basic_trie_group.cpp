@@ -260,29 +260,33 @@ int main(int argc, char* argv[])
   /*
    * Grouping algorithm
    * Use the is_cross_pattern function to check the grouping number
+   * Avoid the expanding number is too large
+   * how to improve the grouping algorithm??
+   * add the threshold, to adjust the grouping seperation
   */
   vector<uint32_t> groupVector;
 
   for (int i = 0; i < pingRulesTable.size(); i++) {
-    //cout << i << " " << "a.mask:" << " " << pingRulesTable[i].mask << " " << "b.mask:" << " " << pingRulesTable[i+1].mask << endl;
-    //cout << (pingRulesTable[i].mask && pingRulesTable[i+1].mask) << endl;
+    cout << i << " " << "a.mask:" << " " << pingRulesTable[i].mask << " " << "b.mask:" << " " << pingRulesTable[i+1].mask << endl;
+    cout << (pingRulesTable[i].mask & pingRulesTable[i+1].mask) << endl;
+    // if there has no intersection between the neighbouring two rules
     if (i != pingRulesTable.size() - 1) {
-      if ( pingRulesTable[i].mask && pingRulesTable[i+1].mask ) {
-        if (pingRulesTable[i].mask & pingRulesTable[i+1].mask == 0) {
-          groupVector.push_back(i);
-        }
-        else {
-          continue;
-        }
+      uint64_t middle = pingRulesTable[i].mask & pingRulesTable[i+1].mask;
+      if ( ( (pingRulesTable[i].mask & middle) == pingRulesTable[i].mask) ||
+           ( (pingRulesTable[i+1].mask & middle) == pingRulesTable[i+1].mask) ) {
+        continue;
       }
       else {
+        groupVector.push_back(i);
         continue;
       }
     }
     else {
       groupVector.push_back(i);
+      continue;
     }
   }
+
 
   cout << "Group num is:" << " " << groupVector.size() << endl;
 /*
@@ -376,7 +380,7 @@ int main(int argc, char* argv[])
         trie.insert_prefix_rule_priority(newSumRuleTable.at(k));
         insertRule_num ++;
       }
-      else if ( trie.get_new_num(newSumRuleTable.at(k)) < 23 ) {
+      else if ( trie.get_new_num(newSumRuleTable.at(k)) < 20 ) {
         trie.expand_rule(newSumRuleTable.at(k));
         expandRule_num ++;
       }
