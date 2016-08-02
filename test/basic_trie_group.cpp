@@ -216,7 +216,6 @@ uint64_t keys_rearrange(uint64_t key, vector<int> delta_array)
 int main(int argc, char* argv[])
 {
   ifstream file (argv[1]);
-
   // Read the rules from txt file
   vector<Rule> pingRulesTable;
   int i = 0;
@@ -239,7 +238,7 @@ int main(int argc, char* argv[])
 
   //cout << pingRulesTable.size() << endl;
 
- // Read in keys from file:
+  // Read in keys from file:
   ifstream file1 (argv[2]);
   vector<uint64_t> keyTable;
   if (file1.is_open()) {
@@ -264,44 +263,70 @@ int main(int argc, char* argv[])
    * how to improve the grouping algorithm??
    * add the threshold, to adjust the grouping seperation
   */
-  vector<uint32_t> groupVector;
 
-  for (int i = 0; i < pingRulesTable.size(); i++) {
-    cout << i << " " << "a.mask:" << " " << pingRulesTable[i].mask << " " << "b.mask:" << " " << pingRulesTable[i+1].mask << endl;
-    cout << (pingRulesTable[i].mask & pingRulesTable[i+1].mask) << endl;
-    // if there has no intersection between the neighbouring two rules
+  // For the grouped rule table
+  vector<uint32_t> groupVector;
+  vector<Rule> newList;
+  Trie trie1;
+  for ( int i = 0; i < pingRulesTable.size(); i++ ) {
     if (i != pingRulesTable.size() - 1) {
+      // Check the relationship between the neighbouring rules
+      // for two rules, a and b, if c=a&b
+      // if a.mask & c == a.mask or b.mask & c == b.mask
+      // can show they have intersection
       uint64_t middle = pingRulesTable[i].mask & pingRulesTable[i+1].mask;
       if ( ( (pingRulesTable[i].mask & middle) == pingRulesTable[i].mask) ||
            ( (pingRulesTable[i+1].mask & middle) == pingRulesTable[i+1].mask) ) {
-        continue;
-      }
-      else {
-        groupVector.push_back(i);
-        continue;
-      }
+        // Created the separated group
+        newList.push_back(pingRulesTable[i]);
+        // Generate the delta array
+        vector<int> new_generated_delta = generate_delta(newList);
+        // Create the rearranged rule set
+        vector<Rule> new_table_list = rules_rearrange(
+              newList, new_generated_delta );
+
+        for ( int k = 0; k < new_table_list.size(); k++ ) {
+          // check each rule in new group
+          // guarantee there has no rules expanding too much and cause bad_alloc
+          if (trie1.get_new_num( new_table_list.at (k) ) > 20) {
+            // 20: if bigger than 20, occur bad allocation, did test
+            //
+            groupVector.push_back(k-1);
+            newList.erase( newList.begin(), newList.begin() + (k-1) );
+            i = i - 1;
+            break;
+          }
+          else {
+            continue;
+          }
+        }
     }
+        else {
+          groupVector.push_back(i-1);
+          continue;
+        }
+      }
+
     else {
       groupVector.push_back(i);
-      continue;
     }
-  }
 
-
-  cout << "Group num is:" << " " << groupVector.size() << endl;
-/*
+  //cout << "test" << endl;
+  //cout << "Group num is:" << " " << groupVector.size() << endl;
+}
+  /*
   for (int j = 0; j < groupVector.size(); j++) {
    cout << j << " " << groupVector[j] << " " << pingRulesTable.size() << endl;
   }
   */
-
+  //~Trie trie1;
 
   /* Create all the subgroups
    * The big array is called bigArray
   */
   vector< vector<Rule> > bigArray;
   // Create a new sub group by copying the related rules
-  for (int j = 0; j < groupVector.size(); j++) {
+  for (int m = 0; m < groupVector.size(); m++) {
     bigArray.push_back(vector<Rule> ());
   }
 
@@ -321,8 +346,8 @@ int main(int argc, char* argv[])
   }
 
   for (int j = 0; j < groupVector.size(); j++) {
-   cout << "Group" << " " << j+1 << " " <<  bigArray[j].size() << " "
-        << groupVector[j] + 1 << " " << "check is the same or not" << endl;
+    cout << "Group" << " " << j+1 << " " <<  bigArray[j].size() << " "
+         << groupVector[j] + 1 << " " << "check is the same or not" << endl;
   }
 
 
@@ -338,7 +363,7 @@ int main(int argc, char* argv[])
 
   int expandRule_num = 0;
   int insertRule_num = 0;
-  int deleteRule_num = 0;
+  //int deleteRule_num = 0;
 
   uint64_t checksum = 0; // show the sum of matching priority
   uint64_t match = 0; // how many keys are being matched in these new rules
@@ -351,7 +376,7 @@ int main(int argc, char* argv[])
   uint64_t sum_key_rearrange_time = 0;
   uint64_t sum_key_search_time = 0;
   //get time1
-  auto start = get_time::now(); // use auto keyword to minimize typing strokes :)
+  //auto start = get_time::now(); // use auto keyword to minimize typing strokes :)
 
 
   // Start to search each key here
@@ -375,21 +400,14 @@ int main(int argc, char* argv[])
     // Doing the rule insertion
     auto start2 = get_time::now();
     for (int k = 0; k < newSumRuleTable.size(); k++) {
-      cout << k << " " << trie.get_new_num(newSumRuleTable.at(k)) << endl;
+      //cout << k << " " << trie.get_new_num(newSumRuleTable.at(k)) << endl;
       if ( is_prefix(newSumRuleTable.at(k)) ) {
         trie.insert_prefix_rule_priority(newSumRuleTable.at(k));
         insertRule_num ++;
       }
-      else if ( trie.get_new_num(newSumRuleTable.at(k)) < 20 ) {
+      else {
         trie.expand_rule(newSumRuleTable.at(k));
         expandRule_num ++;
-      }
-      else {
-        pingRulesTable[k].value = 0;
-        pingRulesTable[k].mask = 0;
-        cout << pingRulesTable[k].value << "test" << endl;
-        deleteRule_num ++;
-        continue;
       }
     }
     auto end2 = get_time::now();
@@ -440,8 +458,8 @@ int main(int argc, char* argv[])
   }
 
   //get time2
-  auto end = get_time::now();
-  auto diff = end - start;
+  //auto end = get_time::now();
+  //auto diff = end - start;
 
   cout << "Total rules rearrange configure time is:" << sum_rule_rearrange_time << " ns " << endl;
   cout << "Total rules insertion configure time is:" << sum_rule_insertion_time << " ns " << endl;
@@ -450,12 +468,12 @@ int main(int argc, char* argv[])
   cout << "Total expanded count is:" << " " << sum_trie_expand_count << endl;
   cout << "Expand rule num is:" << " " << expandRule_num << endl;
   cout << "Insert rule num is:" << " " << insertRule_num << endl;
-  cout << "Delete rule num is:" << " " << deleteRule_num << endl;
+  //cout << "Delete rule num is:" << " " << deleteRule_num << endl;
   cout << "Total insert rule num is:" << " " << sum_trie_count << endl;
   cout << "Total insert trie_node count is:" << " " << sum_trie_node_count << endl;
   cout << "Checksum: " << checksum << endl;
   cout << "Total matches: " << match << endl;
-  cout << "Total runtime is: "<< chrono::duration_cast<ns>(diff).count()<<" ns "<<endl;
+  //cout << "Total runtime is: "<< chrono::duration_cast<ns>(diff).count()<<" ns "<<endl;
 
   return 0;
 }

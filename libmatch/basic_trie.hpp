@@ -97,6 +97,7 @@ public:
   }
   ~Trie()
   {
+    delete root;
     // delete_Tire();
   }
 

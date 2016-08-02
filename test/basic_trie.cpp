@@ -371,7 +371,7 @@ int main(int argc, char* argv[])
     // Doing the rule insertion
     auto start2 = get_time::now();
     for (int k = 0; k < newSumRuleTable.size(); k++) {
-      cout << k << " " << trie.get_new_num(newSumRuleTable.at(k)) << endl;
+      //cout << k << " " << trie.get_new_num(newSumRuleTable.at(k)) << endl;
       if ( is_prefix(newSumRuleTable.at(k)) ) {
         trie.insert_prefix_rule_priority(newSumRuleTable.at(k));
         insertRule_num ++;
