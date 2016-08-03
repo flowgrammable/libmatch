@@ -279,22 +279,11 @@ int main(int argc, char* argv[])
       vector<Rule> new_table_list = rules_rearrange(
             newList, new_generated_delta );
       for ( int k = 0; k < new_table_list.size(); k++ ) {
-        // check each rule in new group
-        // guarantee there has no rules expanding too much and cause bad_alloc
-        // 20: if bigger than 20, occur bad allocation, did test
-        // related to the i value and k value
         Trie trie1; // for caculating the trie1.new_num
-        /*
-        cout << " size of each group:" << " " << newList.size() << endl;
-        cout << list_count << "check the rules in each group" << endl;
-        if (trie1.get_new_num(new_table_list.at(k)) >20) {
-          cout << "k is:" << k << " " << "first Num of wildcard is:" << " " << trie1.get_new_num(new_table_list.at(k)) << endl;
-        }
-        */
-        if (trie1.get_new_num( new_table_list.at (k) ) < 20) {
+
+        if (trie1.get_new_num( new_table_list.at (k))  < 12) {
           continue;
         }
-
         else if (new_table_list.size() == 1) {
           groupVector.push_back(list_count);
           list_count += 1;
@@ -304,16 +293,24 @@ int main(int argc, char* argv[])
         else if ((new_table_list.size() > 1)) {
           //cout << "push back" << list_count + (k-1) << endl;
           if (k == 0) {
+            //cout << list_count << "check group num" << endl;
             groupVector.push_back(list_count);
+            i = list_count;
             list_count += 1;
+            //ut << newList.size() << endl;
             newList.clear();
+            // = i -1;
             break;
           }
           else {
-            groupVector.push_back(list_count + (k-1));
+            //cout << list_count << "group num" << endl;
+            groupVector.push_back(i-1);
             // clear the newList vector, becasue this is a seperated group
             list_count += k;
+            //cout << newList.size() << "original the size of empty" << endl;
             newList.clear();
+            //cout << newList.size() << "check the size of empty" << endl;
+            i = i -1;
             break;
           }
         }
@@ -356,11 +353,11 @@ int main(int argc, char* argv[])
     }
 
   }
-
+/*
   for (int j = 0; j < groupVector.size(); j++) {
     cout << "Group" << j+1 << " " <<  bigArray[j].size() << endl;
   }
-
+*/
 
   // Start to build the newRules in each group
   /*
@@ -382,10 +379,10 @@ int main(int argc, char* argv[])
   uint64_t sum_trie_expand_count = 0;
   uint64_t sum_trie_count = 0;
   uint64_t sum_trie_node_count = 0;
-  uint64_t sum_rule_rearrange_time = 0;
-  uint64_t sum_rule_insertion_time = 0;
-  uint64_t sum_key_rearrange_time = 0;
-  uint64_t sum_key_search_time = 0;
+  auto sum_rule_rearrange_time = 0;
+  auto sum_rule_insertion_time = 0;
+  auto sum_key_rearrange_time = 0;
+  auto sum_key_search_time = 0;
   //get time1
   //auto start = get_time::now(); // use auto keyword to minimize typing strokes :)
 
@@ -397,7 +394,7 @@ int main(int argc, char* argv[])
     Trie trie;
     auto start1 = get_time::now();
     vector<int> delta_need = generate_delta(bigArray[j]);
-    cout << bigArray[j].size() << "size of each array" << endl;
+    //cout << bigArray[j].size() << "size of each array" << endl;
     vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
     auto end1 = get_time::now();
     auto diff1 = end1 - start1;
@@ -412,7 +409,7 @@ int main(int argc, char* argv[])
     // Doing the rule insertion
     auto start2 = get_time::now();
     for (int k = 0; k < newSumRuleTable.size(); k++) {
-      cout << newSumRuleTable.size() << " " << "size" << endl;
+      //cout << newSumRuleTable.size() << " " << "size" << endl;
       //cout << "Num of wildcard is:" << " " << trie.get_new_num(newSumRuleTable.at(k)) << endl;
       if ( is_prefix(newSumRuleTable.at(k)) ) {
         trie.insert_prefix_rule_priority(newSumRuleTable.at(k));
@@ -420,8 +417,8 @@ int main(int argc, char* argv[])
         //cout << "test" << endl;
       }
       else {
-        cout << "test test" << endl;
-        cout << "j=" << j << " "<< "k=" << k << " " << trie.get_new_num(newSumRuleTable.at(k)) << endl;
+        //cout << "test test" << endl;
+        //cout << "j=" << j << " "<< "k=" << k << " " << trie.get_new_num(newSumRuleTable.at(k)) << endl;
         trie.expand_rule(newSumRuleTable.at(k));
 
         expandRule_num ++;
