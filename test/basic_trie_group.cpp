@@ -267,65 +267,74 @@ int main(int argc, char* argv[])
   // For the grouped rule table
   vector<uint32_t> groupVector;
   vector<Rule> newList;
-  Trie trie1;
-  for ( int i = 0; i < pingRulesTable.size(); i++ ) {
-    if (i != pingRulesTable.size() - 1) {
-      // Check the relationship between the neighbouring rules
-      // for two rules, a and b, if c=a&b
-      // if a.mask & c == a.mask or b.mask & c == b.mask
-      // can show they have intersection
-      uint64_t middle = pingRulesTable[i].mask & pingRulesTable[i+1].mask;
-      if ( ( (pingRulesTable[i].mask & middle) == pingRulesTable[i].mask) ||
-           ( (pingRulesTable[i+1].mask & middle) == pingRulesTable[i+1].mask) ) {
-        // Created the separated group
-        newList.push_back(pingRulesTable[i]);
-        // Generate the delta array
-        vector<int> new_generated_delta = generate_delta(newList);
-        // Create the rearranged rule set
-        vector<Rule> new_table_list = rules_rearrange(
-              newList, new_generated_delta );
 
-        for ( int k = 0; k < new_table_list.size(); k++ ) {
-          // check each rule in new group
-          // guarantee there has no rules expanding too much and cause bad_alloc
-          if (trie1.get_new_num( new_table_list.at (k) ) > 20) {
-            // 20: if bigger than 20, occur bad allocation, did test
-            //
-            groupVector.push_back(k-1);
-            newList.erase( newList.begin(), newList.begin() + (k-1) );
-            i = i - 1;
+  // avoid the bad allocation memory
+
+  uint32_t list_count = 0;
+  for ( int i = 0; i < pingRulesTable.size(); i++ ) {
+    if (i < (pingRulesTable.size()-1)) {
+      newList.push_back(pingRulesTable[i]);
+      vector<int> new_generated_delta = generate_delta(newList);
+      // Create the rearranged rule set
+      vector<Rule> new_table_list = rules_rearrange(
+            newList, new_generated_delta );
+      for ( int k = 0; k < new_table_list.size(); k++ ) {
+        // check each rule in new group
+        // guarantee there has no rules expanding too much and cause bad_alloc
+        // 20: if bigger than 20, occur bad allocation, did test
+        // related to the i value and k value
+        Trie trie1; // for caculating the trie1.new_num
+        /*
+        cout << " size of each group:" << " " << newList.size() << endl;
+        cout << list_count << "check the rules in each group" << endl;
+        if (trie1.get_new_num(new_table_list.at(k)) >20) {
+          cout << "k is:" << k << " " << "first Num of wildcard is:" << " " << trie1.get_new_num(new_table_list.at(k)) << endl;
+        }
+        */
+        if (trie1.get_new_num( new_table_list.at (k) ) < 20) {
+          continue;
+        }
+
+        else if (new_table_list.size() == 1) {
+          groupVector.push_back(list_count);
+          list_count += 1;
+          newList.clear();
+          break;
+        }
+        else if ((new_table_list.size() > 1)) {
+          //cout << "push back" << list_count + (k-1) << endl;
+          if (k == 0) {
+            groupVector.push_back(list_count);
+            list_count += 1;
+            newList.clear();
             break;
           }
           else {
-            continue;
+            groupVector.push_back(list_count + (k-1));
+            // clear the newList vector, becasue this is a seperated group
+            list_count += k;
+            newList.clear();
+            break;
           }
         }
-    }
-        else {
-          groupVector.push_back(i-1);
-          continue;
-        }
       }
-
+    }
     else {
       groupVector.push_back(i);
     }
-
-  //cout << "test" << endl;
-  //cout << "Group num is:" << " " << groupVector.size() << endl;
-}
-  /*
-  for (int j = 0; j < groupVector.size(); j++) {
-   cout << j << " " << groupVector[j] << " " << pingRulesTable.size() << endl;
   }
-  */
-  //~Trie trie1;
+
+  cout << "Num of groups is:" << " " << groupVector.size() << endl;
+
+
+
 
   /* Create all the subgroups
    * The big array is called bigArray
   */
   vector< vector<Rule> > bigArray;
   // Create a new sub group by copying the related rules
+
   for (int m = 0; m < groupVector.size(); m++) {
     bigArray.push_back(vector<Rule> ());
   }
@@ -334,20 +343,22 @@ int main(int argc, char* argv[])
     if (j == 0) {
       for (int i = 0; i < (groupVector[j] + 1); i++) {
         bigArray[j].push_back(pingRulesTable.at(i));
+
       }
       continue;
     }
     else {
       for (int k = (groupVector[j-1] + 1); k < (groupVector[j] + 1); k++) {
         bigArray[j].push_back(pingRulesTable.at(k));
+
       }
       continue;
     }
+
   }
 
   for (int j = 0; j < groupVector.size(); j++) {
-    cout << "Group" << " " << j+1 << " " <<  bigArray[j].size() << " "
-         << groupVector[j] + 1 << " " << "check is the same or not" << endl;
+    cout << "Group" << j+1 << " " <<  bigArray[j].size() << endl;
   }
 
 
@@ -386,6 +397,7 @@ int main(int argc, char* argv[])
     Trie trie;
     auto start1 = get_time::now();
     vector<int> delta_need = generate_delta(bigArray[j]);
+    cout << bigArray[j].size() << "size of each array" << endl;
     vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
     auto end1 = get_time::now();
     auto diff1 = end1 - start1;
@@ -400,13 +412,18 @@ int main(int argc, char* argv[])
     // Doing the rule insertion
     auto start2 = get_time::now();
     for (int k = 0; k < newSumRuleTable.size(); k++) {
-      //cout << k << " " << trie.get_new_num(newSumRuleTable.at(k)) << endl;
+      cout << newSumRuleTable.size() << " " << "size" << endl;
+      //cout << "Num of wildcard is:" << " " << trie.get_new_num(newSumRuleTable.at(k)) << endl;
       if ( is_prefix(newSumRuleTable.at(k)) ) {
         trie.insert_prefix_rule_priority(newSumRuleTable.at(k));
         insertRule_num ++;
+        //cout << "test" << endl;
       }
       else {
+        cout << "test test" << endl;
+        cout << "j=" << j << " "<< "k=" << k << " " << trie.get_new_num(newSumRuleTable.at(k)) << endl;
         trie.expand_rule(newSumRuleTable.at(k));
+
         expandRule_num ++;
       }
     }
