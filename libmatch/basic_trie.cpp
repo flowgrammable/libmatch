@@ -102,6 +102,20 @@ bool is_independent_node(trie_node *pNode)
 }
 
 
+void Trie::delete_trie()
+{
+  /*
+  for (uint64_t i = 0; i < node_count; i++) {
+    //pNode->priority = NULL;
+    pNode->children[0] = NULL;
+    pNode->children[1] = NULL;
+  }
+  */
+  delete root;
+  count = 0;
+  node_count = 0;
+}
+
 // Insert rules: original insert function, without expanding ** part.
 void Trie::insert_rule_value(uint64_t rule_value)
 {

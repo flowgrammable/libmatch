@@ -74,6 +74,7 @@ bool is_rule_node(trie_node* pNode);
 // If not, it cannot be deleted
 bool is_independent_node(trie_node* pNode);
 
+void removeChildren();
 
 class Trie
 {
@@ -81,8 +82,8 @@ public:
 
   // This is the input of rules (value, mask)
   trie_node* root;
-  int count; // The number of rules in a trie
-  int node_count; // The number of nodes in a trie
+  uint32_t count; // The number of rules in a trie
+  uint64_t node_count; // The number of nodes in a trie
   uint64_t expand_count = 0; // Make this variable global
   //uint32_t new_num = 0; // Make this variable global, can be access
   //vector<uint32_t> maskNewPosition;
@@ -97,9 +98,11 @@ public:
   }
   ~Trie()
   {
-    delete root;
-    // delete_Tire();
+
   }
+
+  // Delete a trie
+  void delete_trie();
 
   // Insert rules into the trie
 
