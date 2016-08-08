@@ -273,7 +273,7 @@ int main(int argc, char* argv[])
       for ( int k = 0; k < new_table_list.size(); k++ ) {
         Trie trie1; // for caculating the trie1.new_num
         // for guarantee avoding the bad memory alloc
-        if (trie1.get_new_num( new_table_list.at (k))  < 16) {
+        if (trie1.get_new_num( new_table_list.at (k))  < 13) {
           continue;
         }
         else if (new_table_list.size() == 1) {
@@ -363,20 +363,25 @@ int main(int argc, char* argv[])
   for (int j = 0; j < groupVector.size(); j++) {
     // Initilize a trie
     // Each group is a seperate trie
+
     Trie trie;
     auto start1 = get_time::now();
     vector<int> delta_need = generate_delta(bigArray[j]);
     vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
     auto end1 = get_time::now();
-    //auto diff1 = end1 - start1;
-    //sum_rule_rearrange_time += chrono::duration_cast<ns>(diff1).count();
+    auto diff1 = end1 - start1;
+    sum_rule_rearrange_time += chrono::duration_cast<ns>(diff1).count();
+
+    //Checked the num of groups: new rules
     /*
-     * Checked the num of groups: new rules
-    for (int k = 0; k < newSumRuleTable.size(); k++) {
-      cout << newSumRuleTable[k].value << " " << newSumRuleTable[k].mask
-           << " " << newSumRuleTable[k].priority << endl;
+    if (j == 758) {
+      for (int k = 0; k < newSumRuleTable.size(); k++) {
+        cout << newSumRuleTable[k].value << " " << newSumRuleTable[k].mask
+             << " " << newSumRuleTable[k].priority << endl;
+      }
     }
     */
+
     // Doing the rule insertion
     auto start2 = get_time::now();
     for (int k = 0; k < newSumRuleTable.size(); k++) {
@@ -392,28 +397,31 @@ int main(int argc, char* argv[])
       }
     }
     auto end2 = get_time::now();
-    //auto diff2 = end2 - start2;
-    //sum_rule_insertion_time += chrono::duration_cast<ns>(diff2).count();
+    auto diff2 = end2 - start2;
+    sum_rule_insertion_time += chrono::duration_cast<ns>(diff2).count();
     // Finished the rearranged rule insertion for each subtrie
     // Doing the rule searching
     char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
     // Search the rules
+    //cout << "j is:" << j << "test again" << endl;
+
     for (int i = 0; i < keyTable.size(); i++) {
       // Check each key
       auto start3 = get_time::now();
       uint64_t newGenKey = keys_rearrange(keyTable[i], delta_need);
       auto end3 = get_time::now();
-      //auto diff3 = end3 - start3;
-      //sum_key_rearrange_time += chrono::duration_cast<ns>(diff3).count();
+      auto diff3 = end3 - start3;
+      sum_key_rearrange_time += chrono::duration_cast<ns>(diff3).count();
       auto start4 = get_time::now();
       uint64_t priority = trie.LPM1_search_rule(newGenKey);
       auto end4 = get_time::now();
-      //auto diff4 = end4 - start4;
-      //sum_key_search_time += chrono::duration_cast<ns>(diff4).count();
+      auto diff4 = end4 - start4;
+      sum_key_search_time += chrono::duration_cast<ns>(diff4).count();
       match += (priority != 0); // when priority == 0, which means no matching
       if (priority == 0) {
         // not matching
         // Go to check the next keys through this current group of rules
+        //cout << "not matching " << endl;
         continue;
       }
       else {
@@ -424,6 +432,7 @@ int main(int argc, char* argv[])
         keyTable.erase(keyTable.begin() + i);
         // Make sure the index is correct
         // Because we delete one key, so need to decrease index too
+        //cout << "matching" << endl;
         i = i - 1;
         continue;
       }
@@ -432,16 +441,17 @@ int main(int argc, char* argv[])
     sum_trie_count += trie.count;
     sum_trie_node_count += trie.node_count;
     trie.delete_trie();
+    //cout << "Group ID:" << j << match << " " << checksum << endl;
   }
 
   //get time2
   //auto end = get_time::now();
   //auto diff = end - start;
 
-  //cout << "Total rules rearrange configure time is:" << sum_rule_rearrange_time << " ns " << endl;
-  //cout << "Total rules insertion configure time is:" << sum_rule_insertion_time << " ns " << endl;
-  //cout << "Total keys rearrange configure time is:" << sum_key_rearrange_time << " ns " << endl;
-  //cout << "Total keys search time is:" << sum_key_search_time << " ns " << endl;
+  cout << "Total rules rearrange configure time is:" << sum_rule_rearrange_time << " ns " << endl;
+  cout << "Total rules insertion configure time is:" << sum_rule_insertion_time << " ns " << endl;
+  cout << "Total keys rearrange configure time is:" << sum_key_rearrange_time << " ns " << endl;
+  cout << "Total keys search time is:" << sum_key_search_time << " ns " << endl;
   cout << "Total expanded count is:" << " " << sum_trie_expand_count << endl;
   cout << "Expand rule num is:" << " " << expandRule_num << endl;
   cout << "Insert rule num is:" << " " << insertRule_num << endl;
@@ -449,7 +459,6 @@ int main(int argc, char* argv[])
   cout << "Total insert trie_node count is:" << " " << sum_trie_node_count << endl;
   cout << "Checksum: " << checksum << endl;
   cout << "Total matches: " << match << endl;
-  //cout << "Total runtime is: "<< chrono::duration_cast<ns>(diff).count()<<" ns "<<endl;
 
   return 0;
 }
