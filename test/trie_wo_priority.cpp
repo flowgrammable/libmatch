@@ -116,40 +116,64 @@ Rule compare (Rule A, Rule B)
 }
 
 /*
- * Merge the rules
+ * Merge the rules between the first rule and second rule
  * depends on the bits of every column
  * if in each column, it has "1" and "0" or "*"
 */
-vector<Rule> merge_rules(vector<Rule>& ruleList)
+Rule mergeRules(vector<Rule>& ruleList)
 {
-  // Here we didn't do sorting the number of prefix length
-  // or called the number of wildcard
-  // if the bit between the two neighbouring rules is the same
-  // then return the same bit
-  // if not, return the "*" bit
-
-  // Copy into a new vector
-  vector<Rule> new_rule_list(ruleList);
-  Rule rule1; // Create the new merged rule
-  for (int i = 0; i < (ruleList.size()-1); i++) {
-    for (int j = i+1; j < ruleList.size(); j++) {
-      // Get the hamming distance between the neighbouring two rules
-      Result result1 = hd(ruleList[i],ruleList[j]);
-      // Test whether the hamming distance is 1
-      // whether it can be merged or not
-      if ( result1.dif == 1 && result1.flag != -1 ) {
-        // Do merging rules action
-        rule1 = compare(ruleList[i],ruleList[j]);
-        // Insert the merged rules into the new_rule_list
-        new_rule_list.push_back(rule1);
-      }
-      else {
-        // If there is no merging rules
-        // need to insert the original rules into the new_rule_list vector
-
-      }
+  Rule rule1;
+  for (int i = 0; i < 64; i++) {
+    // The mask part
+    if ( (ruleList[0].mask) & (1 << i) == (ruleList[1].mask) & (1 << i)) {
+      // Add all the value of each bit
+      rule1.mask += ((new_rule_list[0].mask) & (1 << i)) * (1 << i);
+    }
+    else {
+      // the bit should be a wildcard "*"
+      rule1.mask += (1 << i);
+    }
+    // The value part
+    if ( ((new_rule_list.at(0)).value) & (1 << i) == (new_rule_list[1].value) & (1 << i)) {
+      // Add all the value of each bit
+      rule1.value += ((new_rule_list[0].value) & (1 << i)) * (1 << i);
+    }
+    else {
+      // the bit should be a wildcard "*"
+      rule1.value += 0;
     }
   }
+
+  return rule1;
+}
+
+/*
+ * Merge the rules
+ * depends on the bits of every column
+ * if in each column, it has "1" and "0" or "*"
+ * Here we didn't do sorting the number of prefix length
+ * or called the number of wildcard
+ * if the bit between the two neighbouring rules is the same
+ * then return the same bit
+ *  if not, return the "*" bit
+*/
+vector<Rule> merge_rules(vector<Rule>& ruleList)
+{
+  // Copy into a new vector
+  vector<Rule> final_list;
+  vector<Rule> new_rule_list(ruleList);
+  while ( new_rule_list.size() > 1 ) {
+  Rule rule2 = mergeRules(vector<Rule>& new_rule_list);
+  // Erase the first two rules after merging
+  new_rule_list.erase(new_rule_list.begin());
+  new_rule_list.erase(new_rule_list.begin() + 1);
+  // Insert the merged rules into the end of the rules vector
+  new_rule_list.push_back(rule2);
+  }
+
+  final_list.push_back(rule2);
+
+  return final_list;
 }
 
 
