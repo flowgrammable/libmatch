@@ -51,6 +51,7 @@ Rule strTint(string rulestr)
  * return the hamming distance and the difference positon bit
  * if the hd == 1, then do merging function
  * if not, no action
+ * return Result.dif and result.flag
 */
 Result hd (Rule first, Rule second)
 {
@@ -101,7 +102,54 @@ Rule compare (Rule A, Rule B)
   if (A.value > B.value) {
     new_rule.value = B.value;
   }
-  if (A.mask > )
+  else {
+    new_rule.value = A.value;
+  }
+  if (A.mask > B.mask) {
+    new_rule.mask = A.mask;
+  }
+  else {
+    new_rule.mask = B.mask;
+  }
+
+  return new_rule;
+}
+
+/*
+ * Merge the rules
+ * depends on the bits of every column
+ * if in each column, it has "1" and "0" or "*"
+*/
+vector<Rule> merge_rules(vector<Rule>& ruleList)
+{
+  // Here we didn't do sorting the number of prefix length
+  // or called the number of wildcard
+  // if the bit between the two neighbouring rules is the same
+  // then return the same bit
+  // if not, return the "*" bit
+
+  // Copy into a new vector
+  vector<Rule> new_rule_list(ruleList);
+  Rule rule1; // Create the new merged rule
+  for (int i = 0; i < (ruleList.size()-1); i++) {
+    for (int j = i+1; j < ruleList.size(); j++) {
+      // Get the hamming distance between the neighbouring two rules
+      Result result1 = hd(ruleList[i],ruleList[j]);
+      // Test whether the hamming distance is 1
+      // whether it can be merged or not
+      if ( result1.dif == 1 && result1.flag != -1 ) {
+        // Do merging rules action
+        rule1 = compare(ruleList[i],ruleList[j]);
+        // Insert the merged rules into the new_rule_list
+        new_rule_list.push_back(rule1);
+      }
+      else {
+        // If there is no merging rules
+        // need to insert the original rules into the new_rule_list vector
+
+      }
+    }
+  }
 }
 
 
@@ -130,21 +178,7 @@ bool is_prefix(Rule& rule)
   }
 }
 
-/*
- * Merge the rules
- * depends on the bits of every column
- * if in each column, it has "1" and "0" or "*"
-*/
-vector<Rule> merge_rules(vector<Rule>& ruleList)
-{
-for (int i = 0; i < ruleList.size(); i++) {
-  if (ruleList[i].mask == 0) {
-    if (ruleList[i].value ) {
-      
-    }
-  }
-}
-}
+
 
 /*
  * Generate the two dimensional array (generate delta array) from the pingRulesTable array
