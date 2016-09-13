@@ -50,23 +50,23 @@ Rule strTint(string rulestr)
  * whether is subset
  * the "1" bit position
 */
-/*
+
 bool is_subset(Rule a, Rule b)
 {
   vector<int> vec_a;
   vector<int> vec_b;
   // Get the "1" bit position for the mask part of two rules
   for (int i = 0; i < 64; i++) {
-    if ((a.mask & (1 << i)) == 1) {
+    if ((a.mask & (uint64_t(1) << i)) == 1) {
       vec_a.push_back(i);
     }
-    if ((b.mask & (1 << i)) == 1) {
+    if ((b.mask & (uint64_t(1) << i)) == 1) {
       vec_b.push_back(i);
     }
   }
   // Check the vec_a and vec_b is subset or not
   std::sort(vec_a.begin(),vec_a.end());
-  std::sort(vec_b.begin(),vec_a.end());
+  std::sort(vec_b.begin(),vec_b.end());
   if (std::includes (vec_a.begin(), vec_a.end(), vec_b.begin(),vec_b.end())
       || std::includes (vec_b.begin(), vec_b.end(), vec_a.begin(),vec_a.end())) {
     return true;
@@ -75,7 +75,7 @@ bool is_subset(Rule a, Rule b)
     return false;
   }
 }
-*/
+
 
 /*
  * Merge the rules between the first rule and second rule
@@ -87,7 +87,7 @@ Result is_mergeable(Rule firstrule, Rule secondrule)
   Result ret;
   Rule rule1;
   rule1.mask = firstrule.mask | secondrule.mask;
-  cout << "rule1.mask = " << rule1.mask << endl;
+  //cout << "rule1.mask = " << rule1.mask << endl;
   if (rule1.mask == 0) {
     for (int q = 0; q < 64; q++) {
       if ((firstrule.value & (uint64_t(1) << q)) != (secondrule.value & (uint64_t(1) << q)) ) {
@@ -141,38 +141,43 @@ vector<Rule> merge_rules(vector<Rule>& ruleList)
 {
   // Copy into a new vector
   vector<Rule> new_rule_list(ruleList);
-  for (int k = 0; k < new_rule_list.size(); k++) {
-    cout << "value part:" << new_rule_list.at(k).value << " " << "mask part:" <<
-        new_rule_list.at(k).mask  << endl;
-  }
   for (int i = 0; i < new_rule_list.size() - 1; i++) {
     for (int j = i+1; j < new_rule_list.size(); j++) {
-      Result ret2 = is_mergeable(new_rule_list.at(i), new_rule_list.at(j));
-      cout << "i=" << i << " " << "j=" << j << " " << "dif=" << ret2.dif << " " << "flag=" << ret2.flag << endl;
-      if (ret2.dif == 0 || ret2.dif == 1) {
-        cout << "mark" << endl;
-        // Get the new merged rules
-        Rule newRule7 = mergeRules(new_rule_list.at(i), new_rule_list.at(j));
-        // How to insert the new rule into the rule vector
-        // How to do the recursion???
-        // Erase the first two rules after merging
-        new_rule_list.erase(new_rule_list.begin() + i);
-        new_rule_list.erase(new_rule_list.begin() + (j-1));
-        // Insert the new merged rule into the beginning of the vector
-        new_rule_list.insert(new_rule_list.begin(), newRule7);
-        cout << "check size:" << new_rule_list.size() << endl;
+      // The condition for able to merging
+      if (new_rule_list.at(i).mask == new_rule_list.at(j).mask) {
+        Result ret2 = is_mergeable(new_rule_list.at(i), new_rule_list.at(j));
+        //cout << "i=" << i << " " << "j=" << j << " " << "dif=" << ret2.dif << " " << "flag=" << ret2.flag << endl;
+        if (ret2.dif == 0 || ret2.dif == 1) {
+          //cout << "mark" << endl;
+          // Get the new merged rules
+          Rule newRule7 = mergeRules(new_rule_list.at(i), new_rule_list.at(j));
+          // How to insert the new rule into the rule vector
+          // How to do the recursion???
+          // Erase the first two rules after merging
+          new_rule_list.erase(new_rule_list.begin() + i);
+          new_rule_list.erase(new_rule_list.begin() + (j-1));
+          // Insert the new merged rule into the beginning of the vector
+          new_rule_list.push_back(newRule7);
+          //new_rule_list.insert(new_rule_list.begin(), newRule7);
+          //cout << "check size:" << new_rule_list.size() << endl;
+          /*
         for (int k = 0; k < new_rule_list.size(); k++) {
           cout << "value part:" << new_rule_list.at(k).value << " " << "mask part:" <<
               new_rule_list.at(k).mask  << endl;
         }
-        cout << i << "check the i loop" << endl;
-        cout << j << "check the j loop" << endl;
-        i = -1;
-        break; // guarantee the next start of i will be 0
-        //j = j - 1; // make sure the rules are all correct
+        */
+          //cout << i << "check the i loop" << endl;
+          //cout << j << "check the j loop" << endl;
+          i = -1;
+          break; // guarantee the next start of i will be 0
+          //j = j - 1; // make sure the rules are all correct
+        }
+        else {
+          continue; // loop the next j value
+        }
       }
       else {
-        continue; // loop the next j value
+        continue;
       }
     }
   }
@@ -369,7 +374,7 @@ int main(int argc, char* argv[])
 {
   ifstream file (argv[1]);
   // Read the rules from txt file
-  vector<Rule> pingRulesTable;
+  vector<Rule> oldpingRulesTable;
   int i = 0;
   if (file.is_open()) {
     while (!file.eof()) {
@@ -382,14 +387,15 @@ int main(int argc, char* argv[])
         // Priority is in-order of generating
         rule.priority = ++i;
         // Push the input file into ruleArray
-        pingRulesTable.push_back(rule);
+        oldpingRulesTable.push_back(rule);
       }
     }
   }
   file.close();
 
-  //cout << pingRulesTable.size() << endl;
-
+  cout << "Original total size = " << oldpingRulesTable.size() << endl;
+  vector<Rule> pingRulesTable = merge_rules(oldpingRulesTable);
+  cout << "Merged total size = " << pingRulesTable.size() << endl;
   // Read in keys from file:
   ifstream file1 (argv[2]);
   vector<uint64_t> keyTable;
@@ -526,9 +532,9 @@ int main(int argc, char* argv[])
 
     Trie trie;
     auto start1 = get_time::now();
-    vector<Rule> newnewTable = merge_rules(bigArray[j]);
-    vector<int> delta_need = generate_delta(newnewTable);
-    vector<Rule> newSumRuleTable = rules_rearrange(newnewTable, delta_need);
+    //vector<Rule> newnewTable = merge_rules(bigArray[j]);
+    vector<int> delta_need = generate_delta(bigArray[j]);
+    vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
     // Sorting the rules in each group into asscending order
     // prepare for the merging next
     //vector<Rule> newnewTable = merge_rules(newSumRuleTable);
@@ -552,8 +558,8 @@ int main(int argc, char* argv[])
       }
     }
     */
-    cout << "original table size = " << bigArray[j].size() << endl;
-    cout << "new table size = " << newnewTable.size() << endl;
+    //cout << "original table size = " << bigArray[j].size() << endl;
+    //cout << "new table size = " << newnewTable.size() << endl;
     // Doing the rule insertion
     auto start2 = get_time::now();
     for (int k = 0; k < newSumRuleTable.size(); k++) {
