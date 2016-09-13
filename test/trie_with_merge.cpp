@@ -22,8 +22,8 @@ using get_time = chrono::steady_clock ;
 
 struct Result {
   // define the result struct for merging algorithm
-  int flag; // show the different bit position
-  int dif; // the number bit of difference
+  int flag = -1; // show the different bit position
+  int dif = 0; // the number bit of difference
 };
 
 // Matches integer type
@@ -50,6 +50,7 @@ Rule strTint(string rulestr)
  * whether is subset
  * the "1" bit position
 */
+/*
 bool is_subset(Rule a, Rule b)
 {
   vector<int> vec_a;
@@ -74,6 +75,7 @@ bool is_subset(Rule a, Rule b)
     return false;
   }
 }
+*/
 
 /*
  * Merge the rules between the first rule and second rule
@@ -85,14 +87,27 @@ Result is_mergeable(Rule firstrule, Rule secondrule)
   Result ret;
   Rule rule1;
   rule1.mask = firstrule.mask | secondrule.mask;
-  int dif = 0;
-  for (int k = 0; k < 64; k++) {
-    if ((rule1.mask & (1 << k)) == 0) {
-      // check the value part, the hamming distance
-      // Check the hamming distance between the value part in the "0" positions
-      if ((firstrule.value & (1 << k)) != (secondrule.value & (1 << k)) ) {
-        ret.flag = k; // show the bit position
+  cout << "rule1.mask = " << rule1.mask << endl;
+  if (rule1.mask == 0) {
+    for (int q = 0; q < 64; q++) {
+      if ((firstrule.value & (uint64_t(1) << q)) != (secondrule.value & (uint64_t(1) << q)) ) {
+        ret.flag = q; // show the bit position
         ret.dif++;
+      }
+    }
+  }
+  else {
+    for (int k = 0; k < 64; k++) {
+      if ((rule1.mask & (uint64_t(1) << k)) == 0) {
+        // check the value part, the hamming distance
+        // Check the hamming distance between the value part in the "0" positions
+        if ((firstrule.value & (uint64_t(1) << k)) != (secondrule.value & (uint64_t(1) << k)) ) {
+          ret.flag = k; // show the bit position
+          ret.dif++;
+        }
+      }
+      else {
+        continue;
       }
     }
   }
@@ -106,29 +121,63 @@ Result is_mergeable(Rule firstrule, Rule secondrule)
  * depending on the hd function
  * the flag value and dif value
 */
-Rule mergeRules(vector<Rule>& ruleList)
+Rule mergeRules(Rule onea, Rule oneb)
 {
   Rule rule7;
   Result ret1;
-  for (int i = 0; i < ruleList.size() - 1; i++) {
-    for (int j = i+1; j < ruleList.size(); j++) {
-      ret1 = is_mergeable(ruleList.at(i), ruleList.at(j));
-      if (ret1.dif == 1) {
-        rule7.mask = ruleList.at(i).mask | ruleList.at(j).mask + (1 << ret1.flag);
-        rule7.value = ruleList.at(i).value & ruleList.at(j).value;
-      }
-      if (ret1.dif == 0) {
-        rule7.mask = ruleList.at(i).mask | ruleList.at(j).mask;
-        rule7.value = ruleList.at(i).value & ruleList.at(j).value;
-      }
-
-    }
+  ret1 = is_mergeable(onea, oneb);
+  if (ret1.dif == 1) {
+    rule7.mask = (onea.mask | oneb.mask) + (uint64_t(1) << ret1.flag);
+    rule7.value = onea.value & oneb.value;
   }
+  if (ret1.dif == 0) {
+    rule7.mask = onea.mask | oneb.mask;
+    rule7.value = onea.value & oneb.value;
+  }
+  return rule7;
 }
 
-
-
-
+vector<Rule> merge_rules(vector<Rule>& ruleList)
+{
+  // Copy into a new vector
+  vector<Rule> new_rule_list(ruleList);
+  for (int k = 0; k < new_rule_list.size(); k++) {
+    cout << "value part:" << new_rule_list.at(k).value << " " << "mask part:" <<
+        new_rule_list.at(k).mask  << endl;
+  }
+  for (int i = 0; i < new_rule_list.size() - 1; i++) {
+    for (int j = i+1; j < new_rule_list.size(); j++) {
+      Result ret2 = is_mergeable(new_rule_list.at(i), new_rule_list.at(j));
+      cout << "i=" << i << " " << "j=" << j << " " << "dif=" << ret2.dif << " " << "flag=" << ret2.flag << endl;
+      if (ret2.dif == 0 || ret2.dif == 1) {
+        cout << "mark" << endl;
+        // Get the new merged rules
+        Rule newRule7 = mergeRules(new_rule_list.at(i), new_rule_list.at(j));
+        // How to insert the new rule into the rule vector
+        // How to do the recursion???
+        // Erase the first two rules after merging
+        new_rule_list.erase(new_rule_list.begin() + i);
+        new_rule_list.erase(new_rule_list.begin() + (j-1));
+        // Insert the new merged rule into the beginning of the vector
+        new_rule_list.insert(new_rule_list.begin(), newRule7);
+        cout << "check size:" << new_rule_list.size() << endl;
+        for (int k = 0; k < new_rule_list.size(); k++) {
+          cout << "value part:" << new_rule_list.at(k).value << " " << "mask part:" <<
+              new_rule_list.at(k).mask  << endl;
+        }
+        cout << i << "check the i loop" << endl;
+        cout << j << "check the j loop" << endl;
+        i = -1;
+        break; // guarantee the next start of i will be 0
+        //j = j - 1; // make sure the rules are all correct
+      }
+      else {
+        continue; // loop the next j value
+      }
+    }
+  }
+  return new_rule_list;
+}
 
 /*
  * Check whether the new rule is a prefix rule
@@ -477,11 +526,13 @@ int main(int argc, char* argv[])
 
     Trie trie;
     auto start1 = get_time::now();
-    vector<int> delta_need = generate_delta(bigArray[j]);
-    vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
+    vector<Rule> newnewTable = merge_rules(bigArray[j]);
+    vector<int> delta_need = generate_delta(newnewTable);
+    vector<Rule> newSumRuleTable = rules_rearrange(newnewTable, delta_need);
     // Sorting the rules in each group into asscending order
     // prepare for the merging next
-    vector<Rule> newSortedTable = sort_rules(newSumRuleTable);
+    //vector<Rule> newnewTable = merge_rules(newSumRuleTable);
+    //vector<Rule> newSortedTable = sort_rules(newSumRuleTable);
     /*
     for (int i = 0; i < newSortedTable.size(); i++) {
       cout << "group ID:" << j << " " << newSortedTable.at(i).mask << " " << "sorted mask" << endl;
@@ -501,18 +552,19 @@ int main(int argc, char* argv[])
       }
     }
     */
-
+    cout << "original table size = " << bigArray[j].size() << endl;
+    cout << "new table size = " << newnewTable.size() << endl;
     // Doing the rule insertion
     auto start2 = get_time::now();
-    for (int k = 0; k < newSortedTable.size(); k++) {
-      if ( is_prefix(newSortedTable.at(k)) ) {
-        trie.insert_prefix_rule_priority(newSortedTable.at(k));
+    for (int k = 0; k < newSumRuleTable.size(); k++) {
+      if ( is_prefix(newSumRuleTable.at(k)) ) {
+        trie.insert_prefix_rule_priority(newSumRuleTable.at(k));
         insertRule_num ++;
       }
       else {
         // becasue we control the number of expanding wildcard
         // so don't need to delete rules manually
-        trie.expand_rule(newSortedTable.at(k));
+        trie.expand_rule(newSumRuleTable.at(k));
         expandRule_num ++;
       }
     }
