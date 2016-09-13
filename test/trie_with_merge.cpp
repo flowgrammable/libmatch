@@ -15,7 +15,6 @@
 #include <chrono>
 #include <algorithm>
 #include <functional>
-#include <tuple>
 
 using namespace std;
 using  ns = chrono::nanoseconds;
@@ -23,8 +22,8 @@ using get_time = chrono::steady_clock ;
 
 struct Result {
   // define the result struct for merging algorithm
-  int flag;
-  int dif;
+  int flag; // show the different bit position
+  int dif; // the number bit of difference
 };
 
 // Matches integer type
@@ -47,72 +46,33 @@ Rule strTint(string rulestr)
 }
 
 /*
- * Caculate the hamming distance between two rules
- * return the hamming distance and the difference positon bit
- * if the hd == 1, then do merging function
- * if not, no action
- * return Result.dif and result.flag
+ * Check the mask part relation
+ * whether is subset
+ * the "1" bit position
 */
-Result hd (Rule first, Rule second)
+bool is_subset(Rule a, Rule b)
 {
-  Result result;
-  int dif = 0;
-  int dif1 = 0;
-  int flag = -1;
-  int flag1 = -1;
+  vector<int> vec_a;
+  vector<int> vec_b;
+  // Get the "1" bit position for the mask part of two rules
   for (int i = 0; i < 64; i++) {
-    int a = ( first.value & (1 << i) );
-    int a1 = ( first.mask & (1 << i) );
-    int b = ( second.value & (1 << i) );
-    int b1 = ( first.mask & (1 << i) );
-    if (a != b) {
-      flag = i;
-      dif++;
+    if ((a.mask & (1 << i)) == 1) {
+      vec_a.push_back(i);
     }
-    if (a1 != b1) {
-      flag1 = i;
-      dif1++;
+    if ((b.mask & (1 << i)) == 1) {
+      vec_b.push_back(i);
     }
   }
-  if (dif == dif1) {
-    result.dif = dif;
+  // Check the vec_a and vec_b is subset or not
+  std::sort(vec_a.begin(),vec_a.end());
+  std::sort(vec_b.begin(),vec_a.end());
+  if (std::includes (vec_a.begin(), vec_a.end(), vec_b.begin(),vec_b.end())
+      || std::includes (vec_b.begin(), vec_b.end(), vec_a.begin(),vec_a.end())) {
+    return true;
   }
   else {
-    cout << "Print Error" << endl;
-    //return;
+    return false;
   }
-  if ( (dif == 1) && (flag == flag1) ) {
-    result.flag = flag;
-  }
-  else {
-    result.flag = -1;
-  }
-  return result;
-}
-
-/*
- * Compare the rule
- * includes the value part and the mask part
- * for implementing the merging function
- * because the rule has two variables: Rule.value and Rule.mask
-*/
-Rule compare (Rule A, Rule B)
-{
-  Rule new_rule;
-  if (A.value > B.value) {
-    new_rule.value = B.value;
-  }
-  else {
-    new_rule.value = A.value;
-  }
-  if (A.mask > B.mask) {
-    new_rule.mask = A.mask;
-  }
-  else {
-    new_rule.mask = B.mask;
-  }
-
-  return new_rule;
 }
 
 /*
@@ -120,83 +80,54 @@ Rule compare (Rule A, Rule B)
  * depends on the bits of every column
  * if in each column, it has "1" and "0" or "*"
 */
-Rule mergeRules(vector<Rule>& ruleList)
+Result is_mergeable(Rule firstrule, Rule secondrule)
 {
+  Result ret;
   Rule rule1;
-  //cout << "first mask:" << ruleList[0].mask << " " << "cesi" << endl;
-  //cout << "second mask:" << ruleList[1].mask << " " << "cesi_1" << endl;
-  //cout << "first value:" << ruleList[0].value << " " << "cesi" << endl;
-  //cout << "second value:" << ruleList[1].value << " " << "cesi_1" << endl;
-  // value is the intersection
-  rule1.value = ruleList[0].value & ruleList[1].value;
-  // for the mask part, divide into two 3 cases: all 0, one 0, and all none-0
-  if ( ruleList[0].mask == 0 && ruleList[1].mask == 0 ) {
-    for (int i = 0; i < 64; i++) {
-      if (( (ruleList[0].value >> i) & uint64_t(1) ) == ( (ruleList[1].value >> i) & uint64_t(1) )) {
-        rule1.mask += uint64_t(0);
-      }
-      else {
-        rule1.mask +=  ( uint64_t(1) << i );
+  rule1.mask = firstrule.mask | secondrule.mask;
+  int dif = 0;
+  for (int k = 0; k < 64; k++) {
+    if ((rule1.mask & (1 << k)) == 0) {
+      // check the value part, the hamming distance
+      // Check the hamming distance between the value part in the "0" positions
+      if ((firstrule.value & (1 << k)) != (secondrule.value & (1 << k)) ) {
+        ret.flag = k; // show the bit position
+        ret.dif++;
       }
     }
   }
-  else {
-    rule1.mask = ruleList[0].mask | ruleList[1].mask;
-    //cout << rule1.mask << endl;
-    for (int j = 0; j < 64; j++) {
-      if ( ((rule1.mask >> j) & uint64_t(1)) == 0 ) {
-        if (((ruleList[0].value >> j) & uint64_t(1))!= ((ruleList[1].value >> j) & uint64_t(1))) {
-          rule1.mask += ( uint64_t(1) << j );
-        }
-      }
-    }
-  }
-
-  return rule1;
+  return ret;
+  // The condition for merging, hamming distance smaller than 1
 }
+
 
 /*
- * Merge the rules
- * depends on the bits of every column
- * if in each column, it has "1" and "0" or "*"
- * Here we didn't do sorting the number of prefix length
- * or called the number of wildcard
- * if the bit between the two neighbouring rules is the same
- * then return the same bit
- *  if not, return the "*" bit
+ * Check whether can merge or not
+ * depending on the hd function
+ * the flag value and dif value
 */
-vector<Rule> merge_rules(vector<Rule>& ruleList)
+Rule mergeRules(vector<Rule>& ruleList)
 {
-  // Copy into a new vector
-  vector<Rule> new_rule_list(ruleList);
-  while ( new_rule_list.size() > 1 ) {
-    Rule rule2 = mergeRules(new_rule_list);
-    // Insert the merged rules into the end of the rules vector
-    new_rule_list.push_back(rule2);
-    /*
-  cout << "original num of rules:" << new_rule_list.size() << endl;
-  for (int k = 0; k < new_rule_list.size(); k++) {
-    cout << new_rule_list[k].value << " " << new_rule_list[k].mask << endl;
-  }
-  */
-    // Erase the first two rules after merging
-    new_rule_list.erase(new_rule_list.begin());
-    new_rule_list.erase(new_rule_list.begin());
-    /*
-  cout << "last rule2 value is:" << " " << rule2.value << ", " << " rule2 mask is:" << rule2.mask
-       << " " << endl;
-  cout << "the num of rules:" << new_rule_list.size() << endl;
-*/
+  Rule rule7;
+  Result ret1;
+  for (int i = 0; i < ruleList.size() - 1; i++) {
+    for (int j = i+1; j < ruleList.size(); j++) {
+      ret1 = is_mergeable(ruleList.at(i), ruleList.at(j));
+      if (ret1.dif == 1) {
+        rule7.mask = ruleList.at(i).mask | ruleList.at(j).mask + (1 << ret1.flag);
+        rule7.value = ruleList.at(i).value & ruleList.at(j).value;
+      }
+      if (ret1.dif == 0) {
+        rule7.mask = ruleList.at(i).mask | ruleList.at(j).mask;
+        rule7.value = ruleList.at(i).value & ruleList.at(j).value;
+      }
 
+    }
   }
-  /*
-  for (int i = 0; i < new_rule_list.size(); i++) {
-    cout << "value:" << " " << new_rule_list[i].value << " " <<
-         "mask:" << " " << new_rule_list[i].mask << endl;
-  }
-  */
-  return new_rule_list;
 }
+
+
+
 
 
 /*
@@ -211,7 +142,7 @@ bool is_prefix(Rule& rule)
   // Check the mask field from the lower bit
   for(int i = 0; i < 64; i++) {
     // if this: get the position whose bit is 1 (have wildcard)
-    if((rule.mask >> i) & uint64_t(1) == 1) {
+    if((rule.mask >> i) & 1 == 1) {
       maskPosition.push_back(i);
     }
   }
@@ -224,7 +155,25 @@ bool is_prefix(Rule& rule)
   }
 }
 
+// Sorting the rules in an asscending order
+bool wayToSort(Rule aa, Rule bb)
+{
+  return aa.mask < bb.mask;
+}
 
+/*
+ * Sorting the prefix format rules into asscending order, denpending on the prefix length
+ * using the std::sort function
+*/
+vector<Rule> sort_rules(vector<Rule>& ruleList)
+{
+  // Copy the rules in each group into a new vector
+  // for backup
+  //vector<Rule> newSortedRules(ruleList);
+  // Sort the newSumColumn vector in descending order
+  std::sort(ruleList.begin(), ruleList.end(), wayToSort);
+  return ruleList;
+}
 
 /*
  * Generate the two dimensional array (generate delta array) from the pingRulesTable array
@@ -418,16 +367,7 @@ int main(int argc, char* argv[])
    * add the threshold, to adjust the grouping seperation
   */
 
-
-
   // For the grouped rule table
-  //vector<Rule> mergedList = merge_rules(pingRulesTable);
-  /*
-  for (i = 0; i < mergedList.size(); i++) {
-    cout << "merged value:" << " " << mergedList[i].value << " " <<
-         "merged mask:" << " " << mergedList[i].mask << endl;
-  }
-  */
   vector<uint32_t> groupVector;
   vector<Rule> newList;
 
@@ -435,7 +375,7 @@ int main(int argc, char* argv[])
 
   uint32_t list_count = 0;
   for ( int i = 0; i < pingRulesTable.size(); i++ ) {
-    if (i < (pingRulesTable.size()-1) || i == (pingRulesTable.size()-1)) {
+    if (i < (pingRulesTable.size()-1)) {
       newList.push_back(pingRulesTable[i]);
       vector<int> new_generated_delta = generate_delta(newList);
       // Create the rearranged rule set
@@ -539,6 +479,15 @@ int main(int argc, char* argv[])
     auto start1 = get_time::now();
     vector<int> delta_need = generate_delta(bigArray[j]);
     vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
+    // Sorting the rules in each group into asscending order
+    // prepare for the merging next
+    vector<Rule> newSortedTable = sort_rules(newSumRuleTable);
+    /*
+    for (int i = 0; i < newSortedTable.size(); i++) {
+      cout << "group ID:" << j << " " << newSortedTable.at(i).mask << " " << "sorted mask" << endl;
+    }
+    */
+
     auto end1 = get_time::now();
     auto diff1 = end1 - start1;
     sum_rule_rearrange_time += chrono::duration_cast<ns>(diff1).count();
@@ -555,15 +504,15 @@ int main(int argc, char* argv[])
 
     // Doing the rule insertion
     auto start2 = get_time::now();
-    for (int k = 0; k < newSumRuleTable.size(); k++) {
-      if ( is_prefix(newSumRuleTable.at(k)) ) {
-        trie.insert_prefix_rule_priority(newSumRuleTable.at(k));
+    for (int k = 0; k < newSortedTable.size(); k++) {
+      if ( is_prefix(newSortedTable.at(k)) ) {
+        trie.insert_prefix_rule_priority(newSortedTable.at(k));
         insertRule_num ++;
       }
       else {
         // becasue we control the number of expanding wildcard
         // so don't need to delete rules manually
-        trie.expand_rule(newSumRuleTable.at(k));
+        trie.expand_rule(newSortedTable.at(k));
         expandRule_num ++;
       }
     }
@@ -633,4 +582,5 @@ int main(int argc, char* argv[])
 
   return 0;
 }
+
 

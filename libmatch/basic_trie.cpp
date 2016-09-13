@@ -26,13 +26,13 @@ static uint64_t mylog2 (uint64_t val) {
 // Check whether Rule a is a subset of Rule b
 // Rule (value, mask, priority)
 // Rule a = 10****, Rule b = 1*****, which means Rule a is a subset of Rule b
-
+/*
 bool is_subset(Rule a, Rule b)
 {
   return ( a.value & b.value == b.value ) && ( a.mask | b.mask == b.mask );
 }
 
-
+*/
 
 
 // Convert the input rule format Rule(value, mask) into the integer type in trie
@@ -267,14 +267,14 @@ void Trie::expand_rule( Rule& rule )
       // then the "00001", so the weight of the first bit of new_num bits is (uint64_t(1) << 0)
       if(((1 << j) & i) == 0) {
         // get the expandedRule for ruleTables
-        expandedRule.value |= 0 * (uint64_t(1) << maskNewPosition1.at(j));
+        expandedRule.value = expandedRule.value;
         expandedRule.mask = ( uint64_t(1) << boundary1 ) - 1; // mask value should be a prefix value after expanded
         expandedRule.priority = rule.priority; // priority keeps the same
         //cout << " check the priority is " << " " << expandedRule.priority << endl;
       }
       else {
         // ((1 << j) & i) != 0
-        expandedRule.value |= 1 * (uint64_t(1) << maskNewPosition1.at(j));
+        expandedRule.value |= (uint64_t(1) << maskNewPosition1.at(j));
         expandedRule.mask = ( uint64_t(1) << boundary1 ) - 1; // mask value should be a prefix value after expanded
         expandedRule.priority = rule.priority; // priority keeps the same
       }
