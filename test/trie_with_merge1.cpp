@@ -150,8 +150,6 @@ vector<Rule> merge_rules(vector<Rule>& ruleList)
   // Copy into a new vector
   vector<Rule> new_rule_list(ruleList);
   Rule newRule7;
-  int dif_0_count = 0;
-  int dif_1_count = 0;
   for (int i = 0; i < new_rule_list.size() - 1; i++) {
     for (int j = i+1; j < new_rule_list.size(); j++) {
       // The condition for able to merging
@@ -161,18 +159,8 @@ vector<Rule> merge_rules(vector<Rule>& ruleList)
         Result ret2 = is_mergeable(new_rule_list.at(i), new_rule_list.at(j));
         //cout << "i =" << i << " " << "j =" << j << " " << "dif =" << ret2.dif << " " << "flag =" << ret2.flag << endl;
         if (ret2.dif == 0) {
-          //cout << "i = " << i << " " << "j = " << j << " " << "dif = " << ret2.dif << " " << "flag = " << ret2.flag << endl;
-          // condition: the two rules are the same
-          // need to delete one
           // the value part is the same on the "1" positions at mask part
           //cout << "Merge rules" << endl;
-          dif_0_count ++;
-          /*
-          new_rule_list.erase(new_rule_list.begin() + j);
-          j = j - 1;
-          continue;
-          */
-
           newRule7.mask = (new_rule_list.at(i).mask | new_rule_list.at(j).mask);
           newRule7.value = new_rule_list.at(i).value & new_rule_list.at(j).value;
           //newRule7.priority = min( new_rule_list.at(i).priority, new_rule_list.at(j).priority );
@@ -184,12 +172,9 @@ vector<Rule> merge_rules(vector<Rule>& ruleList)
           new_rule_list.push_back(newRule7);
           i = -1;
           break;
-
         }
         if (ret2.dif == 1) {
-          //cout << "i = " << i << " " << "j = " << j << " " << "dif = " << ret2.dif << " " << "flag = " << ret2.flag << endl;
           //cout << "Merge rules" << endl;
-          dif_1_count ++;
           newRule7.mask = (new_rule_list.at(i).mask | new_rule_list.at(j).mask)
               + (uint64_t(1) << ret2.flag);
           newRule7.value = new_rule_list.at(i).value & new_rule_list.at(j).value;
@@ -218,7 +203,6 @@ vector<Rule> merge_rules(vector<Rule>& ruleList)
             new_rule_list.at(k).mask  << endl;
   }
   */
-  cout << "count dif_0 = " << dif_0_count << ", " << "count dif_1 = " << dif_1_count << endl;
   return new_rule_list;
 }
 
@@ -278,7 +262,7 @@ vector<int> generate_delta(vector<Rule>& ruleList)
   for (int j = 0; j < 64; j++) {
     uint32_t score = 0;
     for (int i = 0; i < ruleList.size(); i++) {
-      score += ((((ruleList.at(i)).mask) >> j) & 1);
+      score += ((((ruleList.at(i)).mask) >> j) & uint64_t(1));
     }
     sumColumn.push_back(score);
   }
@@ -412,7 +396,7 @@ int main(int argc, char* argv[])
 {
   ifstream file (argv[1]);
   // Read the rules from txt file
-  vector<Rule> oldpingRulesTable;
+  vector<Rule> pingRulesTable;
   int i = 0;
   if (file.is_open()) {
     while (!file.eof()) {
@@ -425,21 +409,20 @@ int main(int argc, char* argv[])
         // Priority is in-order of generating
         rule.priority = ++i;
         // Push the input file into ruleArray
-        oldpingRulesTable.push_back(rule);
+        pingRulesTable.push_back(rule);
       }
     }
   }
   file.close();
 
-  cout << "Original total size = " << oldpingRulesTable.size() << endl;
-  vector<Rule> pingRulesTable = merge_rules(oldpingRulesTable);
-  cout << "Merged total size = " << pingRulesTable.size() << endl;
+  cout << "Original total size = " << pingRulesTable.size() << endl;
+  //vector<Rule> pingRulesTable = merge_rules(oldpingRulesTable);
+  //cout << "Merged total size = " << pingRulesTable.size() << endl;
   /*
   for (int k = 0; k < pingRulesTable.size(); k++) {
     cout << pingRulesTable[k].value << " " << pingRulesTable[k].mask << endl;
   }
   */
-
   // Read in keys from file:
   ifstream file1 (argv[2]);
   vector<uint64_t> keyTable;
@@ -581,7 +564,7 @@ int main(int argc, char* argv[])
     vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
     // Sorting the rules in each group into asscending order
     // prepare for the merging next
-    //vector<Rule> newnewTable = merge_rules(newSumRuleTable);
+    vector<Rule> newnewTable = merge_rules(newSumRuleTable);
     //vector<Rule> newSortedTable = sort_rules(newSumRuleTable);
     /*
     for (int i = 0; i < newSortedTable.size(); i++) {
@@ -606,15 +589,15 @@ int main(int argc, char* argv[])
     //cout << "new table size = " << newnewTable.size() << endl;
     // Doing the rule insertion
     auto start2 = get_time::now();
-    for (int k = 0; k < newSumRuleTable.size(); k++) {
-      if ( is_prefix(newSumRuleTable.at(k)) ) {
-        trie.insert_prefix_rule_priority(newSumRuleTable.at(k));
+    for (int k = 0; k < newnewTable.size(); k++) {
+      if ( is_prefix(newnewTable.at(k)) ) {
+        trie.insert_prefix_rule_priority(newnewTable.at(k));
         insertRule_num ++;
       }
       else {
         // becasue we control the number of expanding wildcard
         // so don't need to delete rules manually
-        trie.expand_rule(newSumRuleTable.at(k));
+        trie.expand_rule(newnewTable.at(k));
         expandRule_num ++;
       }
     }
@@ -684,5 +667,6 @@ int main(int argc, char* argv[])
 
   return 0;
 }
+
 
 

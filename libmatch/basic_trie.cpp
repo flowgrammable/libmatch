@@ -174,7 +174,7 @@ uint32_t Trie::get_new_num(Rule& rule)
   for (int i=0; i<64; i++) {
     // Find the first bit "0" from the least significant bit
     // 10x1xx, so the mask is 001011
-    if ( ((rule.mask >> i) & 1) == 0 ) {
+    if ( ((rule.mask >> i) & uint64_t(1)) == 0 ) {
       boundary = i;
       break;
       //cout << "boundary is" << " " << boundary << endl;
@@ -185,7 +185,7 @@ uint32_t Trie::get_new_num(Rule& rule)
   }
   vector<uint32_t> maskNewPosition;
   for (int j=(boundary+1); j<64; j++) {
-    if ( ((rule.mask >> j) & 1) == 1 ) {
+    if ( ((rule.mask >> j) & uint64_t(1)) == 1 ) {
       maskNewPosition.push_back(j); // recored the positions that should be expanded (the bit is "1")
       continue; // record all the candidates in 64-bit
     }
@@ -210,7 +210,7 @@ void Trie::expand_rule( Rule& rule )
   for (int i=0; i<64; i++) {
     // Find the first bit "0" from the least significant bit
     // 10x1xx, so the mask is 001011
-    if ( ((rule.mask >> i) & 1) == 0 ) {
+    if ( ((rule.mask >> i) & uint64_t(1)) == 0 ) {
       boundary1 = i;
       break;
       //cout << "boundary is" << " " << boundary << endl;
@@ -221,7 +221,7 @@ void Trie::expand_rule( Rule& rule )
   }
   vector<uint32_t> maskNewPosition1;
   for (int j=(boundary1+1); j<64; j++) {
-    if ( ((rule.mask >> j) & 1) == 1 ) {
+    if ( ((rule.mask >> j) & uint64_t(1)) == 1 ) {
       maskNewPosition1.push_back(j); // recored the positions that should be expanded (the bit is "1")
       continue; // record all the candidates in 64-bit
     }
@@ -265,7 +265,7 @@ void Trie::expand_rule( Rule& rule )
       // so on each new_num bit, the weight are all 0
       // ex. for the second conbination value is "1"
       // then the "00001", so the weight of the first bit of new_num bits is (uint64_t(1) << 0)
-      if(((1 << j) & i) == 0) {
+      if(((uint64_t(1) << j) & i) == 0) {
         // get the expandedRule for ruleTables
         expandedRule.value = expandedRule.value;
         expandedRule.mask = ( uint64_t(1) << boundary1 ) - 1; // mask value should be a prefix value after expanded
@@ -312,9 +312,9 @@ void Trie::insert_prefix_rule_priority( Rule& rule )
   // Has a bug here: when 32 bits are all wildcard, will overflow
   uint32_t prefix_len = 64 - mask_num;
 
-  for (int level=0; level<prefix_len; level++) {
+  for (int level = 0; level < prefix_len; level++) {
     // Get the index value of each bit, totally is 32
-    int index = (rule.value >> (63-level)) & 1;
+    int index = (rule.value >> (63-level)) & uint64_t(1);
     // if the key is not present in the trie (is NULL), insert a new node
     if ( !pRule->children[index] ) {
       pRule->children[index] = new_node();
@@ -404,7 +404,7 @@ uint32_t Trie::LPM1_search_rule(uint64_t key)
   uint32_t match = 0;
 
   for (int level=0; level<64; level++) {
-    int index = (key >> (63-level)) & 1;
+    int index = (key >> (63-level)) & uint64_t(1);
     // Choose child based on relelvant bit in key.
     // If child exists, recurse:
     pRule = pRule->children[index];
