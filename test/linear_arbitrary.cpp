@@ -39,6 +39,80 @@ Rule strTint(string rulestr)
   return rule;
 }
 
+// Sorting the rules in an asscending order
+bool wayToSort(Rule aa, Rule bb)
+{
+  return (aa.mask < bb.mask);
+}
+
+bool wayToSort1(Rule aaa, Rule bbb)
+{
+  return (aaa.value < bbb.value);
+}
+
+/*
+ * Sorting the prefix format rules into asscending order, denpending on the prefix length
+ * using the std::sort function
+*/
+vector<Rule> sort_rules(vector<Rule>& ruleList)
+{
+  std::sort(ruleList.begin(), ruleList.end(), wayToSort);
+  /*
+  cout << "mark" << "===============" << endl;
+  for (int k = 0; k < ruleList.size(); k ++) {
+    cout << ruleList[k].value << ", " << ruleList[k].mask << endl;
+  }
+  */
+  vector<Rule> sortTable;
+  vector<Rule> sortTotalTable;
+  // Determine the size of combined table
+  sortTotalTable.reserve(ruleList.size());
+  for (int i = 0; i < ruleList.size(); i ++) {
+    if (i != ruleList.size() - 1) {
+      if (ruleList.at(i).mask == ruleList.at(i+1).mask) {
+        // if the mask value is the same, push into the same vector
+        //cout << "test" << endl;
+        sortTable.push_back(ruleList.at(i));
+        continue;
+      }
+      else {
+        sortTable.push_back(ruleList.at(i));
+        //cout << "i = " << i << endl;
+        std::sort(sortTable.begin(), sortTable.end(), wayToSort1);
+        sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
+        /*
+        for (int k = 0; k < sortTotalTable.size(); k ++) {
+          cout << sortTotalTable[k].value << ", " << sortTotalTable[k].mask << endl;
+        }
+        cout << "sortTotalTable size = " << sortTotalTable.size() << endl;
+        */
+        // Delete the current contents, clear the memory
+        sortTable.clear();
+        //cout << "sortTable size = " << sortTable.size() << endl;
+        continue;
+      }
+    }
+    else {
+      // for the last element in the vector
+      // for avoiding the over-range of the vector
+      if (ruleList.at(i).mask == ruleList.at(i-1).mask) {
+        sortTable.push_back(ruleList.at(i));
+        //cout << "i = " << i << endl;
+        std::sort(sortTable.begin(), sortTable.end(), wayToSort1);
+        sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
+      }
+      else {
+        std::sort(sortTable.begin(), sortTable.end(), wayToSort1);
+        sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
+        sortTable.clear();
+        sortTable.push_back(ruleList.at(i));
+        sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
+      }
+    }
+  }
+  return sortTotalTable;
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -47,7 +121,7 @@ int main(int argc, char* argv[])
   ifstream file (argv[1]);
 
   // Read in rules from file:
-  vector<Rule> inputRules;
+  vector<Rule> oldinputRules;
   int i = 0;
   if (file.is_open()) {
     while (!file.eof()) {
@@ -60,11 +134,13 @@ int main(int argc, char* argv[])
         rule.priority = ++i;
 
         // Push the input file into ruleArray
-        inputRules.push_back(rule);
+        oldinputRules.push_back(rule);
       }
     }
   }
   file.close();
+
+  vector<Rule> inputRules = sort_rules(oldinputRules);
 
   // Read in keys from file:
   string packet;

@@ -122,29 +122,6 @@ Result is_mergeable(Rule firstrule, Rule secondrule)
 }
 
 
-/*
- * Check whether can merge or not
- * depending on the hd function
- * the flag value and dif value
-*/
-/*
-Rule mergeRules(Rule onea, Rule oneb)
-{
-  Rule rule7;
-  Result ret1;
-  ret1 = is_mergeable(onea, oneb);
-  if (ret1.dif == 1) {
-    rule7.mask = (onea.mask | oneb.mask) + (uint64_t(1) << ret1.flag);
-    rule7.value = onea.value & oneb.value;
-  }
-  if (ret1.dif == 0) {
-    rule7.mask = onea.mask | oneb.mask;
-    rule7.value = onea.value & oneb.value;
-  }
-  return rule7;
-}
-*/
-
 vector<Rule> merge_rules(vector<Rule>& ruleList)
 {
   // Copy into a new vector
@@ -468,6 +445,7 @@ int main(int argc, char* argv[])
     }
   }
   file.close();
+
   vector<Rule> pingRulesTable = sort_rules(oldpingRulesTable);
   cout << "Sorted total size = " << pingRulesTable.size() << endl;
   //vector<Rule> pingRulesTable = merge_rules(oldpingRulesTable);
@@ -610,7 +588,6 @@ int main(int argc, char* argv[])
   for (int j = 0; j < groupVector.size(); j++) {
     // Initilize a trie
     // Each group is a seperate trie
-
     Trie trie;
     auto start1 = get_time::now();
     //vector<Rule> newnewTable = merge_rules(bigArray[j]);
