@@ -421,7 +421,7 @@ int main(int argc, char* argv[])
       if (priority == 0) {
         // not matching
         // Go to check the next keys through this current group of rules
-        //cout << "not matching " << endl;
+        cout << "not matching " << endl;
         continue;
       }
       else {
@@ -432,7 +432,7 @@ int main(int argc, char* argv[])
         keyTable.erase(keyTable.begin() + i);
         // Make sure the index is correct
         // Because we delete one key, so need to decrease index too
-        //cout << "matching" << endl;
+        cout << "matching" << endl;
         i = i - 1;
         continue;
       }
