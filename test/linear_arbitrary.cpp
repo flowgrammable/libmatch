@@ -16,6 +16,7 @@
 
 using namespace std;
 using  ns = chrono::nanoseconds;
+using  ms = chrono::milliseconds;
 using get_time = chrono::steady_clock ;
 
 
@@ -195,8 +196,8 @@ int main(int argc, char* argv[])
   //get time2
   cout << "Checksum: " << checksum << endl;
   cout << "Total matches: " << match << endl;
-  cout << "Insertion time is: " << chrono::duration_cast<ns>(diff1).count() << " ns " << endl;
-  cout << "Search time is: "<< chrono::duration_cast<ns>(diff).count() << " ns " << endl;
+  cout << "Insertion time is: " << chrono::duration_cast<ms>(diff1).count() << " ms " << endl;
+  cout << "Search time is: "<< chrono::duration_cast<ms>(diff).count() << " ms " << endl;
 
 
 
