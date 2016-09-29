@@ -1,7 +1,7 @@
 # Copyright (c) 2015 Flowgrammable.org
 # All rights reserved
 
-cmake_minimum_required(VERSION 3.0)
+#cmake_minimum_required(VERSION 3.0)
 project(match CXX)
 enable_testing()
 
@@ -24,7 +24,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 
 # Require Boost C++ Libraries.
-find_package(Boost 1.55.0 REQUIRED)
+find_package(Boost 1.54.0 REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 add_executable(wildcard.test wildcard.cpp)
