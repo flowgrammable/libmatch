@@ -198,8 +198,7 @@ int main(int argc, char* argv[])
   cout << "Total matches: " << match << endl;
   cout << "Insertion time is: " << chrono::duration_cast<ms>(diff1).count() << " ms " << endl;
   cout << "Search time is: "<< chrono::duration_cast<ms>(diff).count() << " ms " << endl;
-
-
+  cout << "==================================================" << endl;
 
   return 0;
 }

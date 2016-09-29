@@ -698,6 +698,7 @@ int main(int argc, char* argv[])
   cout << "Total insert trie_node count is:" << " " << sum_trie_node_count << endl;
   cout << "Checksum: " << checksum << endl;
   cout << "Total matches: " << match << endl;
+  cout << "==================================================" << endl;
 
   return 0;
 }
