@@ -1,0 +1,591 @@
+Sorted total size = 207
+Num of groups is: 1
+Total rules rearrange configure time is:34452 ms 
+Total rules insertion configure time is:1117 ms 
+Total keys rearrange configure time is:17685 ms 
+Total keys search time is:15 ms 
+Total expanded count is: 0
+Expand rule num is: 0
+Insert rule num is: 203
+Total insert rule num is: 202
+Total insert trie_node count is: 9285
+Checksum: 166685
+Total matches: 1579
+==================================================
+Begin test (keys=17642, rules=207):
+Checksum: 162991
+Total matches: 1579
+Insertion time is: 445 ms 
+Search time is: 92288 ms 
+==================================================
+Num of groups is: 1
+Total rules rearrange configure time is:1355 ms 
+Total rules insertion configure time is:1116 ms 
+Total keys rearrange configure time is:17666 ms 
+Total keys search time is:14 ms 
+Total expanded count is: 0
+Expand rule num is: 0
+Insert rule num is: 207
+Total insert rule num is: 198
+Total insert trie_node count is: 9142
+Checksum: 158980
+Total matches: 1579
+==================================================
+Sorted total size = 207
+Num of groups is: 2
+Total rules rearrange configure time is:10762 ms 
+Total rules insertion configure time is:13971 ms 
+Total keys rearrange configure time is:100828 ms 
+Total keys search time is:159 ms 
+Total expanded count is: 3548
+Expand rule num is: 11
+Insert rule num is: 191
+Total insert rule num is: 3732
+Total insert trie_node count is: 99900
+Checksum: 196813
+Total matches: 1832
+==================================================
+Begin test (keys=17642, rules=207):
+Checksum: 200498
+Total matches: 1832
+Insertion time is: 441 ms 
+Search time is: 92345 ms 
+==================================================
+Num of groups is: 42
+Total rules rearrange configure time is:4253 ms 
+Total rules insertion configure time is:1432 ms 
+Total keys rearrange configure time is:33515221 ms 
+Total keys search time is:80 ms 
+Total expanded count is: 66
+Expand rule num is: 2
+Insert rule num is: 205
+Total insert rule num is: 271
+Total insert trie_node count is: 11276
+Checksum: 187667
+Total matches: 1832
+==================================================
+Sorted total size = 207
+Num of groups is: 1
+Total rules rearrange configure time is:13629 ms 
+Total rules insertion configure time is:911 ms 
+Total keys rearrange configure time is:17683 ms 
+Total keys search time is:6 ms 
+Total expanded count is: 6
+Expand rule num is: 3
+Insert rule num is: 199
+Total insert rule num is: 205
+Total insert trie_node count is: 5319
+Checksum: 79323
+Total matches: 1088
+==================================================
+Begin test (keys=17642, rules=207):
+Checksum: 77247
+Total matches: 1088
+Insertion time is: 447 ms 
+Search time is: 93742 ms 
+==================================================
+Num of groups is: 1
+Total rules rearrange configure time is:1304 ms 
+Total rules insertion configure time is:915 ms 
+Total keys rearrange configure time is:17701 ms 
+Total keys search time is:1 ms 
+Total expanded count is: 0
+Expand rule num is: 0
+Insert rule num is: 207
+Total insert rule num is: 206
+Total insert trie_node count is: 5321
+Checksum: 77247
+Total matches: 1088
+==================================================
+Sorted total size = 461
+Num of groups is: 2
+Total rules rearrange configure time is:60962 ms 
+Total rules insertion configure time is:50459 ms 
+Total keys rearrange configure time is:85928 ms 
+Total keys search time is:250 ms 
+Total expanded count is: 12856
+Expand rule num is: 88
+Insert rule num is: 369
+Total insert rule num is: 13208
+Total insert trie_node count is: 373531
+Checksum: 299458
+Total matches: 1284
+==================================================
+Begin test (keys=17642, rules=461):
+Checksum: 297362
+Total matches: 1284
+Insertion time is: 2110 ms 
+Search time is: 207619 ms 
+==================================================
+Num of groups is: 112
+Total rules rearrange configure time is:11023 ms 
+Total rules insertion configure time is:32836 ms 
+Total keys rearrange configure time is:245171218 ms 
+Total keys search time is:765 ms 
+Total expanded count is: 11234
+Expand rule num is: 33
+Insert rule num is: 471
+Total insert rule num is: 11705
+Total insert trie_node count is: 218728
+Checksum: 297146
+Total matches: 1284
+==================================================
+Sorted total size = 461
+Num of groups is: 1
+Total rules rearrange configure time is:387449 ms 
+Total rules insertion configure time is:2100 ms 
+Total keys rearrange configure time is:17674 ms 
+Total keys search time is:9 ms 
+Total expanded count is: 8
+Expand rule num is: 4
+Insert rule num is: 446
+Total insert rule num is: 454
+Total insert trie_node count is: 17904
+Checksum: 354668
+Total matches: 1299
+==================================================
+Begin test (keys=17642, rules=461):
+Checksum: 341767
+Total matches: 1299
+Insertion time is: 2110 ms 
+Search time is: 205303 ms 
+==================================================
+Num of groups is: 1
+Total rules rearrange configure time is:2814 ms 
+Total rules insertion configure time is:2065 ms 
+Total keys rearrange configure time is:17678 ms 
+Total keys search time is:16 ms 
+Total expanded count is: 0
+Expand rule num is: 0
+Insert rule num is: 461
+Total insert rule num is: 451
+Total insert trie_node count is: 17892
+Checksum: 339204
+Total matches: 1299
+==================================================
+Sorted total size = 461
+Num of groups is: 1
+Total rules rearrange configure time is:482805 ms 
+Total rules insertion configure time is:2316 ms 
+Total keys rearrange configure time is:17726 ms 
+Total keys search time is:43 ms 
+Total expanded count is: 10
+Expand rule num is: 5
+Insert rule num is: 441
+Total insert rule num is: 449
+Total insert trie_node count is: 18792
+Checksum: 397234
+Total matches: 3188
+==================================================
+Begin test (keys=17642, rules=461):
+Checksum: 355476
+Total matches: 3188
+Insertion time is: 2087 ms 
+Search time is: 191399 ms 
+==================================================
+Num of groups is: 1
+Total rules rearrange configure time is:2936 ms 
+Total rules insertion configure time is:2375 ms 
+Total keys rearrange configure time is:17740 ms 
+Total keys search time is:176 ms 
+Total expanded count is: 0
+Expand rule num is: 0
+Insert rule num is: 461
+Total insert rule num is: 449
+Total insert trie_node count is: 18779
+Checksum: 340351
+Total matches: 3188
+==================================================
+Sorted total size = 553
+Num of groups is: 3
+Total rules rearrange configure time is:293441 ms 
+Total rules insertion configure time is:29221 ms 
+Total keys rearrange configure time is:161526 ms 
+Total keys search time is:348 ms 
+Total expanded count is: 15474
+Expand rule num is: 61
+Insert rule num is: 468
+Total insert rule num is: 15820
+Total insert trie_node count is: 87241
+Checksum: 520877
+Total matches: 3751
+==================================================
+Begin test (keys=17642, rules=553):
+Checksum: 517201
+Total matches: 3751
+Insertion time is: 3011 ms 
+Search time is: 225408 ms 
+==================================================
+Num of groups is: 2
+Total rules rearrange configure time is:3570 ms 
+Total rules insertion configure time is:30153 ms 
+Total keys rearrange configure time is:71874 ms 
+Total keys search time is:506 ms 
+Total expanded count is: 6752
+Expand rule num is: 26
+Insert rule num is: 527
+Total insert rule num is: 7224
+Total insert trie_node count is: 230730
+Checksum: 499554
+Total matches: 3751
+==================================================
+Sorted total size = 605
+Num of groups is: 3
+Total rules rearrange configure time is:337054 ms 
+Total rules insertion configure time is:69322 ms 
+Total keys rearrange configure time is:174430 ms 
+Total keys search time is:611 ms 
+Total expanded count is: 17504
+Expand rule num is: 60
+Insert rule num is: 520
+Total insert rule num is: 17860
+Total insert trie_node count is: 507502
+Checksum: 634229
+Total matches: 4177
+==================================================
+Begin test (keys=17642, rules=605):
+Checksum: 622676
+Total matches: 4177
+Insertion time is: 3586 ms 
+Search time is: 243492 ms 
+==================================================
+Num of groups is: 90
+Total rules rearrange configure time is:10350 ms 
+Total rules insertion configure time is:43374 ms 
+Total keys rearrange configure time is:132271783 ms 
+Total keys search time is:1109 ms 
+Total expanded count is: 11264
+Expand rule num is: 25
+Insert rule num is: 603
+Total insert rule num is: 11863
+Total insert trie_node count is: 319713
+Checksum: 605783
+Total matches: 4177
+==================================================
+Sorted total size = 1683
+Num of groups is: 4
+Total rules rearrange configure time is:4929847 ms 
+Total rules insertion configure time is:132612 ms 
+Total keys rearrange configure time is:277277 ms 
+Total keys search time is:1004 ms 
+Total expanded count is: 36490
+Expand rule num is: 310
+Insert rule num is: 1318
+Total insert rule num is: 37619
+Total insert trie_node count is: 996834
+Checksum: 4142259
+Total matches: 4919
+==================================================
+Begin test (keys=17642, rules=1683):
+Checksum: 4309764
+Total matches: 4919
+Insertion time is: 27136 ms 
+Search time is: 660621 ms 
+==================================================
+Num of groups is: 388
+Total rules rearrange configure time is:38629 ms 
+Total rules insertion configure time is:130005 ms 
+Total keys rearrange configure time is:-1775860603 ms 
+Total keys search time is:6055 ms 
+Total expanded count is: 41214
+Expand rule num is: 119
+Insert rule num is: 1644
+Total insert rule num is: 42858
+Total insert trie_node count is: 931575
+Checksum: 4080894
+Total matches: 4919
+==================================================
+Sorted total size = 1683
+Num of groups is: 1
+Total rules rearrange configure time is:33395825 ms 
+Total rules insertion configure time is:6588 ms 
+Total keys rearrange configure time is:17729 ms 
+Total keys search time is:239 ms 
+Total expanded count is: 54
+Expand rule num is: 26
+Insert rule num is: 1561
+Total insert rule num is: 1610
+Total insert trie_node count is: 54322
+Checksum: 3985147
+Total matches: 5034
+==================================================
+Begin test (keys=17642, rules=1683):
+Checksum: 3654947
+Total matches: 5034
+Insertion time is: 26413 ms 
+Search time is: 651637 ms 
+==================================================
+Num of groups is: 1
+Total rules rearrange configure time is:10453 ms 
+Total rules insertion configure time is:7143 ms 
+Total keys rearrange configure time is:17740 ms 
+Total keys search time is:243 ms 
+Total expanded count is: 0
+Expand rule num is: 0
+Insert rule num is: 1683
+Total insert rule num is: 1617
+Total insert trie_node count is: 54340
+Checksum: 3608199
+Total matches: 5034
+==================================================
+Sorted total size = 1911
+Num of groups is: 1
+Total rules rearrange configure time is:39711523 ms 
+Total rules insertion configure time is:161177 ms 
+Total keys rearrange configure time is:17748 ms 
+Total keys search time is:1134 ms 
+Total expanded count is: 80116
+Expand rule num is: 305
+Insert rule num is: 1501
+Total insert rule num is: 80180
+Total insert trie_node count is: 641847
+Checksum: 4847237
+Total matches: 5337
+==================================================
+Begin test (keys=17642, rules=1911):
+Checksum: 4472552
+Total matches: 5337
+Insertion time is: 34084 ms 
+Search time is: 729093 ms 
+==================================================
+Num of groups is: 23
+Total rules rearrange configure time is:19319 ms 
+Total rules insertion configure time is:264512 ms 
+Total keys rearrange configure time is:8708865 ms 
+Total keys search time is:2692 ms 
+Total expanded count is: 131546
+Expand rule num is: 412
+Insert rule num is: 2249
+Total insert rule num is: 133124
+Total insert trie_node count is: 1063470
+Checksum: 4325882
+Total matches: 5337
+==================================================
+Sorted total size = 2925
+Num of groups is: 3
+Total rules rearrange configure time is:35771458 ms 
+Total rules insertion configure time is:237491 ms 
+Total keys rearrange configure time is:145834 ms 
+Total keys search time is:1595 ms 
+Total expanded count is: 72728
+Expand rule num is: 560
+Insert rule num is: 2200
+Total insert rule num is: 73718
+Total insert trie_node count is: 1681264
+Checksum: 9713215
+Total matches: 7344
+==================================================
+Begin test (keys=17642, rules=2925):
+Checksum: 9589027
+Total matches: 7344
+Insertion time is: 80683 ms 
+Search time is: 1034433 ms 
+==================================================
+Num of groups is: 759
+Total rules rearrange configure time is:73262 ms 
+Total rules insertion configure time is:210026 ms 
+Total keys rearrange configure time is:-278656057 ms 
+Total keys search time is:14878 ms 
+Total expanded count is: 59992
+Expand rule num is: 203
+Insert rule num is: 2946
+Total insert rule num is: 62937
+Total insert trie_node count is: 1560884
+Checksum: 9295389
+Total matches: 7344
+==================================================
+Sorted total size = 207
+Num of groups is: 1
+Total rules rearrange configure time is:34455 ms 
+Total rules insertion configure time is:1117 ms 
+Total keys rearrange configure time is:28800176 ms 
+Total keys search time is:9630 ms 
+Total expanded count is: 0
+Expand rule num is: 0
+Insert rule num is: 203
+Total insert rule num is: 202
+Total insert trie_node count is: 9285
+Checksum: 115269378
+Total matches: 1018349
+==================================================
+Begin test (keys=28744877, rules=207):
+Checksum: 111161654
+Total matches: 1018349
+Insertion time is: 454 ms 
+Search time is: 154312697 ms 
+==================================================
+Sorted total size = 207
+Num of groups is: 2
+Total rules rearrange configure time is:10766 ms 
+Total rules insertion configure time is:13061 ms 
+Total keys rearrange configure time is:169713352 ms 
+Total keys search time is:17875 ms 
+Total expanded count is: 3548
+Expand rule num is: 11
+Insert rule num is: 191
+Total insert rule num is: 3732
+Total insert trie_node count is: 99900
+Checksum: 148972434
+Total matches: 1436586
+==================================================
+Begin test (keys=28744877, rules=207):
+Checksum: 154558477
+Total matches: 1436586
+Insertion time is: 452 ms 
+Search time is: 155119892 ms 
+==================================================
+Sorted total size = 207
+Num of groups is: 1
+Total rules rearrange configure time is:13552 ms 
+Total rules insertion configure time is:911 ms 
+Total keys rearrange configure time is:28797175 ms 
+Total keys search time is:9144 ms 
+Total expanded count is: 6
+Expand rule num is: 3
+Insert rule num is: 199
+Total insert rule num is: 205
+Total insert trie_node count is: 5319
+Checksum: 84246998
+Total matches: 788504
+==================================================
+Begin test (keys=28744877, rules=207):
+Checksum: 73550568
+Total matches: 788504
+Insertion time is: 456 ms 
+Search time is: 156937915 ms 
+==================================================
+Sorted total size = 461
+Num of groups is: 2
+Total rules rearrange configure time is:60979 ms 
+Total rules insertion configure time is:50608 ms 
+Total keys rearrange configure time is:140082040 ms 
+Total keys search time is:70763 ms 
+Total expanded count is: 12856
+Expand rule num is: 88
+Insert rule num is: 369
+Total insert rule num is: 13208
+Total insert trie_node count is: 373531
+Checksum: 424916473
+Total matches: 1809953
+==================================================
+Begin test (keys=28744877, rules=461):
+Checksum: 415641826
+Total matches: 1809953
+Insertion time is: 2115 ms 
+Search time is: 339794278 ms 
+==================================================
+Sorted total size = 461
+Num of groups is: 1
+Total rules rearrange configure time is:387547 ms 
+Total rules insertion configure time is:2085 ms 
+Total keys rearrange configure time is:28797992 ms 
+Total keys search time is:15914 ms 
+Total expanded count is: 8
+Expand rule num is: 4
+Insert rule num is: 446
+Total insert rule num is: 454
+Total insert trie_node count is: 17904
+Checksum: 456309538
+Total matches: 1827369
+==================================================
+Begin test (keys=28744877, rules=461):
+Checksum: 432724153
+Total matches: 1827369
+Insertion time is: 2126 ms 
+Search time is: 336806348 ms 
+==================================================
+Sorted total size = 461
+Num of groups is: 1
+Total rules rearrange configure time is:482684 ms 
+Total rules insertion configure time is:2331 ms 
+Total keys rearrange configure time is:28811536 ms 
+Total keys search time is:16436 ms 
+Total expanded count is: 10
+Expand rule num is: 5
+Insert rule num is: 441
+Total insert rule num is: 449
+Total insert trie_node count is: 18792
+Checksum: 320363850
+Total matches: 2191121
+==================================================
+Begin test (keys=28744877, rules=461):
+Checksum: 275749571
+Total matches: 2191121
+Insertion time is: 2128 ms 
+Search time is: 333504628 ms 
+==================================================
+Sorted total size = 553
+Num of groups is: 3
+Total rules rearrange configure time is:291271 ms 
+Total rules insertion configure time is:29496 ms 
+Total keys rearrange configure time is:294109176 ms 
+Total keys search time is:85264 ms 
+Total expanded count is: 15474
+Expand rule num is: 61
+Insert rule num is: 468
+Total insert rule num is: 15820
+Total insert trie_node count is: 87241
+Checksum: 490597030
+Total matches: 3031011
+==================================================
+Begin test (keys=28744877, rules=553):
+Checksum: 500830671
+Total matches: 3031011
+Insertion time is: 3093 ms 
+Search time is: 396577528 ms 
+==================================================
+Sorted total size = 605
+Num of groups is: 3
+Total rules rearrange configure time is:335441 ms 
+Total rules insertion configure time is:65163 ms 
+Total keys rearrange configure time is:319587405 ms 
+Total keys search time is:149982 ms 
+Total expanded count is: 17504
+Expand rule num is: 60
+Insert rule num is: 520
+Total insert rule num is: 17860
+Total insert trie_node count is: 507502
+Checksum: 613406515
+Total matches: 3483137
+==================================================
+Begin test (keys=28744877, rules=605):
+Checksum: 619264176
+Total matches: 3483137
+Insertion time is: 3603 ms 
+Search time is: 430966124 ms 
+==================================================
+Sorted total size = 1683
+Num of groups is: 4
+Total rules rearrange configure time is:4929614 ms 
+Total rules insertion configure time is:129545 ms 
+Total keys rearrange configure time is:495663515 ms 
+Total keys search time is:609728 ms 
+Total expanded count is: 36490
+Expand rule num is: 310
+Insert rule num is: 1318
+Total insert rule num is: 37619
+Total insert trie_node count is: 996834
+Checksum: 5163180268
+Total matches: 6153276
+==================================================
+Begin test (keys=28744877, rules=1683):
+Checksum: 5253087211
+Total matches: 6153276
+Insertion time is: 27140 ms 
+Search time is: 1130103247 ms 
+==================================================
+Sorted total size = 1683
+Num of groups is: 1
+Total rules rearrange configure time is:33404158 ms 
+Total rules insertion configure time is:6547 ms 
+Total keys rearrange configure time is:28812020 ms 
+Total keys search time is:190141 ms 
+Total expanded count is: 54
+Expand rule num is: 26
+Insert rule num is: 1561
+Total insert rule num is: 1610
+Total insert trie_node count is: 54322
+Checksum: 4821434142
+Total matches: 5569181
+==================================================
+Begin test (keys=28744877, rules=1683):
