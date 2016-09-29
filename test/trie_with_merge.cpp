@@ -18,6 +18,7 @@
 
 using namespace std;
 using  ns = chrono::nanoseconds;
+using  ms = chrono::microseconds;
 using get_time = chrono::steady_clock ;
 
 struct Result {
@@ -635,7 +636,7 @@ int main(int argc, char* argv[])
 
     auto end1 = get_time::now();
     auto diff1 = end1 - start1;
-    sum_rule_rearrange_time += chrono::duration_cast<ns>(diff1).count();
+    sum_rule_rearrange_time += chrono::duration_cast<ms>(diff1).count();
 
     //Checked the num of groups: new rules
     /*
@@ -664,7 +665,7 @@ int main(int argc, char* argv[])
     }
     auto end2 = get_time::now();
     auto diff2 = end2 - start2;
-    sum_rule_insertion_time += chrono::duration_cast<ns>(diff2).count();
+    sum_rule_insertion_time += chrono::duration_cast<ms>(diff2).count();
     // Finished the rearranged rule insertion for each subtrie
     // Doing the rule searching
     char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
@@ -677,12 +678,12 @@ int main(int argc, char* argv[])
       uint64_t newGenKey = keys_rearrange(keyTable[i], delta_need);
       auto end3 = get_time::now();
       auto diff3 = end3 - start3;
-      sum_key_rearrange_time += chrono::duration_cast<ns>(diff3).count();
+      sum_key_rearrange_time += chrono::duration_cast<ms>(diff3).count();
       auto start4 = get_time::now();
       uint64_t priority = trie.LPM1_search_rule(newGenKey);
       auto end4 = get_time::now();
       auto diff4 = end4 - start4;
-      sum_key_search_time += chrono::duration_cast<ns>(diff4).count();
+      sum_key_search_time += chrono::duration_cast<ms>(diff4).count();
       match += (priority != 0); // when priority == 0, which means no matching
       if (priority == 0) {
         // not matching
@@ -714,10 +715,10 @@ int main(int argc, char* argv[])
   //auto end = get_time::now();
   //auto diff = end - start;
 
-  cout << "Total rules rearrange configure time is:" << sum_rule_rearrange_time << " ns " << endl;
-  cout << "Total rules insertion configure time is:" << sum_rule_insertion_time << " ns " << endl;
-  cout << "Total keys rearrange configure time is:" << sum_key_rearrange_time << " ns " << endl;
-  cout << "Total keys search time is:" << sum_key_search_time << " ns " << endl;
+  cout << "Total rules rearrange configure time is:" << sum_rule_rearrange_time << " ms " << endl;
+  cout << "Total rules insertion configure time is:" << sum_rule_insertion_time << " ms " << endl;
+  cout << "Total keys rearrange configure time is:" << sum_key_rearrange_time << " ms " << endl;
+  cout << "Total keys search time is:" << sum_key_search_time << " ms " << endl;
   cout << "Total expanded count is:" << " " << sum_trie_expand_count << endl;
   cout << "Expand rule num is:" << " " << expandRule_num << endl;
   cout << "Insert rule num is:" << " " << insertRule_num << endl;
@@ -725,6 +726,7 @@ int main(int argc, char* argv[])
   cout << "Total insert trie_node count is:" << " " << sum_trie_node_count << endl;
   cout << "Checksum: " << checksum << endl;
   cout << "Total matches: " << match << endl;
+  cout << "==================================================" << endl;
 
   return 0;
 }
