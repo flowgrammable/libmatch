@@ -18,7 +18,7 @@
 
 using namespace std;
 using  ns = chrono::nanoseconds;
-using  ms = chrono::milliseconds;
+using  ms = chrono::microseconds;
 using get_time = chrono::steady_clock ;
 
 struct Result {
@@ -621,8 +621,8 @@ int main(int argc, char* argv[])
         expandRule_num ++;
       }
     }
-    cout << "j=" << j << ", " << "count number: " << tries[j].count << endl;
-    cout << "j=" << j << ", " << "trie node num: " << tries[j].node_count << endl;
+    //cout << "j=" << j << ", " << "count number: " << tries[j].count << endl;
+    //cout << "j=" << j << ", " << "trie node num: " << tries[j].node_count << endl;
     auto end2 = get_time::now();
     auto diff2 = end2 - start2;
     sum_rule_insertion_time += chrono::duration_cast<ms>(diff2).count();

@@ -16,7 +16,7 @@
 
 using namespace std;
 using  ns = chrono::nanoseconds;
-using  ms = chrono::milliseconds;
+using  ms = chrono::microseconds;
 using get_time = chrono::steady_clock ;
 
 

@@ -76,17 +76,6 @@ bool is_subset(Rule a, Rule b)
   }
 }
 
-/*
- * Not considering about the priority
- * Sort the rules depends on the mask part value
-*/
-/*
-vector<Rule> sort_table(vector<Rule>& ruleTable)
-{
-
-}
-*/
-
 
 /*
  * Merge the rules between the first rule and second rule
@@ -132,30 +121,6 @@ Result is_mergeable(Rule firstrule, Rule secondrule)
   // The condition for merging, hamming distance smaller than 1
 }
 
-
-/*
- * Check whether can merge or not
- * depending on the hd function
- * the flag value and dif value
-*/
-/*
-Rule mergeRules(Rule onea, Rule oneb)
-{
-  Rule rule7;
-  Result ret1;
-  ret1 = is_mergeable(onea, oneb);
-  if (ret1.dif == 1) {
-    rule7.mask = (onea.mask | oneb.mask) + (uint64_t(1) << ret1.flag);
-    rule7.value = onea.value & oneb.value;
-  }
-  if (ret1.dif == 0) {
-    rule7.mask = onea.mask | oneb.mask;
-    rule7.value = onea.value & oneb.value;
-  }
-  return rule7;
-}
-*/
-
 vector<Rule> merge_rules(vector<Rule>& ruleList)
 {
   // Copy into a new vector
@@ -195,7 +160,6 @@ vector<Rule> merge_rules(vector<Rule>& ruleList)
           new_rule_list.push_back(newRule7);
           i = -1;
           break;
-
         }
         if (ret2.dif == 1) {
           //cout << "i = " << i << " " << "j = " << j << " " << "dif = " << ret2.dif << " " << "flag = " << ret2.flag << endl;
@@ -298,6 +262,7 @@ vector<Rule> sort_rules(vector<Rule>& ruleList)
         sortTable.push_back(ruleList.at(i));
         //cout << "i = " << i << endl;
         std::sort(sortTable.begin(), sortTable.end(), wayToSort1);
+        // Insert the sortTable into the end of sortTotalTable
         sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
         /*
         for (int k = 0; k < sortTotalTable.size(); k ++) {
@@ -343,7 +308,7 @@ vector<int> generate_delta(vector<Rule>& ruleList)
   for (int j = 0; j < 64; j++) {
     uint32_t score = 0;
     for (int i = 0; i < ruleList.size(); i++) {
-      score += ((((ruleList.at(i)).mask) >> j) & 1);
+      score += ((((ruleList.at(i)).mask) >> j) & uint64_t(1));
     }
     sumColumn.push_back(score);
   }
@@ -502,6 +467,7 @@ int main(int argc, char* argv[])
   */
   cout << "Original total size = " << oldpingRulesTable.size() << endl;
   // Sorting the rules
+  //vector<Rule> merged_rule_table = merge_rules(oldpingRulesTable);
   vector<Rule> sortedRuleTable = sort_rules(oldpingRulesTable);
   cout << "Sorted total size = " << sortedRuleTable.size() << endl;
   /*
@@ -509,7 +475,8 @@ int main(int argc, char* argv[])
     cout << sortedRuleTable[k].value << " " << sortedRuleTable[k].mask << endl;
   }
   */
-  vector<Rule> pingRulesTable = merge_rules(sortedRuleTable);
+  //vector<Rule> pingRulesTable = merge_rules(sortedRuleTable);
+  vector<Rule> pingRulesTable (sortedRuleTable);
   cout << "Merged total size = " << pingRulesTable.size() << endl;
   /*
   for (int k = 0; k < pingRulesTable.size(); k++) {
