@@ -18,6 +18,7 @@
 
 using namespace std;
 using  ns = chrono::nanoseconds;
+using  ms = chrono::microseconds;
 using get_time = chrono::steady_clock ;
 
 struct Result {
@@ -121,13 +122,12 @@ Result is_mergeable(Rule firstrule, Rule secondrule)
   // The condition for merging, hamming distance smaller than 1
 }
 
+
 vector<Rule> merge_rules(vector<Rule>& ruleList)
 {
   // Copy into a new vector
   vector<Rule> new_rule_list(ruleList);
   Rule newRule7;
-  int dif_0_count = 0;
-  int dif_1_count = 0;
   for (int i = 0; i < new_rule_list.size() - 1; i++) {
     for (int j = i+1; j < new_rule_list.size(); j++) {
       // The condition for able to merging
@@ -137,18 +137,8 @@ vector<Rule> merge_rules(vector<Rule>& ruleList)
         Result ret2 = is_mergeable(new_rule_list.at(i), new_rule_list.at(j));
         //cout << "i =" << i << " " << "j =" << j << " " << "dif =" << ret2.dif << " " << "flag =" << ret2.flag << endl;
         if (ret2.dif == 0) {
-          //cout << "i = " << i << " " << "j = " << j << " " << "dif = " << ret2.dif << " " << "flag = " << ret2.flag << endl;
-          // condition: the two rules are the same
-          // need to delete one
           // the value part is the same on the "1" positions at mask part
           //cout << "Merge rules" << endl;
-          dif_0_count ++;
-          /*
-          new_rule_list.erase(new_rule_list.begin() + j);
-          j = j - 1;
-          continue;
-          */
-
           newRule7.mask = (new_rule_list.at(i).mask | new_rule_list.at(j).mask);
           newRule7.value = new_rule_list.at(i).value & new_rule_list.at(j).value;
           //newRule7.priority = min( new_rule_list.at(i).priority, new_rule_list.at(j).priority );
@@ -162,9 +152,7 @@ vector<Rule> merge_rules(vector<Rule>& ruleList)
           break;
         }
         if (ret2.dif == 1) {
-          //cout << "i = " << i << " " << "j = " << j << " " << "dif = " << ret2.dif << " " << "flag = " << ret2.flag << endl;
           //cout << "Merge rules" << endl;
-          dif_1_count ++;
           newRule7.mask = (new_rule_list.at(i).mask | new_rule_list.at(j).mask)
               + (uint64_t(1) << ret2.flag);
           newRule7.value = new_rule_list.at(i).value & new_rule_list.at(j).value;
@@ -193,7 +181,6 @@ vector<Rule> merge_rules(vector<Rule>& ruleList)
             new_rule_list.at(k).mask  << endl;
   }
   */
-  cout << "count dif_0 = " << dif_0_count << ", " << "count dif_1 = " << dif_1_count << endl;
   return new_rule_list;
 }
 
@@ -262,7 +249,6 @@ vector<Rule> sort_rules(vector<Rule>& ruleList)
         sortTable.push_back(ruleList.at(i));
         //cout << "i = " << i << endl;
         std::sort(sortTable.begin(), sortTable.end(), wayToSort1);
-        // Insert the sortTable into the end of sortTotalTable
         sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
         /*
         for (int k = 0; k < sortTotalTable.size(); k ++) {
@@ -460,30 +446,16 @@ int main(int argc, char* argv[])
     }
   }
   file.close();
-  /*
-  for (int k = 0; k < oldpingRulesTable.size(); k++) {
-    cout << oldpingRulesTable[k].value << " " << oldpingRulesTable[k].mask << endl;
-  }
-  */
-  cout << "Original total size = " << oldpingRulesTable.size() << endl;
-  // Sorting the rules
-  //vector<Rule> merged_rule_table = merge_rules(oldpingRulesTable);
-  vector<Rule> sortedRuleTable = sort_rules(oldpingRulesTable);
-  cout << "Sorted total size = " << sortedRuleTable.size() << endl;
-  /*
-  for (int k = 0; k < sortedRuleTable.size(); k++) {
-    cout << sortedRuleTable[k].value << " " << sortedRuleTable[k].mask << endl;
-  }
-  */
-  //vector<Rule> pingRulesTable = merge_rules(sortedRuleTable);
-  vector<Rule> pingRulesTable (sortedRuleTable);
-  cout << "Merged total size = " << pingRulesTable.size() << endl;
+
+  vector<Rule> pingRulesTable = sort_rules(oldpingRulesTable);
+  cout << "Sorted total size = " << pingRulesTable.size() << endl;
+  //vector<Rule> pingRulesTable = merge_rules(oldpingRulesTable);
+  //cout << "Merged total size = " << pingRulesTable.size() << endl;
   /*
   for (int k = 0; k < pingRulesTable.size(); k++) {
     cout << pingRulesTable[k].value << " " << pingRulesTable[k].mask << endl;
   }
   */
-
   // Read in keys from file:
   ifstream file1 (argv[2]);
   vector<uint64_t> keyTable;
@@ -611,113 +583,93 @@ int main(int argc, char* argv[])
   auto sum_key_search_time = 0;
   //get time1
   //auto start = get_time::now(); // use auto keyword to minimize typing strokes :)
+  // Define a 2D vector for storing delta vector
+  vector< vector<int> > delta_vector;
+  // Allocate an array to hold my class objects
+  vector<Trie> tries(groupVector.size());
+  //Trie* trie = new Trie[groupVector.size()];
 
-
-  // Start to search each key here
+  // Start to construct the trie data structure here
   for (int j = 0; j < groupVector.size(); j++) {
     // Initilize a trie
     // Each group is a seperate trie
+    // Initialize each trie
 
-    Trie trie;
     auto start1 = get_time::now();
     //vector<Rule> newnewTable = merge_rules(bigArray[j]);
     vector<int> delta_need = generate_delta(bigArray[j]);
+    // Push each delta vector into the 2D vector
+    delta_vector.push_back(delta_need);
     vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
     // Sorting the rules in each group into asscending order
     // prepare for the merging next
-    //vector<Rule> newnewTable = merge_rules(newSumRuleTable);
-    //vector<Rule> newSortedTable = sort_rules(newSumRuleTable);
-    /*
-    for (int i = 0; i < newSortedTable.size(); i++) {
-      cout << "group ID:" << j << " " << newSortedTable.at(i).mask << " " << "sorted mask" << endl;
-    }
-    */
-
+    vector<Rule> newnewTable = merge_rules(newSumRuleTable);
     auto end1 = get_time::now();
     auto diff1 = end1 - start1;
-    sum_rule_rearrange_time += chrono::duration_cast<ns>(diff1).count();
-
-    //Checked the num of groups: new rules
-    /*
-    if (j == 758) {
-      for (int k = 0; k < newSumRuleTable.size(); k++) {
-        cout << newSumRuleTable[k].value << " " << newSumRuleTable[k].mask
-             << " " << newSumRuleTable[k].priority << endl;
-      }
-    }
-    */
-    //cout << "original table size = " << bigArray[j].size() << endl;
-    //cout << "new table size = " << newnewTable.size() << endl;
+    sum_rule_rearrange_time += chrono::duration_cast<ms>(diff1).count();
     // Doing the rule insertion
     auto start2 = get_time::now();
-    for (int k = 0; k < newSumRuleTable.size(); k++) {
-      if ( is_prefix(newSumRuleTable.at(k)) ) {
-        trie.insert_prefix_rule_priority(newSumRuleTable.at(k));
+    for (int k = 0; k < newnewTable.size(); k++) {
+      if ( is_prefix(newnewTable.at(k)) ) {
+        tries[j].insert_prefix_rule_priority(newnewTable.at(k));
         insertRule_num ++;
       }
       else {
         // becasue we control the number of expanding wildcard
         // so don't need to delete rules manually
-        trie.expand_rule(newSumRuleTable.at(k));
+        tries[j].expand_rule(newnewTable.at(k));
         expandRule_num ++;
       }
     }
+    //cout << "j=" << j << ", " << "count number: " << tries[j].count << endl;
+    //cout << "j=" << j << ", " << "trie node num: " << tries[j].node_count << endl;
     auto end2 = get_time::now();
     auto diff2 = end2 - start2;
-    sum_rule_insertion_time += chrono::duration_cast<ns>(diff2).count();
-    // Finished the rearranged rule insertion for each subtrie
-    // Doing the rule searching
-    char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
-    // Search the rules
-    //cout << "j is:" << j << "test again" << endl;
+    sum_rule_insertion_time += chrono::duration_cast<ms>(diff2).count();
+    sum_trie_expand_count += tries[j].expand_count;  // correct
+    sum_trie_count += tries[j].count;
+    sum_trie_node_count += tries[j].node_count;
 
-    for (int i = 0; i < keyTable.size(); i++) {
-      // Check each key
-      auto start3 = get_time::now();
-      uint64_t newGenKey = keys_rearrange(keyTable[i], delta_need);
+  }
+
+  // Finished the rearranged rule insertion for each subtrie
+  // Doing the rule searching
+  char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
+  for (int i = 0; i < keyTable.size(); i++) {
+    // Check each key
+    auto start3 = get_time::now();
+    for (int m = 0; m < groupVector.size(); m++) {
+      uint64_t newGenKey = keys_rearrange(keyTable[i], delta_vector[m]);
       auto end3 = get_time::now();
       auto diff3 = end3 - start3;
-      sum_key_rearrange_time += chrono::duration_cast<ns>(diff3).count();
+      sum_key_rearrange_time += chrono::duration_cast<ms>(diff3).count();
       auto start4 = get_time::now();
-      uint64_t priority = trie.LPM1_search_rule(newGenKey);
+      uint64_t priority = tries[m].LPM1_search_rule(newGenKey);
       auto end4 = get_time::now();
       auto diff4 = end4 - start4;
-      sum_key_search_time += chrono::duration_cast<ns>(diff4).count();
+      sum_key_search_time += chrono::duration_cast<ms>(diff4).count();
       match += (priority != 0); // when priority == 0, which means no matching
-      if (priority == 0) {
-        // not matching
-        // Go to check the next keys through this current group of rules
+      if (priority != 0) {
+        // matching
+        checksum += priority;
+        break;
+      }
+      else {
+        // not matching, go to check the next trie
         //cout << "not matching " << endl;
         continue;
       }
-      else {
-        checksum += priority;
-        // Delete the matched keys from the keyTable
-        // Avoid the duplication searching
-        // Delete the element keyTable[i]
-        keyTable.erase(keyTable.begin() + i);
-        // Make sure the index is correct
-        // Because we delete one key, so need to decrease index too
-        //cout << "matching" << endl;
-        i = i - 1;
-        continue;
-      }
     }
-    sum_trie_expand_count += trie.expand_count;
-    sum_trie_count += trie.count;
-    sum_trie_node_count += trie.node_count;
-    trie.delete_trie();
-    //cout << "Group ID:" << j << match << " " << checksum << endl;
   }
 
   //get time2
   //auto end = get_time::now();
   //auto diff = end - start;
 
-  cout << "Total rules rearrange configure time is:" << sum_rule_rearrange_time << " ns " << endl;
-  cout << "Total rules insertion configure time is:" << sum_rule_insertion_time << " ns " << endl;
-  cout << "Total keys rearrange configure time is:" << sum_key_rearrange_time << " ns " << endl;
-  cout << "Total keys search time is:" << sum_key_search_time << " ns " << endl;
+  cout << "Total rules rearrange configure time is:" << sum_rule_rearrange_time << " ms " << endl;
+  cout << "Total rules insertion configure time is:" << sum_rule_insertion_time << " ms " << endl;
+  cout << "Total keys rearrange configure time is:" << sum_key_rearrange_time << " ms " << endl;
+  cout << "Total keys search time is:" << sum_key_search_time << " ms " << endl;
   cout << "Total expanded count is:" << " " << sum_trie_expand_count << endl;
   cout << "Expand rule num is:" << " " << expandRule_num << endl;
   cout << "Insert rule num is:" << " " << insertRule_num << endl;
@@ -728,5 +680,8 @@ int main(int argc, char* argv[])
 
   return 0;
 }
+
+
+
 
 

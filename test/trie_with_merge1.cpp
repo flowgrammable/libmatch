@@ -121,30 +121,6 @@ Result is_mergeable(Rule firstrule, Rule secondrule)
   // The condition for merging, hamming distance smaller than 1
 }
 
-
-/*
- * Check whether can merge or not
- * depending on the hd function
- * the flag value and dif value
-*/
-/*
-Rule mergeRules(Rule onea, Rule oneb)
-{
-  Rule rule7;
-  Result ret1;
-  ret1 = is_mergeable(onea, oneb);
-  if (ret1.dif == 1) {
-    rule7.mask = (onea.mask | oneb.mask) + (uint64_t(1) << ret1.flag);
-    rule7.value = onea.value & oneb.value;
-  }
-  if (ret1.dif == 0) {
-    rule7.mask = onea.mask | oneb.mask;
-    rule7.value = onea.value & oneb.value;
-  }
-  return rule7;
-}
-*/
-
 vector<Rule> merge_rules(vector<Rule>& ruleList)
 {
   // Copy into a new vector

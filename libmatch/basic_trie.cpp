@@ -168,6 +168,7 @@ void Trie::insert_rule( Rule& rule )
 
 }
 
+// Get the "*" wildcard number after the multi-prefix number
 uint32_t Trie::get_new_num(Rule& rule)
 {
   int boundary = 0;
