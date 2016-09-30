@@ -162,7 +162,7 @@ int main(int argc, char* argv[])
   file1.close();
 
   vector<uint64_t> keyTable;
-  for (int i = 0; i < 1764200; i++) {
+  for (int i = 0; i < 17642000; i++) {
     keyTable.push_back(keyTable1[i]);
   }
 
