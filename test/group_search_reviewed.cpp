@@ -475,7 +475,7 @@ int main(int argc, char* argv[])
   //cout << keyTable.size() << endl;
 
   vector<uint64_t> keyTable;
-  for (int i = 0; i < 176420; i++) {
+  for (int i = 0; i < 1764200; i++) {
     keyTable.push_back(keyTable1[i]);
   }
 
