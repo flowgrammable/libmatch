@@ -39,7 +39,10 @@ add_executable(random_vector.test random_vector.cpp)
 add_executable(trie_backup.test trie_backup.cpp)
 add_executable(linear_arbitrary.test linear_arbitrary.cpp)
 add_executable(group_search_reviewed.test group_search_reviewed.cpp)
+#add_executable(generate_keys_num.test generate_keys_num.cpp)
 
+
+#add_test(test_generate_keys_num.test)
 add_test(test_wildcard wildcard.test)
 add_test(test_hash hash.test)
 add_test(test_basic_trie basic_trie.test)

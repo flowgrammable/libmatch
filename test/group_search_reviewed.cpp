@@ -458,7 +458,7 @@ int main(int argc, char* argv[])
   */
   // Read in keys from file:
   ifstream file1 (argv[2]);
-  vector<uint64_t> keyTable;
+  vector<uint64_t> keyTable1;
   if (file1.is_open()) {
     while (!file1.eof()) {
       // Read lines as long as the file is
@@ -467,12 +467,17 @@ int main(int argc, char* argv[])
       if(!packet.empty()) {
         uint64_t key = stoull(packet);
         // Push the input file into ruleArray
-        keyTable.push_back(key);
+        keyTable1.push_back(key);
       }
     }
   }
   file1.close();
   //cout << keyTable.size() << endl;
+
+  vector<uint64_t> keyTable;
+  for (int i = 0; i < 176420; i++) {
+    keyTable.push_back(keyTable1[i]);
+  }
 
   /*
    * Grouping algorithm
