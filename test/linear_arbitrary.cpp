@@ -141,13 +141,13 @@ int main(int argc, char* argv[])
   }
   file.close();
 
-  vector<Rule> inputRules = sort_rules(oldinputRules);
+  //vector<Rule> inputRules = sort_rules(oldinputRules);
 
   // Read in keys from file:
   string packet;
   uint64_t key;
   ifstream file1 (argv[2]);
-  vector<uint64_t> keyTable1;
+  vector<uint64_t> keyTable;
   if (file1.is_open()) {
     while (!file1.eof()) {
       // Read lines as long as the file is
@@ -155,24 +155,26 @@ int main(int argc, char* argv[])
       if(!packet.empty()) {
         key = stoull(packet);
         // Push the input file into ruleArray
-        keyTable1.push_back(key);
+        keyTable.push_back(key);
       }
     }
   }
   file1.close();
 
+  /*
   vector<uint64_t> keyTable;
   for (int i = 0; i < 17642000; i++) {
     keyTable.push_back(keyTable1[i]);
   }
+  */
 
   // Insert rules into linear arbitrary table:
   linearTable table;
 
   auto start1 = get_time::now();
 
-  for (int i=0; i<inputRules.size(); i++) {
-    table.insert_rule(inputRules.at(i));
+  for (int i = 0; i < oldinputRules.size(); i++) {
+    table.insert_rule(oldinputRules.at(i));
   }
 
   auto end1 = get_time::now();
@@ -182,7 +184,7 @@ int main(int argc, char* argv[])
 
   // Search the rules
   cout << "Begin test (keys=" << keyTable.size() <<
-          ", rules=" << inputRules.size() << "):" << endl;
+          ", rules=" << oldinputRules.size() << "):" << endl;
 
   uint64_t checksum = 0;
   uint64_t match = 0;
@@ -190,7 +192,7 @@ int main(int argc, char* argv[])
 
   auto start = get_time::now(); //use auto keyword to minimize typing strokes :)
   //get time1
-  for (int j=0; j<keyTable.size(); j++) {
+  for (int j = 0; j < keyTable.size(); j++) {
     uint64_t priority = table.search_rule(keyTable[j]);
     //cout << present << endl;
     checksum += priority;

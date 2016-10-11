@@ -83,7 +83,7 @@ public:
   // This is the input of rules (value, mask)
   trie_node* root;
   uint32_t count; // The number of rules in a trie
-  uint64_t node_count; // The number of nodes in a trie
+  uint64_t node_count; // The number of trie nodes in a trie
   uint64_t expand_count = 0; // Make this variable global
   //uint32_t new_num = 0; // Make this variable global, can be access
   //vector<uint32_t> maskNewPosition;

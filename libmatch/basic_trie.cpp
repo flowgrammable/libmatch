@@ -208,7 +208,7 @@ void Trie::expand_rule( Rule& rule )
   //uint64_t expand_count_sum = 0;
   //cout << " The priority is " << " " << rule.priority << endl;
   int boundary1 = 0;
-  for (int i=0; i<64; i++) {
+  for (int i = 0; i < 64; i++) {
     // Find the first bit "0" from the least significant bit
     // 10x1xx, so the mask is 001011
     if ( ((rule.mask >> i) & uint64_t(1)) == 0 ) {

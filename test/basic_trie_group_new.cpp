@@ -21,12 +21,6 @@ using  ns = chrono::nanoseconds;
 using  ms = chrono::microseconds;
 using get_time = chrono::steady_clock ;
 
-struct Result {
-  // define the result struct for merging algorithm
-  int flag = -1; // show the different bit position
-  int dif = 0; // the number bit of difference
-};
-
 // Matches integer type
 Rule strTint(string rulestr)
 {
@@ -47,144 +41,6 @@ Rule strTint(string rulestr)
 }
 
 /*
- * Check the mask part relation
- * whether is subset
- * the "1" bit position
-*/
-
-bool is_subset(Rule a, Rule b)
-{
-  vector<int> vec_a;
-  vector<int> vec_b;
-  // Get the "1" bit position for the mask part of two rules
-  for (int i = 0; i < 64; i++) {
-    if ((a.mask & (uint64_t(1) << i)) == 1) {
-      vec_a.push_back(i);
-    }
-    if ((b.mask & (uint64_t(1) << i)) == 1) {
-      vec_b.push_back(i);
-    }
-  }
-  // Check the vec_a and vec_b is subset or not
-  std::sort(vec_a.begin(),vec_a.end());
-  std::sort(vec_b.begin(),vec_b.end());
-  if (std::includes (vec_a.begin(), vec_a.end(), vec_b.begin(),vec_b.end())
-      || std::includes (vec_b.begin(), vec_b.end(), vec_a.begin(),vec_a.end())) {
-    return true;
-  }
-  else {
-    return false;
-  }
-}
-
-
-/*
- * Merge the rules between the first rule and second rule
- * depends on the bits of every column
- * if in each column, it has "1" and "0" or "*"
-*/
-Result is_mergeable(Rule firstrule, Rule secondrule)
-{
-  Result ret;
-  Rule rule1;
-  rule1.mask = firstrule.mask | secondrule.mask;
-  //cout << "rule1.mask = " << rule1.mask << endl;
-  if (rule1.mask == 0) {
-    for (int q = 0; q < 64; q++) {
-      if ((firstrule.value & (uint64_t(1) << q)) != (secondrule.value & (uint64_t(1) << q)) ) {
-        ret.flag = q; // show the bit position
-        ret.dif++;
-      }
-      else {
-        continue;
-      }
-    }
-  }
-  else {
-    for (int k = 0; k < 64; k++) {
-      if ((rule1.mask & (uint64_t(1) << k)) == 0) {
-        // check the value part, the hamming distance
-        // Check the hamming distance between the value part in the "0" positions
-        if ((firstrule.value & (uint64_t(1) << k)) != (secondrule.value & (uint64_t(1) << k)) ) {
-          ret.flag = k; // show the bit position
-          ret.dif++;
-        }
-        else {
-          continue;
-        }
-      }
-      else {
-        continue;
-      }
-    }
-  }
-  return ret;
-  // The condition for merging, hamming distance smaller than 1
-}
-
-
-vector<Rule> merge_rules(vector<Rule>& ruleList)
-{
-  // Copy into a new vector
-  vector<Rule> new_rule_list(ruleList);
-  Rule newRule7;
-  for (int i = 0; i < new_rule_list.size() - 1; i++) {
-    for (int j = i+1; j < new_rule_list.size(); j++) {
-      // The condition for able to merging
-      //if (new_rule_list.at(i).mask == new_rule_list.at(j).mask)
-      //if (is_subset (new_rule_list.at(i), new_rule_list.at(j)))
-      if (new_rule_list.at(i).mask == new_rule_list.at(j).mask) {
-        Result ret2 = is_mergeable(new_rule_list.at(i), new_rule_list.at(j));
-        //cout << "i =" << i << " " << "j =" << j << " " << "dif =" << ret2.dif << " " << "flag =" << ret2.flag << endl;
-        if (ret2.dif == 0) {
-          // the value part is the same on the "1" positions at mask part
-          //cout << "Merge rules" << endl;
-          newRule7.mask = (new_rule_list.at(i).mask | new_rule_list.at(j).mask);
-          newRule7.value = new_rule_list.at(i).value & new_rule_list.at(j).value;
-          //newRule7.priority = min( new_rule_list.at(i).priority, new_rule_list.at(j).priority );
-          newRule7.priority = new_rule_list.size() - 1;
-          //cout << "value = " << newRule7.value << " " << "mask = " << newRule7.mask << " " << "priority = " << newRule7.priority << endl;
-          new_rule_list.erase(new_rule_list.begin() + i);
-          new_rule_list.erase(new_rule_list.begin() + (j-1));
-          // Insert the new merged rule into the beginning of the vector
-          new_rule_list.push_back(newRule7);
-          i = -1;
-          break;
-        }
-        if (ret2.dif == 1) {
-          //cout << "Merge rules" << endl;
-          newRule7.mask = (new_rule_list.at(i).mask | new_rule_list.at(j).mask)
-              + (uint64_t(1) << ret2.flag);
-          newRule7.value = new_rule_list.at(i).value & new_rule_list.at(j).value;
-          //newRule7.priority = min( new_rule_list.at(i).priority, new_rule_list.at(j).priority );
-          newRule7.priority = new_rule_list.size() - 1;
-          //cout << "value = " << newRule7.value << " " << "mask = " << newRule7.mask << " " << "priority = " << newRule7.priority << endl;
-          new_rule_list.erase(new_rule_list.begin() + i);
-          new_rule_list.erase(new_rule_list.begin() + (j-1));
-          // Insert the new merged rule into the beginning of the vector
-          new_rule_list.push_back(newRule7);
-          i = -1;
-          break;
-        }
-        else {
-          continue;
-        }
-      }
-      else {
-        continue;
-      }
-    }
-  }
-  /*
-  for (int k = 0; k < new_rule_list.size(); k++) {
-    cout << "value part:" << new_rule_list.at(k).value << " " << "mask part:" <<
-            new_rule_list.at(k).mask  << endl;
-  }
-  */
-  return new_rule_list;
-}
-
-/*
  * Check whether the new rule is a prefix rule
  * if yes, do the LPM insertion
  * if not, do the expand rule function
@@ -196,91 +52,17 @@ bool is_prefix(Rule& rule)
   // Check the mask field from the lower bit
   for(int i = 0; i < 64; i++) {
     // if this: get the position whose bit is 1 (have wildcard)
-    if((rule.mask >> i) & uint64_t(1) == 1) {
+    if((rule.mask >> i) & 1 == 1) {
       maskPosition.push_back(i);
     }
   }
   uint32_t num = maskPosition.size(); // num is the number of wildcard
-  if (rule.mask == (uint64_t(1) << num)-1) {
+  if (rule.mask == (1 << num)-1) {
     return true;
   }
   else {
     return false;
   }
-}
-
-// Sorting the rules in an asscending order
-bool wayToSort(Rule aa, Rule bb)
-{
-  return (aa.mask < bb.mask);
-}
-
-bool wayToSort1(Rule aaa, Rule bbb)
-{
-  return (aaa.value < bbb.value);
-}
-
-/*
- * Sorting the prefix format rules into asscending order, denpending on the prefix length
- * using the std::sort function
-*/
-vector<Rule> sort_rules(vector<Rule>& ruleList)
-{
-  std::sort(ruleList.begin(), ruleList.end(), wayToSort);
-  /*
-  cout << "mark" << "===============" << endl;
-  for (int k = 0; k < ruleList.size(); k ++) {
-    cout << ruleList[k].value << ", " << ruleList[k].mask << endl;
-  }
-  */
-  vector<Rule> sortTable;
-  vector<Rule> sortTotalTable;
-  // Determine the size of combined table
-  sortTotalTable.reserve(ruleList.size());
-  for (int i = 0; i < ruleList.size(); i ++) {
-    if (i != ruleList.size() - 1) {
-      if (ruleList.at(i).mask == ruleList.at(i+1).mask) {
-        // if the mask value is the same, push into the same vector
-        //cout << "test" << endl;
-        sortTable.push_back(ruleList.at(i));
-        continue;
-      }
-      else {
-        sortTable.push_back(ruleList.at(i));
-        //cout << "i = " << i << endl;
-        std::sort(sortTable.begin(), sortTable.end(), wayToSort1);
-        sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
-        /*
-        for (int k = 0; k < sortTotalTable.size(); k ++) {
-          cout << sortTotalTable[k].value << ", " << sortTotalTable[k].mask << endl;
-        }
-        cout << "sortTotalTable size = " << sortTotalTable.size() << endl;
-        */
-        // Delete the current contents, clear the memory
-        sortTable.clear();
-        //cout << "sortTable size = " << sortTable.size() << endl;
-        continue;
-      }
-    }
-    else {
-      // for the last element in the vector
-      // for avoiding the over-range of the vector
-      if (ruleList.at(i).mask == ruleList.at(i-1).mask) {
-        sortTable.push_back(ruleList.at(i));
-        //cout << "i = " << i << endl;
-        std::sort(sortTable.begin(), sortTable.end(), wayToSort1);
-        sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
-      }
-      else {
-        std::sort(sortTable.begin(), sortTable.end(), wayToSort1);
-        sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
-        sortTable.clear();
-        sortTable.push_back(ruleList.at(i));
-        sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
-      }
-    }
-  }
-  return sortTotalTable;
 }
 
 /*
@@ -294,7 +76,7 @@ vector<int> generate_delta(vector<Rule>& ruleList)
   for (int j = 0; j < 64; j++) {
     uint32_t score = 0;
     for (int i = 0; i < ruleList.size(); i++) {
-      score += ((((ruleList.at(i)).mask) >> j) & uint64_t(1));
+      score += ((((ruleList.at(i)).mask) >> j) & 1);
     }
     sumColumn.push_back(score);
   }
@@ -428,7 +210,7 @@ int main(int argc, char* argv[])
 {
   ifstream file (argv[1]);
   // Read the rules from txt file
-  vector<Rule> oldpingRulesTable;
+  vector<Rule> pingRulesTable;
   int i = 0;
   if (file.is_open()) {
     while (!file.eof()) {
@@ -441,21 +223,14 @@ int main(int argc, char* argv[])
         // Priority is in-order of generating
         rule.priority = ++i;
         // Push the input file into ruleArray
-        oldpingRulesTable.push_back(rule);
+        pingRulesTable.push_back(rule);
       }
     }
   }
   file.close();
 
-  vector<Rule> pingRulesTable = sort_rules(oldpingRulesTable);
-  cout << "Sorted total size = " << pingRulesTable.size() << endl;
-  //vector<Rule> pingRulesTable = merge_rules(oldpingRulesTable);
-  //cout << "Merged total size = " << pingRulesTable.size() << endl;
-  /*
-  for (int k = 0; k < pingRulesTable.size(); k++) {
-    cout << pingRulesTable[k].value << " " << pingRulesTable[k].mask << endl;
-  }
-  */
+  //cout << pingRulesTable.size() << endl;
+
   // Read in keys from file:
   ifstream file1 (argv[2]);
   vector<uint64_t> keyTable;
@@ -472,14 +247,7 @@ int main(int argc, char* argv[])
     }
   }
   file1.close();
-  // cout << keyTable.size() << endl;
-  // Genearte the different size of key nums
-  /*
-  vector<uint64_t> keyTable;
-  for (int i = 0; i < 17642000; i++) {
-    keyTable.push_back(keyTable1[i]);
-  }
-  */
+  //cout << keyTable.size() << endl;
 
   /*
    * Grouping algorithm
@@ -551,6 +319,8 @@ int main(int argc, char* argv[])
     bigArray.push_back(vector<Rule> ());
   }
 
+  // For the group numbers, put the related rules into groups
+
   for (int j = 0; j < groupVector.size(); j++) {
     if (j == 0) {
       for (int i = 0; i < (groupVector[j] + 1); i++) {
@@ -569,7 +339,7 @@ int main(int argc, char* argv[])
 
   // Start to build the newRules in each group
   /*
-   * We get the new rearrangement rules table here, named sumRulesTabel
+   * We get the new rearrangement rules table here, named sumRulesTable
    * Next, we will do the rules insertion
    * Here, we just insert prefix rules, follow the LPM insertion function
    * So we need to check whether each new rules is prefix rule
@@ -590,7 +360,9 @@ int main(int argc, char* argv[])
   auto sum_key_search_time = 0;
   //get time1
   //auto start = get_time::now(); // use auto keyword to minimize typing strokes :)
-  // Define a 2D vector for storing delta vector
+
+
+
   vector< vector<int> > delta_vector;
   // Allocate an array to hold my class objects
   vector<Trie> tries(groupVector.size());
@@ -610,21 +382,21 @@ int main(int argc, char* argv[])
     vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
     // Sorting the rules in each group into asscending order
     // prepare for the merging next
-    vector<Rule> newnewTable = merge_rules(newSumRuleTable);
+    //vector<Rule> newnewTable = merge_rules(newSumRuleTable);
     auto end1 = get_time::now();
     auto diff1 = end1 - start1;
     sum_rule_rearrange_time += chrono::duration_cast<ms>(diff1).count();
     // Doing the rule insertion
     auto start2 = get_time::now();
-    for (int k = 0; k < newnewTable.size(); k++) {
-      if ( is_prefix(newnewTable.at(k)) ) {
-        tries[j].insert_prefix_rule_priority(newnewTable.at(k));
+    for (int k = 0; k < newSumRuleTable.size(); k++) {
+      if ( is_prefix(newSumRuleTable.at(k)) ) {
+        tries[j].insert_prefix_rule_priority(newSumRuleTable.at(k));
         insertRule_num ++;
       }
       else {
         // becasue we control the number of expanding wildcard
         // so don't need to delete rules manually
-        tries[j].expand_rule(newnewTable.at(k));
+        tries[j].expand_rule(newSumRuleTable.at(k));
         expandRule_num ++;
       }
     }
@@ -669,6 +441,7 @@ int main(int argc, char* argv[])
     }
   }
 
+
   //get time2
   //auto end = get_time::now();
   //auto diff = end - start;
@@ -688,8 +461,4 @@ int main(int argc, char* argv[])
 
   return 0;
 }
-
-
-
-
 
