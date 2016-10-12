@@ -607,10 +607,11 @@ int main(int argc, char* argv[])
     vector<int> delta_need = generate_delta(bigArray[j]);
     // Push each delta vector into the 2D vector
     delta_vector.push_back(delta_need);
-    vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
+    //vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
+    vector<Rule> newnewTable = rules_rearrange(bigArray[j], delta_need);
     // Sorting the rules in each group into asscending order
     // prepare for the merging next
-    vector<Rule> newnewTable = merge_rules(newSumRuleTable);
+    //vector<Rule> newnewTable = merge_rules(newSumRuleTable);
     auto end1 = get_time::now();
     auto diff1 = end1 - start1;
     sum_rule_rearrange_time += chrono::duration_cast<ms>(diff1).count();
