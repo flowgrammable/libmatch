@@ -607,10 +607,11 @@ int main(int argc, char* argv[])
     vector<int> delta_need = generate_delta(bigArray[j]);
     // Push each delta vector into the 2D vector
     delta_vector.push_back(delta_need);
-    vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
+    //vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
+    vector<Rule> newnewTable = rules_rearrange(bigArray[j], delta_need);
     // Sorting the rules in each group into asscending order
     // prepare for the merging next
-    vector<Rule> newnewTable = merge_rules(newSumRuleTable);
+    //vector<Rule> newnewTable = merge_rules(newSumRuleTable);
     auto end1 = get_time::now();
     auto diff1 = end1 - start1;
     sum_rule_rearrange_time += chrono::duration_cast<ms>(diff1).count();
@@ -645,6 +646,7 @@ int main(int argc, char* argv[])
   for (int i = 0; i < keyTable.size(); i++) {
     // Check each key
     auto start3 = get_time::now();
+    vector<uint64_t> matchVector;
     for (int m = 0; m < groupVector.size(); m++) {
       uint64_t newGenKey = keys_rearrange(keyTable[i], delta_vector[m]);
       auto end3 = get_time::now();
@@ -654,19 +656,39 @@ int main(int argc, char* argv[])
       uint64_t priority = tries[m].LPM1_search_rule(newGenKey);
       auto end4 = get_time::now();
       auto diff4 = end4 - start4;
+      // Insert all the priority value, including match and no_match
+      matchVector.push_back(priority);
+
       sum_key_search_time += chrono::duration_cast<ms>(diff4).count();
-      match += (priority != 0); // when priority == 0, which means no matching
-      if (priority != 0) {
-        // matching
-        checksum += priority;
-        break;
+    }
+    /*
+    for (int h = 0; h < matchVector.size(); h++) {
+      cout << "The key index:" << i << " " << matchVector[h] << endl;
+    }
+    */
+
+    vector<uint64_t> test1;
+    for (int v = 0; v < matchVector.size(); v++) {
+
+      if (matchVector[v] == 0) {
+
+        continue;
       }
       else {
-        // not matching, go to check the next trie
-        //cout << "not matching " << endl;
+        uint64_t test = matchVector[v];
+        test1.push_back(test);
         continue;
       }
     }
+    // Choose the smallest one, which means the highest priority
+    if (test1.size() > 0) {
+
+      uint64_t match_final = *min_element(test1.begin(), test1.end());
+      cout << "The key index:" << i << " " << "final match priority index============:" << " " << match_final << endl;
+      checksum += match_final;
+      match++;
+    }
+
   }
 
   //get time2
