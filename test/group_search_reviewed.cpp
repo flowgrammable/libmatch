@@ -687,7 +687,7 @@ int main(int argc, char* argv[])
     if (test1.size() > 0) {
 
       uint64_t match_final = *min_element(test1.begin(), test1.end());
-      cout << "The key index:" << i << " " << "final match priority index============:" << " " << match_final << endl;
+      cout << "i index:" << i << " " << "final match priority index============:" << " " << match_final << endl;
       checksum += match_final;
       match++;
     }
