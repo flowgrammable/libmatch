@@ -446,16 +446,16 @@ int main(int argc, char* argv[])
     }
   }
   file.close();
-
+  // Need to check the priority preserve the same after sorting
   vector<Rule> pingRulesTable = sort_rules(oldpingRulesTable);
   cout << "Sorted total size = " << pingRulesTable.size() << endl;
   //vector<Rule> pingRulesTable = merge_rules(oldpingRulesTable);
   //cout << "Merged total size = " << pingRulesTable.size() << endl;
-  /*
+
   for (int k = 0; k < pingRulesTable.size(); k++) {
-    cout << pingRulesTable[k].value << " " << pingRulesTable[k].mask << endl;
+    cout << pingRulesTable[k].priority << " " << pingRulesTable[k].value << " " << pingRulesTable[k].mask << endl;
   }
-  */
+
   // Read in keys from file:
   ifstream file1 (argv[2]);
   vector<uint64_t> keyTable;
@@ -653,19 +653,22 @@ int main(int argc, char* argv[])
       auto diff3 = end3 - start3;
       sum_key_rearrange_time += chrono::duration_cast<ms>(diff3).count();
       auto start4 = get_time::now();
+      // How to get the multiple match index in a tree???
       uint64_t priority = tries[m].LPM1_search_rule(newGenKey);
       auto end4 = get_time::now();
       auto diff4 = end4 - start4;
       // Insert all the priority value, including match and no_match
+
       matchVector.push_back(priority);
 
       sum_key_search_time += chrono::duration_cast<ms>(diff4).count();
     }
-    /*
+/*
     for (int h = 0; h < matchVector.size(); h++) {
       cout << "The key index:" << i << " " << matchVector[h] << endl;
     }
     */
+
 
     vector<uint64_t> test1;
     for (int v = 0; v < matchVector.size(); v++) {
@@ -688,6 +691,7 @@ int main(int argc, char* argv[])
       checksum += match_final;
       match++;
     }
+
 
   }
 

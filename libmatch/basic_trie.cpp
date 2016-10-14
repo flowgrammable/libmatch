@@ -324,11 +324,21 @@ void Trie::insert_prefix_rule_priority( Rule& rule )
     // move to child node:
     pRule = pRule->children[index];
     // check if rule exists:
-    if (pRule->priority != 0) {
-      // do not insert rule...
+
+    if (pRule->priority != 0 && pRule->priority < rule.priority) {
+      // If this trie node has a rule, and the priority is higher, do not insert rule
       // probably print a message of interest
       return;
     }
+
+    /*
+    if (pRule->priority != 0) {
+      // If this trie node has a rule, and the priority is higher, do not insert rule
+      // probably print a message of interest
+      return;
+    }
+    */
+
   }
   // Insert the new rule:
   count++;
