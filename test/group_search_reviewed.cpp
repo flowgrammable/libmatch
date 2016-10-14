@@ -448,13 +448,14 @@ int main(int argc, char* argv[])
   file.close();
   // Need to check the priority preserve the same after sorting
   vector<Rule> pingRulesTable = sort_rules(oldpingRulesTable);
-  cout << "Sorted total size = " << pingRulesTable.size() << endl;
+  //cout << "Sorted total size = " << pingRulesTable.size() << endl;
   //vector<Rule> pingRulesTable = merge_rules(oldpingRulesTable);
   //cout << "Merged total size = " << pingRulesTable.size() << endl;
-
+/*
   for (int k = 0; k < pingRulesTable.size(); k++) {
     cout << pingRulesTable[k].priority << " " << pingRulesTable[k].value << " " << pingRulesTable[k].mask << endl;
   }
+  */
 
   // Read in keys from file:
   ifstream file1 (argv[2]);
