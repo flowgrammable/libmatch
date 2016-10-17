@@ -377,6 +377,7 @@ void Trie::insert_prefix_rule(uint64_t value, uint64_t mask)
 
 
 // Prefix rules lookup--search rules
+
 bool Trie::LPM_search_rule(uint64_t key)
 {
   trie_node* pRule;
@@ -408,11 +409,14 @@ bool Trie::LPM_search_rule(uint64_t key)
 }
 
 // Prefix rules lookup--search rules
+// Assume the priority is more significant than the longest prefix match (not sure is correct)????
 // Return the match priority, show which rule is being matched
 uint32_t Trie::LPM1_search_rule(uint64_t key)
 {
   trie_node* pRule = root;
-  uint32_t match = 0;
+  uint64_t match = 0;
+  // Store the multiple match rules
+  vector<uint64_t> matchArray;
 
   for (int level=0; level<64; level++) {
     int index = (key >> (63-level)) & uint64_t(1);
@@ -422,7 +426,10 @@ uint32_t Trie::LPM1_search_rule(uint64_t key)
     if ( pRule ) {
       // Node is a rule, save match:
       if ( pRule->priority != 0 ) {
-        match = pRule->priority;
+        // If matches, insert the priority value into the matchArray vector
+        matchArray.push_back(pRule->priority);
+        //match = pRule->priority;
+        match = *min_element(matchArray.begin(), matchArray.end());
       }
     }
     else {
@@ -430,8 +437,10 @@ uint32_t Trie::LPM1_search_rule(uint64_t key)
       break;
     }
   }
+  // Return the minimum value in the matchArray
 
   return match;
+  //return match;
   // If return 0, match miss
   // If return 1, match hit
 }

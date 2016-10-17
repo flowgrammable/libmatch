@@ -610,6 +610,12 @@ int main(int argc, char* argv[])
     delta_vector.push_back(delta_need);
     //vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
     vector<Rule> newnewTable = rules_rearrange(bigArray[j], delta_need);
+
+    for (int k = 0; k < newnewTable.size(); k++) {
+      cout << "Group num:" << j << " " << newnewTable[k].priority << " " << newnewTable[k].value << " " << newnewTable[k].mask << endl;
+    }
+
+
     // Sorting the rules in each group into asscending order
     // prepare for the merging next
     //vector<Rule> newnewTable = merge_rules(newSumRuleTable);
@@ -650,6 +656,7 @@ int main(int argc, char* argv[])
     vector<uint64_t> matchVector;
     for (int m = 0; m < groupVector.size(); m++) {
       uint64_t newGenKey = keys_rearrange(keyTable[i], delta_vector[m]);
+      cout << "Key index:" << " " << i << " " << newGenKey << endl;
       auto end3 = get_time::now();
       auto diff3 = end3 - start3;
       sum_key_rearrange_time += chrono::duration_cast<ms>(diff3).count();
