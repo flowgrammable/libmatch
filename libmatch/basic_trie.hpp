@@ -54,11 +54,13 @@ struct trie_node
 {
   uint64_t priority; // Used to mark rule nodes, and also can show pripority
   trie_node* children[2]; // Trie stride = 1, has two pointer, '0' and '1'
+  uint32_t action;
 
   // trie_node constructor
   trie_node()
   {
     priority = 0;
+    action = 0;
     children[0] = NULL;
     children[1] = NULL;
   }

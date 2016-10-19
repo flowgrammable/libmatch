@@ -68,6 +68,7 @@ uint64_t linearTable::search_rule( uint64_t key )
     if (ruleTable[i].value == ( key & ( ~ruleTable[i].mask ) ) ) {
       //return ruleTable[i].priority;
       return ruleTable[i].action;
+      //return ruleTable[i];
     }
   }
 

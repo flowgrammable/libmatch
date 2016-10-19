@@ -118,6 +118,26 @@ vector<Rule> sort_rules(vector<Rule>& ruleList)
 
 int main(int argc, char* argv[])
 {
+  // Add the thrid parameter: random action
+  vector<int> actions;
+  string line1;
+  uint32_t action1;
+  ifstream file2 (argv[3]);
+  // Read action from the txt file
+  if (file2.is_open()) {
+    while (!file2.eof()) {
+      getline(file2, line1);
+      if (!line1.empty()) {
+        action1 = stoull(line1);
+        actions.push_back(action1);
+      }
+    }
+  }
+  file2.close();
+
+  cout << "actions size: " << actions.size() << endl;
+
+
   string line;
   Rule rule;
   ifstream file (argv[1]);
@@ -133,14 +153,19 @@ int main(int argc, char* argv[])
         rule = strTint(line);
         // Add the priority feature when generating rules
         // Priority is in-order of generating
-        rule.priority = ++i;
-        rule.action = rand() % 50 + 1; // randomly choose from [1,50]
+
+        rule.action = actions[i];
+        i = i + 1;
+        rule.priority = i;
+        //rule.action = rand() % 50 + 1; // randomly choose from [1,50]
         // Push the input file into ruleArray
         oldinputRules.push_back(rule);
       }
     }
   }
   file.close();
+
+
 
  for (int k = 0; k < oldinputRules.size(); k++) {
    cout << "Rule index: " << k << ", action: " <<

@@ -171,6 +171,7 @@ vector<Rule> rules_rearrange(vector<Rule>& oldRuleList, vector<int> delta_array)
       //cout << j << " " << newRule.mask << endl;
       // Guarantee the priority does not change
       newRule.priority = oldRuleList[i].priority;
+      newRule.action = oldRuleList[i].action;
     }
     sumRulesTable.push_back(newRule);
   }
@@ -209,6 +210,23 @@ uint64_t keys_rearrange(uint64_t key, vector<int> delta_array)
 
 int main(int argc, char* argv[])
 {
+
+  vector<int> actions;
+  string line1;
+  uint32_t action1;
+  ifstream file2 (argv[3]);
+  // Read action from the txt file
+  if (file2.is_open()) {
+    while (!file2.eof()) {
+      getline(file2, line1);
+      if (!line1.empty()) {
+        action1 = stoull(line1);
+        actions.push_back(action1);
+      }
+    }
+  }
+  file2.close();
+
   ifstream file (argv[1]);
   // Read the rules from txt file
   vector<Rule> pingRulesTable;
@@ -222,7 +240,9 @@ int main(int argc, char* argv[])
         Rule rule = strTint(line);
         // Add the priority feature when generating rules
         // Priority is in-order of generating
-        rule.priority = ++i;
+        rule.action = actions[i];
+        i = i + 1;
+        rule.priority = i;
         // Push the input file into ruleArray
         pingRulesTable.push_back(rule);
       }
@@ -350,6 +370,7 @@ int main(int argc, char* argv[])
 
   int expandRule_num = 0;
   int insertRule_num = 0;
+  uint64_t actionSum = 0;
   uint64_t checksum = 0; // show the sum of matching priority
   uint64_t match = 0; // how many keys are being matched in these new rules
   uint64_t sum_trie_expand_count = 0;
@@ -428,12 +449,14 @@ int main(int argc, char* argv[])
       sum_key_rearrange_time += chrono::duration_cast<ms>(diff3).count();
       auto start4 = get_time::now();
       uint64_t priority = tries[m].LPM1_search_rule(newGenKey);
+      cout << priority << endl;
       auto end4 = get_time::now();
       auto diff4 = end4 - start4;
       // Insert all the priority value, including match and no_match
       matchVector.push_back(priority);
       sum_key_search_time += chrono::duration_cast<ms>(diff4).count();
     }
+    cout << "matchVector size: " << matchVector.size() << endl;
     vector<uint64_t> test1;
     for (int v = 0; v < matchVector.size(); v++) {
 
@@ -447,12 +470,16 @@ int main(int argc, char* argv[])
         continue;
       }
     }
+    vector<uint64_t>::iterator its;
     // Choose the smallest one, which means the highest priority
     if (test1.size() > 0) {
 
       uint64_t match_final = *min_element(test1.begin(), test1.end());
+      its = find(pingRulesTable.begin(), pingRulesTable.end(),match_final);
+      int position = distance(pingRulesTable.begin(), its);
       //cout << "i index:" << i << " " << "final match priority index============:" << " " << match_final << endl;
       checksum += match_final;
+      actionSum = actionSum + pingRulesTable[position].action;
       match++;
     }
 
@@ -473,6 +500,7 @@ int main(int argc, char* argv[])
   cout << "Total insert rule num is:" << " " << sum_trie_count << endl;
   cout << "Total insert trie_node count is:" << " " << sum_trie_node_count << endl;
   cout << "Checksum: " << checksum << endl;
+  cout << "ActionSum" << actionSum << endl;
   cout << "Total matches: " << match << endl;
   cout << "==================================================" << endl;
 

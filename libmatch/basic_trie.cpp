@@ -295,8 +295,8 @@ void Trie::expand_rule( Rule& rule )
 }
 
 
-
-// Insert prefix rules with Rule(value, mask, priority)
+// Added action attribute
+// Insert prefix rules with Rule(value, mask, priority, action)
 // Added the priority purpose
 // Inserting rules will depend on the priority
 // The priority must be in-order of insertion
@@ -343,6 +343,7 @@ void Trie::insert_prefix_rule_priority( Rule& rule )
   // Insert the new rule:
   count++;
   pRule->priority = rule.priority; // If the priority is not 0, the node is leaf node
+  pRule->action = rule.action;
   //cout << pRule->priority << " " << pRule->star_num << endl;
 }
 
@@ -414,10 +415,16 @@ bool Trie::LPM_search_rule(uint64_t key)
 uint32_t Trie::LPM1_search_rule(uint64_t key)
 {
   trie_node* pRule = root;
-  uint64_t match = 0;
-  // Store the multiple match rules
-  vector<uint64_t> matchArray;
 
+  uint64_t match = 0;
+  uint32_t decision1 = 0;
+  uint32_t position = 0;
+  // Store the multiple match rules
+  //vector<uint64_t> matchArray;
+  //vector<match_result> matchArray; // 2-D match vector, stores priority and action
+  vector<uint64_t> priorityArray;
+  vector<uint64_t>::iterator it;
+  vector<uint32_t> actionArray;
   for (int level=0; level<64; level++) {
     int index = (key >> (63-level)) & uint64_t(1);
     // Choose child based on relelvant bit in key.
@@ -427,9 +434,18 @@ uint32_t Trie::LPM1_search_rule(uint64_t key)
       // Node is a rule, save match:
       if ( pRule->priority != 0 ) {
         // If matches, insert the priority value into the matchArray vector
-        matchArray.push_back(pRule->priority);
+        priorityArray.push_back(pRule->priority);
+        actionArray.push_back(pRule->action);
+
+        //matchArray.push_back(pRule->priority);
         //match = pRule->priority;
-        match = *min_element(matchArray.begin(), matchArray.end());
+        // Find the highest priority rule here when there has multiple matches
+        match = *min_element(priorityArray.begin(), priorityArray.end());
+        cout << "match value:" << match << endl;
+        it = find(priorityArray.begin(), priorityArray.end(),match);
+        int position = distance(priorityArray.begin(), it);
+        cout << "position:" << position << endl;
+
       }
     }
     else {
@@ -437,8 +453,20 @@ uint32_t Trie::LPM1_search_rule(uint64_t key)
       break;
     }
   }
+  cout << "priorityVector size: " << priorityArray.size() << endl;
+  cout << "actionVector size: " << actionArray.size() << endl;
   // Return the minimum value in the matchArray
+  for (int k = 0; k < actionArray.size(); k++) {
+    cout << "Index: " << k << " " << actionArray[k] << endl;
+  }
+  if (priorityArray.size() == 0) {
+    decision1 = 0;
+  }
 
+  else {
+    decision1 = actionArray.at(position);
+  }
+  cout << "decision value: " << decision1 << endl;
   return match;
   //return match;
   // If return 0, match miss
