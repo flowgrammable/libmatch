@@ -143,8 +143,7 @@ int main(int argc, char* argv[])
   file.close();
 
  for (int k = 0; k < oldinputRules.size(); k++) {
-   cout << "Rule index: " << k << ", action: " <<
-           oldinputRules[k].action << ", priority: " << oldinputRules[k].priority << endl;
+   cout << oldinputRules[k].action << endl;
  }
 
   // Read in keys from file:
@@ -165,59 +164,11 @@ int main(int argc, char* argv[])
   }
   file1.close();
 
-  /*
-  vector<uint64_t> keyTable;
-  for (int i = 0; i < 17642000; i++) {
-    keyTable.push_back(keyTable1[i]);
-  }
-  */
-
-  // Insert rules into linear arbitrary table:
-  linearTable table;
-
-  auto start1 = get_time::now();
-
-  for (int i = 0; i < oldinputRules.size(); i++) {
-    table.insert_rule(oldinputRules.at(i));
-  }
-
-  auto end1 = get_time::now();
-  auto diff1 = end1 - start1;
-
-  char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
-
-  // Search the rules
-  cout << "Begin test (keys=" << keyTable.size() <<
-          ", rules=" << oldinputRules.size() << "):" << endl;
-
-  uint64_t checksum = 0;
-  uint64_t actionSum = 0;
-  uint64_t match = 0;
 
 
-  auto start = get_time::now(); //use auto keyword to minimize typing strokes :)
-  //get time1
-  for (int j = 0; j < keyTable.size(); j++) {
-    //uint64_t priority = table.search_rule(keyTable[j]);
-    uint64_t decision = table.search_rule(keyTable[j]);
-    //cout << present << endl;
-    //checksum += priority;
-    actionSum += decision;
-    //match += (priority != 0);
-    match += (decision != 0);
-
-  }
-  auto end = get_time::now();
-  auto diff = end - start;
-  //get time2
-  //cout << "Checksum: " << checksum << endl;
-  cout << "ActionSum: " << actionSum << endl;
-  cout << "Total matches: " << match << endl;
-  cout << "Insertion time is: " << chrono::duration_cast<ms>(diff1).count() << " ms " << endl;
-  cout << "Search time is: "<< chrono::duration_cast<ms>(diff).count() << " ms " << endl;
-  cout << "==================================================" << endl;
 
   return 0;
 }
+
 
 

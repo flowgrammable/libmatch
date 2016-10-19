@@ -19,18 +19,21 @@ struct Rule
   uint64_t value;
   uint64_t mask;
   uint64_t priority;
+  uint32_t action;
   Rule()
   {
     value = 0;
     mask = 0;
     priority = 0;
+    action = 0;
   }
 
-  Rule(uint64_t x, uint64_t y, uint64_t z)
+  Rule(uint64_t x, uint64_t y, uint64_t z, uint32_t w)
   {
     value = x;
     mask = y;
     priority = z;
+    action = w;
   }
 
 };

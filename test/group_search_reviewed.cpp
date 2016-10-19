@@ -90,8 +90,11 @@ Result is_mergeable(Rule firstrule, Rule secondrule)
   rule1.mask = firstrule.mask | secondrule.mask;
   //cout << "rule1.mask = " << rule1.mask << endl;
   if (rule1.mask == 0) {
+    // Check the value part is the same or not, because there is no "*"
     for (int q = 0; q < 64; q++) {
+      // Check every bit position on the value part
       if ((firstrule.value & (uint64_t(1) << q)) != (secondrule.value & (uint64_t(1) << q)) ) {
+        // If the bit position are not the same, flag and dif value changes
         ret.flag = q; // show the bit position
         ret.dif++;
       }
@@ -99,9 +102,12 @@ Result is_mergeable(Rule firstrule, Rule secondrule)
         continue;
       }
     }
+    // Get all the difference bit position between two rules (mask value = 0)
   }
   else {
+    // If the mask value is not 0, which means the mask value part has the "*", wildcard
     for (int k = 0; k < 64; k++) {
+      // Get all the bit positions of "0" in mask value part
       if ((rule1.mask & (uint64_t(1) << k)) == 0) {
         // check the value part, the hamming distance
         // Check the hamming distance between the value part in the "0" positions
@@ -131,18 +137,20 @@ vector<Rule> merge_rules(vector<Rule>& ruleList)
   for (int i = 0; i < new_rule_list.size() - 1; i++) {
     for (int j = i+1; j < new_rule_list.size(); j++) {
       // The condition for able to merging
-      //if (new_rule_list.at(i).mask == new_rule_list.at(j).mask)
-      //if (is_subset (new_rule_list.at(i), new_rule_list.at(j)))
+      // If the two rules' mask value part is the same
       if (new_rule_list.at(i).mask == new_rule_list.at(j).mask) {
+        // Just compare the value part when the mask part is "0", ignor the "1" part
         Result ret2 = is_mergeable(new_rule_list.at(i), new_rule_list.at(j));
+        // Get the ret2 value, to see the bit position difference and the flag value
         //cout << "i =" << i << " " << "j =" << j << " " << "dif =" << ret2.dif << " " << "flag =" << ret2.flag << endl;
         if (ret2.dif == 0) {
           // the value part is the same on the "1" positions at mask part
           //cout << "Merge rules" << endl;
           newRule7.mask = (new_rule_list.at(i).mask | new_rule_list.at(j).mask);
           newRule7.value = new_rule_list.at(i).value & new_rule_list.at(j).value;
-          //newRule7.priority = min( new_rule_list.at(i).priority, new_rule_list.at(j).priority );
-          newRule7.priority = new_rule_list.size() - 1;
+          // The merged rule's priority should equal to the highest priority
+          newRule7.priority = min( new_rule_list.at(i).priority, new_rule_list.at(j).priority );
+          //newRule7.priority = new_rule_list.size() - 1;
           //cout << "value = " << newRule7.value << " " << "mask = " << newRule7.mask << " " << "priority = " << newRule7.priority << endl;
           new_rule_list.erase(new_rule_list.begin() + i);
           new_rule_list.erase(new_rule_list.begin() + (j-1));
@@ -152,12 +160,13 @@ vector<Rule> merge_rules(vector<Rule>& ruleList)
           break;
         }
         if (ret2.dif == 1) {
+          // There is just one bit position different
           //cout << "Merge rules" << endl;
           newRule7.mask = (new_rule_list.at(i).mask | new_rule_list.at(j).mask)
               + (uint64_t(1) << ret2.flag);
           newRule7.value = new_rule_list.at(i).value & new_rule_list.at(j).value;
-          //newRule7.priority = min( new_rule_list.at(i).priority, new_rule_list.at(j).priority );
-          newRule7.priority = new_rule_list.size() - 1;
+          newRule7.priority = min( new_rule_list.at(i).priority, new_rule_list.at(j).priority );
+          //newRule7.priority = new_rule_list.size() - 1;
           //cout << "value = " << newRule7.value << " " << "mask = " << newRule7.mask << " " << "priority = " << newRule7.priority << endl;
           new_rule_list.erase(new_rule_list.begin() + i);
           new_rule_list.erase(new_rule_list.begin() + (j-1));
@@ -604,13 +613,29 @@ int main(int argc, char* argv[])
     // Initialize each trie
 
     auto start1 = get_time::now();
+/*
     //vector<Rule> newnewTable = merge_rules(bigArray[j]);
     vector<int> delta_need = generate_delta(bigArray[j]);
     // Push each delta vector into the 2D vector
     delta_vector.push_back(delta_need);
     //vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
     vector<Rule> newnewTable = rules_rearrange(bigArray[j], delta_need);
-/*
+*/
+    /*
+     * Get rules set in each group
+     * merge first, then genearte delta
+     * genearte new rules set
+    */
+
+    vector<Rule> mergedTable = merge_rules(bigArray[j]);
+    vector<int> delta_need = generate_delta(mergedTable);
+    // Push each delta vector into the 2D vector
+    delta_vector.push_back(delta_need);
+    //vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
+    vector<Rule> newnewTable = rules_rearrange(mergedTable, delta_need);
+
+
+    /*
     for (int k = 0; k < newnewTable.size(); k++) {
       cout << "Group num:" << j << " " << newnewTable[k].priority << " " << newnewTable[k].value << " " << newnewTable[k].mask << endl;
     }
