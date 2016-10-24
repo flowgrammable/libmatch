@@ -271,6 +271,7 @@ void Trie::expand_rule( Rule& rule )
         expandedRule.value = expandedRule.value;
         expandedRule.mask = ( uint64_t(1) << boundary1 ) - 1; // mask value should be a prefix value after expanded
         expandedRule.priority = rule.priority; // priority keeps the same
+        expandedRule.action = rule.action;
         //cout << " check the priority is " << " " << expandedRule.priority << endl;
       }
       else {
@@ -278,6 +279,7 @@ void Trie::expand_rule( Rule& rule )
         expandedRule.value |= (uint64_t(1) << maskNewPosition1.at(j));
         expandedRule.mask = ( uint64_t(1) << boundary1 ) - 1; // mask value should be a prefix value after expanded
         expandedRule.priority = rule.priority; // priority keeps the same
+        expandedRule.action = rule.action;
       }
     }
     // Every combinations on new_num bit
@@ -304,6 +306,7 @@ void Trie::expand_rule( Rule& rule )
 
 void Trie::insert_prefix_rule_priority( Rule& rule )
 {
+  cout << "check the rule action value: " << rule.action << endl;
   trie_node* pRule = root;
   // Considering the prefix rules, thus the length of rule should be different
   // depends on the mask value, the length of each rule = 32-mask
@@ -339,12 +342,14 @@ void Trie::insert_prefix_rule_priority( Rule& rule )
     }
     */
 
+
+
   }
   // Insert the new rule:
   count++;
   pRule->priority = rule.priority; // If the priority is not 0, the node is leaf node
   pRule->action = rule.action;
-  //cout << pRule->priority << " " << pRule->star_num << endl;
+  cout << "priority value: " << pRule->priority << ", action value: " << pRule->action << endl;
 }
 
 // Insert prefix rules with Rule(value, mask)
@@ -412,13 +417,15 @@ bool Trie::LPM_search_rule(uint64_t key)
 // Prefix rules lookup--search rules
 // Assume the priority is more significant than the longest prefix match (not sure is correct)????
 // Return the match priority, show which rule is being matched
-uint32_t Trie::LPM1_search_rule(uint64_t key)
+trie_result Trie::LPM1_search_rule(uint64_t key)
 {
   trie_node* pRule = root;
 
+  trie_result ret;
+
   uint64_t match = 0;
   uint32_t decision1 = 0;
-  uint32_t position = 0;
+  //uint32_t position = 0;
   // Store the multiple match rules
   //vector<uint64_t> matchArray;
   //vector<match_result> matchArray; // 2-D match vector, stores priority and action
@@ -440,11 +447,10 @@ uint32_t Trie::LPM1_search_rule(uint64_t key)
         //matchArray.push_back(pRule->priority);
         //match = pRule->priority;
         // Find the highest priority rule here when there has multiple matches
-        match = *min_element(priorityArray.begin(), priorityArray.end());
-        cout << "match value:" << match << endl;
-        it = find(priorityArray.begin(), priorityArray.end(),match);
-        int position = distance(priorityArray.begin(), it);
-        cout << "position:" << position << endl;
+        ret.priority = *min_element(priorityArray.begin(), priorityArray.end());
+        //cout << "match value:" << ret.priority << endl;
+
+        //cout << "position:" << position << endl;
 
       }
     }
@@ -453,21 +459,28 @@ uint32_t Trie::LPM1_search_rule(uint64_t key)
       break;
     }
   }
-  cout << "priorityVector size: " << priorityArray.size() << endl;
-  cout << "actionVector size: " << actionArray.size() << endl;
+
+  it = find(priorityArray.begin(), priorityArray.end(),ret.priority);
+  int position = distance(priorityArray.begin(), it);
+  //cout << "priorityVector size: " << priorityArray.size() << endl;
+  //cout << "actionVector size: " << actionArray.size() << endl;
   // Return the minimum value in the matchArray
+  /*
   for (int k = 0; k < actionArray.size(); k++) {
     cout << "Index: " << k << " " << actionArray[k] << endl;
   }
+  */
+
   if (priorityArray.size() == 0) {
-    decision1 = 0;
+    ret.action = 0;
   }
 
   else {
-    decision1 = actionArray.at(position);
+    ret.action = actionArray.at(position);
   }
-  cout << "decision value: " << decision1 << endl;
-  return match;
+  //cout << "decision value: " << ret.action << endl;
+
+  return ret;
   //return match;
   // If return 0, match miss
   // If return 1, match hit

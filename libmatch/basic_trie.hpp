@@ -12,6 +12,8 @@
 #include <vector>
 #include <string>
 #include <cmath>
+#include <tuple>
+#include <utility>
 
 using namespace std;
 
@@ -48,7 +50,20 @@ void convert_rule(vector<uint64_t>& rulesTable, Rule& rule);
 
 void detect_wildcard_mask(Rule& rule);
 
+// Construct a data structure for the result, which
+// includes priority value and action value
 
+struct trie_result
+{
+  uint64_t priority;
+  uint32_t action;
+
+  trie_result()
+  {
+    priority = 0;
+    action = 0;
+  }
+};
 
 struct trie_node
 {
@@ -131,7 +146,7 @@ public:
 
   bool prefix_search_rule(uint64_t key);
   bool LPM_search_rule(uint64_t key);
-  uint32_t LPM1_search_rule(uint64_t key);
+  trie_result LPM1_search_rule(uint64_t key);
 
   // New: delete the Rule format rules
   void resetRule(Rule& rule);

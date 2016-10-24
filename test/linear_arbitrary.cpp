@@ -231,6 +231,7 @@ int main(int argc, char* argv[])
     //match += (priority != 0);
     match += (decision != 0);
 
+    cout << "i index:" << j << ", action=" << decision << endl;
   }
   auto end = get_time::now();
   auto diff = end - start;

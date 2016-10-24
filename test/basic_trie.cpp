@@ -409,7 +409,8 @@ int main(int argc, char* argv[])
       auto diff3 = end3 - start3;
       sum_key_rearrange_time += chrono::duration_cast<ms>(diff3).count();
       auto start4 = get_time::now();
-      uint64_t priority = trie.LPM1_search_rule(newGenKey);
+      trie_result priority = trie.LPM1_search_rule(newGenKey);
+      //uint64_t priority = trie.LPM1_search_rule(newGenKey);
       auto end4 = get_time::now();
       auto diff4 = end4 - start4;
       sum_key_search_time += chrono::duration_cast<ms>(diff4).count();

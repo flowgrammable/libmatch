@@ -250,6 +250,10 @@ int main(int argc, char* argv[])
   }
   file.close();
 
+  for (int m = 0; m < pingRulesTable.size(); m++) {
+    cout << "test action: " << pingRulesTable[m].action << endl;
+  }
+
   //cout << pingRulesTable.size() << endl;
 
   // Read in keys from file:
@@ -442,22 +446,29 @@ int main(int argc, char* argv[])
 
     auto start3 = get_time::now();
     vector<uint64_t> matchVector;
+    vector<uint32_t> decisionVector;
     for (int m = 0; m < groupVector.size(); m++) {
       uint64_t newGenKey = keys_rearrange(keyTable[i], delta_vector[m]);
       auto end3 = get_time::now();
       auto diff3 = end3 - start3;
       sum_key_rearrange_time += chrono::duration_cast<ms>(diff3).count();
       auto start4 = get_time::now();
-      uint64_t priority = tries[m].LPM1_search_rule(newGenKey);
-      cout << priority << endl;
+      trie_result search_ret = tries[m].LPM1_search_rule(newGenKey);
+      //uint64_t priority = tries[m].LPM1_search_rule(newGenKey);
+      //cout << "Priority value: " << search_ret.priority << ", Action value: " << search_ret.action << endl;
       auto end4 = get_time::now();
       auto diff4 = end4 - start4;
       // Insert all the priority value, including match and no_match
-      matchVector.push_back(priority);
+      //matchVector.push_back(priority);
+      matchVector.push_back(search_ret.priority); // Store the priority value
+      decisionVector.push_back(search_ret.action);
+      cout << "test value: " << search_ret.action << endl; // Has a bug here....... action should not be 0
       sum_key_search_time += chrono::duration_cast<ms>(diff4).count();
     }
-    cout << "matchVector size: " << matchVector.size() << endl;
-    vector<uint64_t> test1;
+    //cout << "matchVector size: " << matchVector.size() << endl;
+    //cout << "decisionVector size: " << decisionVector.size() << endl; // should be the same
+    vector<uint64_t> test1; // Store the priority value
+    vector<uint32_t> test2; // Store the action value
     for (int v = 0; v < matchVector.size(); v++) {
 
       if (matchVector[v] == 0) {
@@ -466,23 +477,39 @@ int main(int argc, char* argv[])
       }
       else {
         uint64_t test = matchVector[v];
+        uint32_t action2 = decisionVector[v];
         test1.push_back(test);
+        test2.push_back(action2);
         continue;
       }
     }
-    vector<uint64_t>::iterator its;
+
     // Choose the smallest one, which means the highest priority
     if (test1.size() > 0) {
 
       uint64_t match_final = *min_element(test1.begin(), test1.end());
-      its = find(pingRulesTable.begin(), pingRulesTable.end(),match_final);
-      int position = distance(pingRulesTable.begin(), its);
-      //cout << "i index:" << i << " " << "final match priority index============:" << " " << match_final << endl;
-      checksum += match_final;
-      actionSum = actionSum + pingRulesTable[position].action;
-      match++;
-    }
 
+
+      checksum += match_final;
+
+      match++;
+
+      vector<uint64_t>::iterator it;
+      it = find(test1.begin(), test1.end(),match_final);
+      int position1 = distance(test1.begin(), it);
+      cout << "action size: " << test2.size() << endl;
+      for (int q = 0; q < test2.size(); q++) {
+        cout << "action set==="  << q  << " " << test2[q] << endl;
+      }
+      actionSum += test2.at(position1);
+      //cout << "i index:" << j << ", action=:" << decision << endl;
+      cout << "i index:" << i << ", action=" << test2.at(position1) << endl;
+      cout << "i index:" << i << " " << "priority=:" << match_final << ", action=" << test2.at(position1) << endl;
+    }
+    //vector<uint64_t>::iterator its;
+    //its = find(pingRulesTable.begin(), pingRulesTable.end(),match_final);
+    //int position = distance(pingRulesTable.begin(), its);
+    //actionSum = actionSum + pingRulesTable[position].action;
   }
 
 
@@ -500,7 +527,7 @@ int main(int argc, char* argv[])
   cout << "Total insert rule num is:" << " " << sum_trie_count << endl;
   cout << "Total insert trie_node count is:" << " " << sum_trie_node_count << endl;
   cout << "Checksum: " << checksum << endl;
-  cout << "ActionSum" << actionSum << endl;
+  cout << "ActionSum: " << actionSum << endl;
   cout << "Total matches: " << match << endl;
   cout << "==================================================" << endl;
 
