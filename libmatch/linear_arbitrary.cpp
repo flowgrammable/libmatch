@@ -62,18 +62,26 @@ void linearTable::insert_rule( Rule& rule )
 }
 
 
-uint64_t linearTable::search_rule( uint64_t key )
+trie_result linearTable::search_rule( uint64_t key )
 {
+  trie_result rule_a_p; // rules with action attribute and priority attribute
   for (int i = 0; i < ruleTable.size(); i++) {
+
     if (ruleTable[i].value == ( key & ( ~ruleTable[i].mask ) ) ) {
+      rule_a_p.action = ruleTable[i].action;
+      rule_a_p.priority = ruleTable[i].priority;
+      break;
+      //return rule_a_p;
       //return ruleTable[i].priority;
-      return ruleTable[i].action;
+      //return ruleTable[i].action;
       //return ruleTable[i];
     }
   }
 
+  return rule_a_p;
+
   // If no rules match:
-  return 0;
+  //return 0;
 }
 
 

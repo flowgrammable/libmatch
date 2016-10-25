@@ -38,6 +38,18 @@ struct Rule
 
 };
 
+struct trie_result
+{
+  uint64_t priority;
+  uint32_t action;
+
+  trie_result()
+  {
+    priority = 0;
+    action = 0;
+  }
+};
+
 class linearTable
 {
 private:
@@ -58,7 +70,7 @@ public:
 
   void insert_rule( Rule& rule );
 
-  uint64_t search_rule( uint64_t key );
+  trie_result search_rule( uint64_t key );
 
   void delete_rule( Rule& rule );
 

@@ -138,42 +138,51 @@ vector<Rule> merge_rules(vector<Rule>& ruleList)
     for (int j = i+1; j < new_rule_list.size(); j++) {
       // The condition for able to merging
       // If the two rules' mask value part is the same
-      if (new_rule_list.at(i).mask == new_rule_list.at(j).mask) {
-        // Just compare the value part when the mask part is "0", ignor the "1" part
-        Result ret2 = is_mergeable(new_rule_list.at(i), new_rule_list.at(j));
-        // Get the ret2 value, to see the bit position difference and the flag value
-        //cout << "i =" << i << " " << "j =" << j << " " << "dif =" << ret2.dif << " " << "flag =" << ret2.flag << endl;
-        if (ret2.dif == 0) {
-          // the value part is the same on the "1" positions at mask part
-          //cout << "Merge rules" << endl;
-          newRule7.mask = (new_rule_list.at(i).mask | new_rule_list.at(j).mask);
-          newRule7.value = new_rule_list.at(i).value & new_rule_list.at(j).value;
-          // The merged rule's priority should equal to the highest priority
-          newRule7.priority = min( new_rule_list.at(i).priority, new_rule_list.at(j).priority );
-          //newRule7.priority = new_rule_list.size() - 1;
-          //cout << "value = " << newRule7.value << " " << "mask = " << newRule7.mask << " " << "priority = " << newRule7.priority << endl;
-          new_rule_list.erase(new_rule_list.begin() + i);
-          new_rule_list.erase(new_rule_list.begin() + (j-1));
-          // Insert the new merged rule into the beginning of the vector
-          new_rule_list.push_back(newRule7);
-          i = -1;
-          break;
-        }
-        if (ret2.dif == 1) {
-          // There is just one bit position different
-          //cout << "Merge rules" << endl;
-          newRule7.mask = (new_rule_list.at(i).mask | new_rule_list.at(j).mask)
-              + (uint64_t(1) << ret2.flag);
-          newRule7.value = new_rule_list.at(i).value & new_rule_list.at(j).value;
-          newRule7.priority = min( new_rule_list.at(i).priority, new_rule_list.at(j).priority );
-          //newRule7.priority = new_rule_list.size() - 1;
-          //cout << "value = " << newRule7.value << " " << "mask = " << newRule7.mask << " " << "priority = " << newRule7.priority << endl;
-          new_rule_list.erase(new_rule_list.begin() + i);
-          new_rule_list.erase(new_rule_list.begin() + (j-1));
-          // Insert the new merged rule into the beginning of the vector
-          new_rule_list.push_back(newRule7);
-          i = -1;
-          break;
+
+      if (new_rule_list.at(i).action == new_rule_list.at(j).action) {
+
+        if (new_rule_list.at(i).mask == new_rule_list.at(j).mask) {
+          // Just compare the value part when the mask part is "0", ignor the "1" part
+          Result ret2 = is_mergeable(new_rule_list.at(i), new_rule_list.at(j));
+          // Get the ret2 value, to see the bit position difference and the flag value
+          //cout << "i =" << i << " " << "j =" << j << " " << "dif =" << ret2.dif << " " << "flag =" << ret2.flag << endl;
+          if (ret2.dif == 0) {
+            // the value part is the same on the "1" positions at mask part
+            //cout << "Merge rules" << endl;
+            newRule7.mask = (new_rule_list.at(i).mask | new_rule_list.at(j).mask);
+            newRule7.value = new_rule_list.at(i).value & new_rule_list.at(j).value;
+            // The merged rule's priority should equal to the highest priority
+            newRule7.priority = min( new_rule_list.at(i).priority, new_rule_list.at(j).priority );
+            newRule7.action = new_rule_list.at(i).action;
+            //newRule7.priority = new_rule_list.size() - 1;
+            //cout << "value = " << newRule7.value << " " << "mask = " << newRule7.mask << " " << "priority = " << newRule7.priority << endl;
+            new_rule_list.erase(new_rule_list.begin() + i);
+            new_rule_list.erase(new_rule_list.begin() + (j-1));
+            // Insert the new merged rule into the beginning of the vector
+            new_rule_list.push_back(newRule7);
+            i = -1;
+            break;
+          }
+          if (ret2.dif == 1) {
+            // There is just one bit position different
+            //cout << "Merge rules" << endl;
+            newRule7.mask = (new_rule_list.at(i).mask | new_rule_list.at(j).mask)
+                + (uint64_t(1) << ret2.flag);
+            newRule7.value = new_rule_list.at(i).value & new_rule_list.at(j).value;
+            newRule7.priority = min( new_rule_list.at(i).priority, new_rule_list.at(j).priority );
+            newRule7.action = new_rule_list.at(i).action;
+            //newRule7.priority = new_rule_list.size() - 1;
+            //cout << "value = " << newRule7.value << " " << "mask = " << newRule7.mask << " " << "priority = " << newRule7.priority << endl;
+            new_rule_list.erase(new_rule_list.begin() + i);
+            new_rule_list.erase(new_rule_list.begin() + (j-1));
+            // Insert the new merged rule into the beginning of the vector
+            new_rule_list.push_back(newRule7);
+            i = -1;
+            break;
+          }
+          else {
+            continue;
+          }
         }
         else {
           continue;
@@ -481,10 +490,11 @@ int main(int argc, char* argv[])
   //cout << "Sorted total size = " << pingRulesTable.size() << endl;
   //vector<Rule> pingRulesTable = merge_rules(oldpingRulesTable);
   //cout << "Merged total size = " << pingRulesTable.size() << endl;
-
+  /*
   for (int k = 0; k < pingRulesTable.size(); k++) {
     cout << pingRulesTable[k].priority << " " << pingRulesTable[k].action << " " << pingRulesTable[k].value << " " << pingRulesTable[k].mask << endl;
   }
+  */
 
 
   // Read in keys from file:
@@ -648,9 +658,9 @@ int main(int argc, char* argv[])
      * merge first, then genearte delta
      * genearte new rules set
     */
-    vector<Rule> mergedTable(bigArray[j]); // In order to avoid the merge_rules function
+    //vector<Rule> mergedTable(bigArray[j]); // In order to avoid the merge_rules function
 
-    //vector<Rule> mergedTable = merge_rules(bigArray[j]);
+    vector<Rule> mergedTable = merge_rules(bigArray[j]);
 
     vector<int> delta_need = generate_delta(mergedTable);
     // Push each delta vector into the 2D vector

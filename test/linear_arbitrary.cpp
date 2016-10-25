@@ -225,19 +225,21 @@ int main(int argc, char* argv[])
   //get time1
   for (int j = 0; j < keyTable.size(); j++) {
     //uint64_t priority = table.search_rule(keyTable[j]);
-    uint64_t decision = table.search_rule(keyTable[j]);
+    //uint64_t decision = table.search_rule(keyTable[j]);
+    trie_result decision = table.search_rule(keyTable[j]);
     //cout << present << endl;
     //checksum += priority;
-    actionSum += decision;
+    actionSum += decision.action;
+    checksum += decision.priority;
     //match += (priority != 0);
-    match += (decision != 0);
+    match += (decision.action != 0); // action or priority are both work
 
     //cout << "i index:" << j << ", action=" << decision << endl;
   }
   auto end = get_time::now();
   auto diff = end - start;
   //get time2
-  //cout << "Checksum: " << checksum << endl;
+  cout << "Checksum: " << checksum << endl;
   cout << "ActionSum: " << actionSum << endl;
   cout << "Total matches: " << match << endl;
   cout << "Insertion time is: " << chrono::duration_cast<ms>(diff1).count() << " ms " << endl;
