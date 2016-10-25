@@ -135,7 +135,7 @@ int main(int argc, char* argv[])
   }
   file2.close();
 
-  cout << "actions size: " << actions.size() << endl;
+  //cout << "actions size: " << actions.size() << endl;
 
 
   string line;
@@ -166,11 +166,12 @@ int main(int argc, char* argv[])
   file.close();
 
 
-
+/*
  for (int k = 0; k < oldinputRules.size(); k++) {
    cout << "Rule index: " << k << ", action: " <<
            oldinputRules[k].action << ", priority: " << oldinputRules[k].priority << endl;
  }
+ */
 
   // Read in keys from file:
   string packet;
@@ -231,7 +232,7 @@ int main(int argc, char* argv[])
     //match += (priority != 0);
     match += (decision != 0);
 
-    cout << "i index:" << j << ", action=" << decision << endl;
+    //cout << "i index:" << j << ", action=" << decision << endl;
   }
   auto end = get_time::now();
   auto diff = end - start;

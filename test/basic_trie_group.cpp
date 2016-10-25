@@ -250,9 +250,11 @@ int main(int argc, char* argv[])
   }
   file.close();
 
+  /*
   for (int m = 0; m < pingRulesTable.size(); m++) {
     cout << "test action: " << pingRulesTable[m].action << endl;
   }
+  */
 
   //cout << pingRulesTable.size() << endl;
 
@@ -443,7 +445,6 @@ int main(int argc, char* argv[])
   char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
   for (int i = 0; i < keyTable.size(); i++) {
     // Check each key
-
     auto start3 = get_time::now();
     vector<uint64_t> matchVector;
     vector<uint32_t> decisionVector;
@@ -462,7 +463,8 @@ int main(int argc, char* argv[])
       //matchVector.push_back(priority);
       matchVector.push_back(search_ret.priority); // Store the priority value
       decisionVector.push_back(search_ret.action);
-      cout << "test value: " << search_ret.action << endl; // Has a bug here....... action should not be 0
+      //cout << "test value: " << search_ret.action << endl; // Has a bug here....... action should not be 0
+      // Find the bug, the expand function did not insert the action attribute value
       sum_key_search_time += chrono::duration_cast<ms>(diff4).count();
     }
     //cout << "matchVector size: " << matchVector.size() << endl;
@@ -470,9 +472,7 @@ int main(int argc, char* argv[])
     vector<uint64_t> test1; // Store the priority value
     vector<uint32_t> test2; // Store the action value
     for (int v = 0; v < matchVector.size(); v++) {
-
       if (matchVector[v] == 0) {
-
         continue;
       }
       else {
@@ -486,30 +486,24 @@ int main(int argc, char* argv[])
 
     // Choose the smallest one, which means the highest priority
     if (test1.size() > 0) {
-
       uint64_t match_final = *min_element(test1.begin(), test1.end());
-
-
       checksum += match_final;
-
       match++;
-
       vector<uint64_t>::iterator it;
       it = find(test1.begin(), test1.end(),match_final);
       int position1 = distance(test1.begin(), it);
-      cout << "action size: " << test2.size() << endl;
+      //cout << "action size: " << test2.size() << endl;
+      /*
       for (int q = 0; q < test2.size(); q++) {
         cout << "action set==="  << q  << " " << test2[q] << endl;
       }
+      */
       actionSum += test2.at(position1);
       //cout << "i index:" << j << ", action=:" << decision << endl;
-      cout << "i index:" << i << ", action=" << test2.at(position1) << endl;
-      cout << "i index:" << i << " " << "priority=:" << match_final << ", action=" << test2.at(position1) << endl;
+      //cout << "i index:" << i << ", action=" << test2.at(position1) << endl;
+      //cout << "i index:" << i << " " << "priority=:" << match_final << ", action=" << test2.at(position1) << endl;
     }
-    //vector<uint64_t>::iterator its;
-    //its = find(pingRulesTable.begin(), pingRulesTable.end(),match_final);
-    //int position = distance(pingRulesTable.begin(), its);
-    //actionSum = actionSum + pingRulesTable[position].action;
+
   }
 
 

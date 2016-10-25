@@ -397,6 +397,7 @@ vector<Rule> rules_rearrange(vector<Rule>& oldRuleList, vector<int> delta_array)
       newRule.mask |= subRule.mask;
       //cout << j << " " << newRule.mask << endl;
       newRule.priority = oldRuleList[i].priority;
+      newRule.action = oldRuleList[i].action;
     }
     sumRulesTable.push_back(newRule);
   }
@@ -435,6 +436,23 @@ uint64_t keys_rearrange(uint64_t key, vector<int> delta_array)
 
 int main(int argc, char* argv[])
 {
+  // Input the action file
+  vector<int> actions;
+  string line1;
+  uint32_t action1;
+  ifstream file2 (argv[3]);
+  // Read action from the txt file
+  if (file2.is_open()) {
+    while (!file2.eof()) {
+      getline(file2, line1);
+      if (!line1.empty()) {
+        action1 = stoull(line1);
+        actions.push_back(action1);
+      }
+    }
+  }
+  file2.close();
+
   ifstream file (argv[1]);
   // Read the rules from txt file
   vector<Rule> oldpingRulesTable;
@@ -448,7 +466,10 @@ int main(int argc, char* argv[])
         Rule rule = strTint(line);
         // Add the priority feature when generating rules
         // Priority is in-order of generating
-        rule.priority = ++i;
+        rule.action = actions[i];
+        i = i + 1;
+        rule.priority = i;
+        //rule.priority = ++i;
         // Push the input file into ruleArray
         oldpingRulesTable.push_back(rule);
       }
@@ -460,11 +481,11 @@ int main(int argc, char* argv[])
   //cout << "Sorted total size = " << pingRulesTable.size() << endl;
   //vector<Rule> pingRulesTable = merge_rules(oldpingRulesTable);
   //cout << "Merged total size = " << pingRulesTable.size() << endl;
-/*
+
   for (int k = 0; k < pingRulesTable.size(); k++) {
-    cout << pingRulesTable[k].priority << " " << pingRulesTable[k].value << " " << pingRulesTable[k].mask << endl;
+    cout << pingRulesTable[k].priority << " " << pingRulesTable[k].action << " " << pingRulesTable[k].value << " " << pingRulesTable[k].mask << endl;
   }
-  */
+
 
   // Read in keys from file:
   ifstream file1 (argv[2]);
@@ -589,6 +610,7 @@ int main(int argc, char* argv[])
 
   int expandRule_num = 0;
   int insertRule_num = 0;
+  uint64_t actionSum = 0;
   uint64_t checksum = 0; // show the sum of matching priority
   uint64_t match = 0; // how many keys are being matched in these new rules
   uint64_t sum_trie_expand_count = 0;
@@ -613,7 +635,7 @@ int main(int argc, char* argv[])
     // Initialize each trie
 
     auto start1 = get_time::now();
-/*
+    /*
     //vector<Rule> newnewTable = merge_rules(bigArray[j]);
     vector<int> delta_need = generate_delta(bigArray[j]);
     // Push each delta vector into the 2D vector
@@ -626,8 +648,10 @@ int main(int argc, char* argv[])
      * merge first, then genearte delta
      * genearte new rules set
     */
+    vector<Rule> mergedTable(bigArray[j]); // In order to avoid the merge_rules function
 
-    vector<Rule> mergedTable = merge_rules(bigArray[j]);
+    //vector<Rule> mergedTable = merge_rules(bigArray[j]);
+
     vector<int> delta_need = generate_delta(mergedTable);
     // Push each delta vector into the 2D vector
     delta_vector.push_back(delta_need);
@@ -676,6 +700,7 @@ int main(int argc, char* argv[])
   // Finished the rearranged rule insertion for each subtrie
   // Doing the rule searching
   char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
+  /*
   for (int i = 0; i < keyTable.size(); i++) {
     // Check each key
     auto start3 = get_time::now();
@@ -697,11 +722,11 @@ int main(int argc, char* argv[])
 
       sum_key_search_time += chrono::duration_cast<ms>(diff4).count();
     }
-/*
+
     for (int h = 0; h < matchVector.size(); h++) {
       cout << "The key index:" << i << " " << matchVector[h] << endl;
     }
-    */
+
 
 
     vector<uint64_t> test1;
@@ -728,6 +753,70 @@ int main(int argc, char* argv[])
 
 
   }
+*/
+
+  for (int i = 0; i < keyTable.size(); i++) {
+    // Check each key
+    auto start3 = get_time::now();
+    vector<uint64_t> matchVector;
+    vector<uint32_t> decisionVector;
+    for (int m = 0; m < groupVector.size(); m++) {
+      uint64_t newGenKey = keys_rearrange(keyTable[i], delta_vector[m]);
+      auto end3 = get_time::now();
+      auto diff3 = end3 - start3;
+      sum_key_rearrange_time += chrono::duration_cast<ms>(diff3).count();
+      auto start4 = get_time::now();
+      trie_result search_ret = tries[m].LPM1_search_rule(newGenKey);
+      //uint64_t priority = tries[m].LPM1_search_rule(newGenKey);
+      //cout << "Priority value: " << search_ret.priority << ", Action value: " << search_ret.action << endl;
+      auto end4 = get_time::now();
+      auto diff4 = end4 - start4;
+      // Insert all the priority value, including match and no_match
+      //matchVector.push_back(priority);
+      matchVector.push_back(search_ret.priority); // Store the priority value
+      decisionVector.push_back(search_ret.action);
+      //cout << "test value: " << search_ret.action << endl; // Has a bug here....... action should not be 0
+      // Find the bug, the expand function did not insert the action attribute value
+      sum_key_search_time += chrono::duration_cast<ms>(diff4).count();
+    }
+    //cout << "matchVector size: " << matchVector.size() << endl;
+    //cout << "decisionVector size: " << decisionVector.size() << endl; // should be the same
+    vector<uint64_t> test1; // Store the priority value
+    vector<uint32_t> test2; // Store the action value
+    for (int v = 0; v < matchVector.size(); v++) {
+      if (matchVector[v] == 0) {
+        continue;
+      }
+      else {
+        uint64_t test = matchVector[v];
+        uint32_t action2 = decisionVector[v];
+        test1.push_back(test);
+        test2.push_back(action2);
+        continue;
+      }
+    }
+
+    // Choose the smallest one, which means the highest priority
+    if (test1.size() > 0) {
+      uint64_t match_final = *min_element(test1.begin(), test1.end());
+      checksum += match_final;
+      match++;
+      vector<uint64_t>::iterator it;
+      it = find(test1.begin(), test1.end(),match_final);
+      int position1 = distance(test1.begin(), it);
+      //cout << "action size: " << test2.size() << endl;
+      /*
+      for (int q = 0; q < test2.size(); q++) {
+        cout << "action set==="  << q  << " " << test2[q] << endl;
+      }
+      */
+      actionSum += test2.at(position1);
+      //cout << "i index:" << j << ", action=:" << decision << endl;
+      //cout << "i index:" << i << ", action=" << test2.at(position1) << endl;
+      //cout << "i index:" << i << " " << "priority=:" << match_final << ", action=" << test2.at(position1) << endl;
+    }
+
+  }
 
   //get time2
   //auto end = get_time::now();
@@ -743,6 +832,7 @@ int main(int argc, char* argv[])
   cout << "Total insert rule num is:" << " " << sum_trie_count << endl;
   cout << "Total insert trie_node count is:" << " " << sum_trie_node_count << endl;
   cout << "Checksum: " << checksum << endl;
+  cout << "ActionSum: " << actionSum << endl;
   cout << "Total matches: " << match << endl;
   cout << "==================================================" << endl;
 

@@ -306,7 +306,7 @@ void Trie::expand_rule( Rule& rule )
 
 void Trie::insert_prefix_rule_priority( Rule& rule )
 {
-  cout << "check the rule action value: " << rule.action << endl;
+  //cout << "check the rule action value: " << rule.action << endl;
   trie_node* pRule = root;
   // Considering the prefix rules, thus the length of rule should be different
   // depends on the mask value, the length of each rule = 32-mask
@@ -349,7 +349,7 @@ void Trie::insert_prefix_rule_priority( Rule& rule )
   count++;
   pRule->priority = rule.priority; // If the priority is not 0, the node is leaf node
   pRule->action = rule.action;
-  cout << "priority value: " << pRule->priority << ", action value: " << pRule->action << endl;
+  //cout << "priority value: " << pRule->priority << ", action value: " << pRule->action << endl;
 }
 
 // Insert prefix rules with Rule(value, mask)
