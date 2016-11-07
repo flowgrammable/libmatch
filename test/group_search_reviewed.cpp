@@ -547,7 +547,7 @@ int main(int argc, char* argv[])
       for ( int k = 0; k < new_table_list.size(); k++ ) {
         Trie trie1; // for caculating the trie1.new_num
         // for guarantee avoding the bad memory alloc
-        if (trie1.get_new_num( new_table_list.at (k))  < 13) {
+        if (trie1.get_new_num( new_table_list.at (k))  < 14) {
           continue;
         }
         else if (new_table_list.size() == 1) {
