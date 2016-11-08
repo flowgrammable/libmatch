@@ -442,7 +442,7 @@ uint64_t keys_rearrange(uint64_t key, vector<int> delta_array)
   //cout << newKey << endl;
 }
 
-
+static int threshold; // Set the wildcard num as a variable
 int main(int argc, char* argv[])
 {
   // Input the action file
@@ -461,7 +461,7 @@ int main(int argc, char* argv[])
     }
   }
   file2.close();
-
+  threshold = stoull(argv[4]);
   ifstream file (argv[1]);
   // Read the rules from txt file
   vector<Rule> oldpingRulesTable;
@@ -547,7 +547,7 @@ int main(int argc, char* argv[])
       for ( int k = 0; k < new_table_list.size(); k++ ) {
         Trie trie1; // for caculating the trie1.new_num
         // for guarantee avoding the bad memory alloc
-        if (trie1.get_new_num( new_table_list.at (k))  < 14) {
+        if (trie1.get_new_num( new_table_list.at (k))  < threshold) {
           continue;
         }
         else if (new_table_list.size() == 1) {
