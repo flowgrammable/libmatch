@@ -1,5 +1,5 @@
 #!/bin/bash
-#echo "=====207,S====="
+echo "=====207,S====="
 ./optimized_libmatch/test/group_search_reviewed.test ~/libmatch/test/Benchmarks/207.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action207.txt 5 >> result_try1.txt
 ./optimized_libmatch/test/group_search_reviewed.test ~/libmatch/test/Benchmarks/207.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action207.txt 6 >> result_try1.txt
 ./optimized_libmatch/test/group_search_reviewed.test ~/libmatch/test/Benchmarks/207.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action207.txt 7 >> result_try1.txt
