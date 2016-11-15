@@ -442,7 +442,27 @@ uint64_t keys_rearrange(uint64_t key, vector<int> delta_array)
   //cout << newKey << endl;
 }
 
+/*
+ * For the optimization version, we will optimize the threshold variable
+ * in each group, so the each value in different group can be not the same
+ * more flexible, to guarantee the memory cost
+ * thus, the variable "threshold" is a variable in group algorithm
+*/
+
+/*
+ * Performance constraints:memory cost
+ * the maximal value is: 1000,000 trie nodes
+ * the number of group is a constant here
+ * for each group, we will choose the threshold value depends on the memory cost constraint
+*/
+
+static int group_num; // Set the constant group number, in order to get the number of groups we want
 static int threshold; // Set the wildcard num as a variable
+static int memory_constraint = 1000000 / group_num; // Set the memory cost constraint
+// Thus, if we know the number of group, we will know the memory constraint for each group
+// This assume that: each group has the same size of rules, and cost almost the same memory cost
+
+
 int main(int argc, char* argv[])
 {
   // Input the action file
@@ -461,7 +481,11 @@ int main(int argc, char* argv[])
     }
   }
   file2.close();
-  threshold = stoull(argv[4]);
+  // threshold is no longer a constant in the optimized grouping algorithm
+  //threshold = stoull(argv[4]);
+
+  group_num = stoull(argv[4]); // The value is an argument through the input
+
   ifstream file (argv[1]);
   // Read the rules from txt file
   vector<Rule> oldpingRulesTable;
@@ -710,60 +734,7 @@ int main(int argc, char* argv[])
   // Finished the rearranged rule insertion for each subtrie
   // Doing the rule searching
   char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
-  /*
-  for (int i = 0; i < keyTable.size(); i++) {
-    // Check each key
-    auto start3 = get_time::now();
-    vector<uint64_t> matchVector;
-    for (int m = 0; m < groupVector.size(); m++) {
-      uint64_t newGenKey = keys_rearrange(keyTable[i], delta_vector[m]);
-      //cout << "Key index:" << " " << i << " " << newGenKey << endl;
-      auto end3 = get_time::now();
-      auto diff3 = end3 - start3;
-      sum_key_rearrange_time += chrono::duration_cast<ms>(diff3).count();
-      auto start4 = get_time::now();
-      // How to get the multiple match index in a tree???
-      uint64_t priority = tries[m].LPM1_search_rule(newGenKey);
-      auto end4 = get_time::now();
-      auto diff4 = end4 - start4;
-      // Insert all the priority value, including match and no_match
 
-      matchVector.push_back(priority);
-
-      sum_key_search_time += chrono::duration_cast<ms>(diff4).count();
-    }
-
-    for (int h = 0; h < matchVector.size(); h++) {
-      cout << "The key index:" << i << " " << matchVector[h] << endl;
-    }
-
-
-
-    vector<uint64_t> test1;
-    for (int v = 0; v < matchVector.size(); v++) {
-
-      if (matchVector[v] == 0) {
-
-        continue;
-      }
-      else {
-        uint64_t test = matchVector[v];
-        test1.push_back(test);
-        continue;
-      }
-    }
-    // Choose the smallest one, which means the highest priority
-    if (test1.size() > 0) {
-
-      uint64_t match_final = *min_element(test1.begin(), test1.end());
-      //cout << "i index:" << i << " " << "final match priority index============:" << " " << match_final << endl;
-      checksum += match_final;
-      match++;
-    }
-
-
-  }
-*/
 
   for (int i = 0; i < keyTable.size(); i++) {
     // Check each key
