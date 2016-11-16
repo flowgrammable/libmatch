@@ -186,7 +186,10 @@ uint32_t Trie::get_new_num(Rule& rule)
       continue;
     }
   }
-  vector<uint32_t> maskNewPosition;
+  // Find the first "0" bit, which is the arbitrary bit in the middle
+  // Then detect all the "1" bit, which means all the wildcard in non-prefix positions
+  // Need to expand all wildcard to make the rules become prefix rules
+  vector<uint32_t> maskNewPosition; // To store the expand wildcard position
   for (int j=(boundary+1); j<64; j++) {
     if ( ((rule.mask >> j) & uint64_t(1)) == 1 ) {
       maskNewPosition.push_back(j); // recored the positions that should be expanded (the bit is "1")

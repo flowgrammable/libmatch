@@ -227,14 +227,17 @@ bool is_prefix(Rule& rule)
   }
 }
 
-// Sorting the rules in an asscending order
+// Sorting the rules in an ascending order
+// Ascending sort: 1,2,3,....
 bool wayToSort(Rule aa, Rule bb)
 {
+  // Sort the mask part of rules
   return (aa.mask < bb.mask);
 }
 
 bool wayToSort1(Rule aaa, Rule bbb)
 {
+  // Sort the value part of rules
   return (aaa.value < bbb.value);
 }
 
@@ -244,6 +247,7 @@ bool wayToSort1(Rule aaa, Rule bbb)
 */
 vector<Rule> sort_rules(vector<Rule>& ruleList)
 {
+  // Sort the rules by the mask value part, ascending sort
   std::sort(ruleList.begin(), ruleList.end(), wayToSort);
   /*
   cout << "mark" << "===============" << endl;
@@ -254,9 +258,10 @@ vector<Rule> sort_rules(vector<Rule>& ruleList)
   vector<Rule> sortTable;
   vector<Rule> sortTotalTable;
   // Determine the size of combined table
+  // set the size of sortTotalTable as the same as the ruleList.size
   sortTotalTable.reserve(ruleList.size());
   for (int i = 0; i < ruleList.size(); i ++) {
-    if (i != ruleList.size() - 1) {
+    if (i != ruleList.size() - 1) { // Not the last rule in the ruleList
       if (ruleList.at(i).mask == ruleList.at(i+1).mask) {
         // if the mask value is the same, push into the same vector
         //cout << "test" << endl;
@@ -266,7 +271,11 @@ vector<Rule> sort_rules(vector<Rule>& ruleList)
       else {
         sortTable.push_back(ruleList.at(i));
         //cout << "i = " << i << endl;
+        // Sort the rules in the sortTable with the same mask value
+        // But has the different value part value, so sort the value part value
         std::sort(sortTable.begin(), sortTable.end(), wayToSort1);
+        // Insert the sorted rules into a new ruleTable
+        // Add the new rules into the end of the current table == insert position
         sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
         /*
         for (int k = 0; k < sortTotalTable.size(); k ++) {
@@ -293,6 +302,8 @@ vector<Rule> sort_rules(vector<Rule>& ruleList)
         std::sort(sortTable.begin(), sortTable.end(), wayToSort1);
         sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
         sortTable.clear();
+        // After insert the sorted rules, then insert the last rule into a sortTable
+        // then insert it to the final table
         sortTable.push_back(ruleList.at(i));
         sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
       }
@@ -457,8 +468,8 @@ uint64_t keys_rearrange(uint64_t key, vector<int> delta_array)
 */
 
 static int group_num; // Set the constant group number, in order to get the number of groups we want
-static int threshold; // Set the wildcard num as a variable
-static int memory_constraint = 1000000 / group_num; // Set the memory cost constraint
+//static int threshold; // Set the wildcard num as a variable
+//static int memory_constraint = 1000000 / group_num; // Set the memory cost constraint
 // Thus, if we know the number of group, we will know the memory constraint for each group
 // This assume that: each group has the same size of rules, and cost almost the same memory cost
 
@@ -485,7 +496,7 @@ int main(int argc, char* argv[])
   //threshold = stoull(argv[4]);
 
   group_num = stoull(argv[4]); // The value is an argument through the input
-
+  //cout << "Group number is: " << group_num << endl;
   ifstream file (argv[1]);
   // Read the rules from txt file
   vector<Rule> oldpingRulesTable;
@@ -509,9 +520,10 @@ int main(int argc, char* argv[])
     }
   }
   file.close();
+  //cout << "test============" << endl;
   // Need to check the priority preserve the same after sorting
   vector<Rule> pingRulesTable = sort_rules(oldpingRulesTable);
-  //cout << "Sorted total size = " << pingRulesTable.size() << endl;
+  cout << "Sorted total rule size = " << pingRulesTable.size() << endl;
   //vector<Rule> pingRulesTable = merge_rules(oldpingRulesTable);
   //cout << "Merged total size = " << pingRulesTable.size() << endl;
   /*
@@ -519,6 +531,7 @@ int main(int argc, char* argv[])
     cout << pingRulesTable[k].priority << " " << pingRulesTable[k].action << " " << pingRulesTable[k].value << " " << pingRulesTable[k].mask << endl;
   }
   */
+
 
 
   // Read in keys from file:
@@ -537,7 +550,7 @@ int main(int argc, char* argv[])
     }
   }
   file1.close();
-  // cout << keyTable.size() << endl;
+  cout << "Number of keys: " << keyTable.size() << endl;
   // Genearte the different size of key nums
   /*
   vector<uint64_t> keyTable;
@@ -545,6 +558,13 @@ int main(int argc, char* argv[])
     keyTable.push_back(keyTable1[i]);
   }
   */
+
+  /*=============================================
+   * We have the sorted rules
+   * need to group the rules depends on the group number we distribute manually, which is a constant
+   * For each group, we will have the memory cost constraint
+  */
+
 
   /*
    * Grouping algorithm
@@ -560,9 +580,29 @@ int main(int argc, char* argv[])
 
   // avoid the bad allocation memory
 
+  // ==========================
+  // Construct the new groupVector
+  if (pingRulesTable.size() % group_num == 0) {
+    for ( int i = 0; i < group_num; i++ ) {
+      groupVector.push_back( (pingRulesTable.size() / group_num - 1) +
+          (pingRulesTable.size() / group_num) * i );
+    }
+  }
+  else {
+    for (int j = 0; j < group_num - 1; j++) {
+      groupVector.push_back( (pingRulesTable.size() / group_num - 1) +
+          (pingRulesTable.size() / group_num) * j );
+    }
+    groupVector.push_back( pingRulesTable.size() - 1 );
+  }
+
+
+ /*
   uint32_t list_count = 0;
+  // Get the groupvector, the group information
   for ( int i = 0; i < pingRulesTable.size(); i++ ) {
     if (i < (pingRulesTable.size()-1)) {
+      // not the last rule in the table
       newList.push_back(pingRulesTable[i]);
       vector<int> new_generated_delta = generate_delta(newList);
       // Create the rearranged rule set
@@ -603,6 +643,7 @@ int main(int argc, char* argv[])
       groupVector.push_back(i);
     }
   }
+  */
 
   cout << "Num of groups is:" << " " << groupVector.size() << endl;
 
@@ -631,6 +672,11 @@ int main(int argc, char* argv[])
       continue;
     }
   }
+
+  // Now, all the rules have been already inserted into each group
+  // Have multiple table, shown as bigArray[j]
+  // j is the index of group number
+  // =================================================
 
   // Start to build the newRules in each group
   /*
@@ -669,21 +715,8 @@ int main(int argc, char* argv[])
     // Initialize each trie
 
     auto start1 = get_time::now();
-    /*
-    //vector<Rule> newnewTable = merge_rules(bigArray[j]);
-    vector<int> delta_need = generate_delta(bigArray[j]);
-    // Push each delta vector into the 2D vector
-    delta_vector.push_back(delta_need);
-    //vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
-    vector<Rule> newnewTable = rules_rearrange(bigArray[j], delta_need);
-*/
-    /*
-     * Get rules set in each group
-     * merge first, then genearte delta
-     * genearte new rules set
-    */
-    //vector<Rule> mergedTable(bigArray[j]); // In order to avoid the merge_rules function
 
+    // Merge the rules in the same group
     vector<Rule> mergedTable = merge_rules(bigArray[j]);
 
     vector<int> delta_need = generate_delta(mergedTable);
@@ -691,6 +724,19 @@ int main(int argc, char* argv[])
     delta_vector.push_back(delta_need);
     //vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
     vector<Rule> newnewTable = rules_rearrange(mergedTable, delta_need);
+    // ===========================
+    // Get the new rules table after applying rearrange vector
+    // Need to check the maximal value of the get_new_num
+    int check_max = 0;
+    for (int q = 0; q < newnewTable.size(); q++) {
+      int check = tries[j].get_new_num( newnewTable.at(q) );
+      if (check > check_max) {
+        check_max = check;
+      }
+    }
+    cout << "Group index: " << j << ", " << "max number of wildcard: " << check_max << endl;
+    // =============================
+    // Get the maximal value of wildcard
 
 
     /*
