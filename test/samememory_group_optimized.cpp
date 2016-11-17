@@ -551,6 +551,13 @@ int main(int argc, char* argv[])
   }
   file1.close();
   cout << "Number of keys: " << keyTable.size() << endl;
+  // Genearte the different size of key nums
+  /*
+  vector<uint64_t> keyTable;
+  for (int i = 0; i < 17642000; i++) {
+    keyTable.push_back(keyTable1[i]);
+  }
+  */
 
   /*=============================================
    * We have the sorted rules
@@ -575,47 +582,68 @@ int main(int argc, char* argv[])
 
   // ==========================
   // Construct the new groupVector
+  if (pingRulesTable.size() % group_num == 0) {
+    for ( int i = 0; i < group_num; i++ ) {
+      groupVector.push_back( (pingRulesTable.size() / group_num - 1) +
+          (pingRulesTable.size() / group_num) * i );
+    }
+  }
+  else {
+    for (int j = 0; j < group_num - 1; j++) {
+      groupVector.push_back( (pingRulesTable.size() / group_num - 1) +
+          (pingRulesTable.size() / group_num) * j );
+    }
+    groupVector.push_back( pingRulesTable.size() - 1 );
+  }
 
+
+ /*
+  uint32_t list_count = 0;
   // Get the groupvector, the group information
   for ( int i = 0; i < pingRulesTable.size(); i++ ) {
-    //if (i < (pingRulesTable.size()-1)) {
+    if (i < (pingRulesTable.size()-1)) {
       // not the last rule in the table
       newList.push_back(pingRulesTable[i]);
       vector<int> new_generated_delta = generate_delta(newList);
       // Create the rearranged rule set
       vector<Rule> new_table_list = rules_rearrange(
             newList, new_generated_delta );
-      Trie trie1;
       for ( int k = 0; k < new_table_list.size(); k++ ) {
-        if ( is_prefix(new_table_list.at(k)) ) {
-          trie1.insert_prefix_rule_priority(new_table_list.at(k));
-
+        Trie trie1; // for caculating the trie1.new_num
+        // for guarantee avoding the bad memory alloc
+        if (trie1.get_new_num( new_table_list.at (k))  < threshold) {
+          continue;
         }
-        else {
-          // becasue we control the number of expanding wildcard
-          // so don't need to delete rules manually
-          trie1.expand_rule(new_table_list.at(k));
-
+        else if (new_table_list.size() == 1) {
+          groupVector.push_back(list_count);
+          list_count += 1;
+          newList.clear();
+          break;
+        }
+        else if ((new_table_list.size() > 1)) {
+          if (k == 0) {
+            groupVector.push_back(list_count);
+            i = list_count;
+            list_count += 1;
+            newList.clear();
+            break;
+          }
+          else {
+            groupVector.push_back(i-1);
+            // clear the newList vector, becasue this is a seperated group
+            list_count += k;
+            newList.clear();
+            i = i -1;
+            break;
+          }
         }
       }
-      // ===========================
-      // Trying to build the first group data structure
-      // Depending on the number of total trie node of a group
-      // Calculate the memory cost constraint
-      // Here, the constraint = 100,000, which can be tune manully
-      cout << "Rule index: " << i << ", " << "test====number of trie node: " << trie1.node_count << endl;
-      if ( trie1.node_count < (10000 / group_num) ) {
-
-        continue;
-      }
-      else {
-        groupVector.push_back(i-1);
-        //trie1.delete_trie();
-        newList.clear(); // Guarantee it just calculate each group
-
-      }
+    }
+    else {
+      groupVector.push_back(i);
+    }
   }
-
+  */
 
   cout << "Num of groups is:" << " " << groupVector.size() << endl;
 
