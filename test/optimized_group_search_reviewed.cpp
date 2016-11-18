@@ -467,7 +467,8 @@ uint64_t keys_rearrange(uint64_t key, vector<int> delta_array)
  * for each group, we will choose the threshold value depends on the memory cost constraint
 */
 
-static int group_num; // Set the constant group number, in order to get the number of groups we want
+static int memory_c_each_g; // Set the constant memory constraint in each group,
+//which means we will divide group based on the memory cost
 //static int threshold; // Set the wildcard num as a variable
 //static int memory_constraint = 1000000 / group_num; // Set the memory cost constraint
 // Thus, if we know the number of group, we will know the memory constraint for each group
@@ -495,7 +496,7 @@ int main(int argc, char* argv[])
   // threshold is no longer a constant in the optimized grouping algorithm
   //threshold = stoull(argv[4]);
 
-  group_num = stoull(argv[4]); // The value is an argument through the input
+  memory_c_each_g = stoull(argv[4]); // The value is an argument through the input
   //cout << "Group number is: " << group_num << endl;
   ifstream file (argv[1]);
   // Read the rules from txt file
@@ -578,7 +579,7 @@ int main(int argc, char* argv[])
 
   // Get the groupvector, the group information
   for ( int i = 0; i < pingRulesTable.size(); i++ ) {
-    //if (i < (pingRulesTable.size()-1)) {
+    if (i < (pingRulesTable.size()-1)) {
       // not the last rule in the table
       newList.push_back(pingRulesTable[i]);
       vector<int> new_generated_delta = generate_delta(newList);
@@ -602,18 +603,22 @@ int main(int argc, char* argv[])
       // Trying to build the first group data structure
       // Depending on the number of total trie node of a group
       // Calculate the memory cost constraint
-      // Here, the constraint = 100,000, which can be tune manully
-      cout << "Rule index: " << i << ", " << "test====number of trie node: " << trie1.node_count << endl;
-      if ( trie1.node_count < (10000 / group_num) ) {
-
+      // Here, the constraint = 10,000, which can be tune manully
+      // memory_c_each_g
+      // (10000 / group_num)
+      //cout << "Rule index: " << i << ", " << "test====number of trie node: " << trie1.node_count << endl;
+      if ( trie1.node_count < memory_c_each_g ) {
         continue;
       }
       else {
         groupVector.push_back(i-1);
         //trie1.delete_trie();
         newList.clear(); // Guarantee it just calculate each group
-
       }
+    }
+    else {
+      groupVector.push_back(i);
+    }
   }
 
 
