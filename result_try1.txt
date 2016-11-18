@@ -1,147 +1,6 @@
 Sorted total rule size = 553
 Number of keys: 17642
-Num of groups is: 5
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 11
-Group index: 4, max number of wildcard: 0
-Total rules rearrange configure time is:564 ms 
-Total rules insertion configure time is:14744 ms 
-Total keys rearrange configure time is:123742 ms 
-Total keys search time is:368 ms 
-Total expanded count is: 10732
-Expand rule num is: 52
-Insert rule num is: 501
-Total insert rule num is: 11150
-Total insert trie_node count is: 174667
-Checksum: 499554
-ActionSum: 100895
-Total matches: 3751
-==================================================
-Sorted total rule size = 553
-Number of keys: 17642
-Num of groups is: 6
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 11
-Group index: 5, max number of wildcard: 0
-Total rules rearrange configure time is:524 ms 
-Total rules insertion configure time is:15783 ms 
-Total keys rearrange configure time is:177605 ms 
-Total keys search time is:330 ms 
-Total expanded count is: 6464
-Expand rule num is: 13
-Insert rule num is: 540
-Total insert rule num is: 6999
-Total insert trie_node count is: 206860
-Checksum: 499554
-ActionSum: 100895
-Total matches: 3751
-==================================================
-Sorted total rule size = 553
-Number of keys: 17642
-Num of groups is: 7
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 6
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Total rules rearrange configure time is:514 ms 
-Total rules insertion configure time is:1985 ms 
-Total keys rearrange configure time is:254718 ms 
-Total keys search time is:135 ms 
-Total expanded count is: 478
-Expand rule num is: 24
-Insert rule num is: 529
-Total insert rule num is: 996
-Total insert trie_node count is: 24962
-Checksum: 499554
-ActionSum: 100895
-Total matches: 3751
-==================================================
-Sorted total rule size = 553
-Number of keys: 17642
-Num of groups is: 8
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 14
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 0
-Total rules rearrange configure time is:543 ms 
-Total rules insertion configure time is:33794 ms 
-Total keys rearrange configure time is:341497 ms 
-Total keys search time is:421 ms 
-Total expanded count is: 48800
-Expand rule num is: 51
-Insert rule num is: 502
-Total insert rule num is: 48988
-Total insert trie_node count is: 288771
-Checksum: 499554
-ActionSum: 100895
-Total matches: 3751
-==================================================
-Sorted total rule size = 553
-Number of keys: 17642
-Num of groups is: 9
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 11
-Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 0
-Total rules rearrange configure time is:531 ms 
-Total rules insertion configure time is:12403 ms 
-Total keys rearrange configure time is:426935 ms 
-Total keys search time is:419 ms 
-Total expanded count is: 7896
-Expand rule num is: 30
-Insert rule num is: 523
-Total insert rule num is: 8410
-Total insert trie_node count is: 147946
-Checksum: 499554
-ActionSum: 100895
-Total matches: 3751
-==================================================
-Sorted total rule size = 553
-Number of keys: 17642
-Num of groups is: 10
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 2
-Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 0
-Group index: 9, max number of wildcard: 0
-Total rules rearrange configure time is:526 ms 
-Total rules insertion configure time is:1709 ms 
-Total keys rearrange configure time is:528306 ms 
-Total keys search time is:79 ms 
-Total expanded count is: 20
-Expand rule num is: 6
-Insert rule num is: 547
-Total insert rule num is: 561
-Total insert trie_node count is: 22327
-Checksum: 499554
-ActionSum: 100895
-Total matches: 3751
-==================================================
-Sorted total rule size = 553
-Number of keys: 17642
-Num of groups is: 11
+Num of groups is: 46
 Group index: 0, max number of wildcard: 0
 Group index: 1, max number of wildcard: 0
 Group index: 2, max number of wildcard: 0
@@ -149,19 +8,205 @@ Group index: 3, max number of wildcard: 0
 Group index: 4, max number of wildcard: 0
 Group index: 5, max number of wildcard: 0
 Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 7
+Group index: 7, max number of wildcard: 0
 Group index: 8, max number of wildcard: 0
 Group index: 9, max number of wildcard: 0
 Group index: 10, max number of wildcard: 0
-Total rules rearrange configure time is:517 ms 
-Total rules insertion configure time is:2474 ms 
-Total keys rearrange configure time is:633241 ms 
-Total keys search time is:119 ms 
-Total expanded count is: 1244
-Expand rule num is: 37
-Insert rule num is: 516
-Total insert rule num is: 1741
-Total insert trie_node count is: 28591
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 0
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 0
+Group index: 32, max number of wildcard: 0
+Group index: 33, max number of wildcard: 0
+Group index: 34, max number of wildcard: 0
+Group index: 35, max number of wildcard: 0
+Group index: 36, max number of wildcard: 0
+Group index: 37, max number of wildcard: 0
+Group index: 38, max number of wildcard: 0
+Group index: 39, max number of wildcard: 0
+Group index: 40, max number of wildcard: 0
+Group index: 41, max number of wildcard: 0
+Group index: 42, max number of wildcard: 0
+Group index: 43, max number of wildcard: 0
+Group index: 44, max number of wildcard: 0
+Group index: 45, max number of wildcard: 0
+Total rules rearrange configure time is:824 ms 
+Total rules insertion configure time is:1881 ms 
+Total keys rearrange configure time is:10754825 ms 
+Total keys search time is:177 ms 
+Total expanded count is: 0
+Expand rule num is: 0
+Insert rule num is: 553
+Total insert rule num is: 548
+Total insert trie_node count is: 23457
+Checksum: 499554
+ActionSum: 100895
+Total matches: 3751
+==================================================
+Sorted total rule size = 553
+Number of keys: 17642
+Num of groups is: 29
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 3
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Total rules rearrange configure time is:659 ms 
+Total rules insertion configure time is:1829 ms 
+Total keys rearrange configure time is:4414432 ms 
+Total keys search time is:174 ms 
+Total expanded count is: 40
+Expand rule num is: 9
+Insert rule num is: 544
+Total insert rule num is: 579
+Total insert trie_node count is: 23197
+Checksum: 499554
+ActionSum: 100895
+Total matches: 3751
+==================================================
+Sorted total rule size = 553
+Number of keys: 17642
+Num of groups is: 23
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 3
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Total rules rearrange configure time is:626 ms 
+Total rules insertion configure time is:1688 ms 
+Total keys rearrange configure time is:2815153 ms 
+Total keys search time is:108 ms 
+Total expanded count is: 48
+Expand rule num is: 10
+Insert rule num is: 543
+Total insert rule num is: 586
+Total insert trie_node count is: 22961
+Checksum: 499554
+ActionSum: 100895
+Total matches: 3751
+==================================================
+Sorted total rule size = 553
+Number of keys: 17642
+Num of groups is: 19
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 3
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Total rules rearrange configure time is:593 ms 
+Total rules insertion configure time is:1791 ms 
+Total keys rearrange configure time is:1930227 ms 
+Total keys search time is:124 ms 
+Total expanded count is: 48
+Expand rule num is: 10
+Insert rule num is: 543
+Total insert rule num is: 586
+Total insert trie_node count is: 22753
+Checksum: 499554
+ActionSum: 100895
+Total matches: 3751
+==================================================
+Sorted total rule size = 553
+Number of keys: 17642
+Num of groups is: 16
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 4
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Total rules rearrange configure time is:547 ms 
+Total rules insertion configure time is:1789 ms 
+Total keys rearrange configure time is:1307030 ms 
+Total keys search time is:74 ms 
+Total expanded count is: 64
+Expand rule num is: 11
+Insert rule num is: 542
+Total insert rule num is: 601
+Total insert trie_node count is: 22863
 Checksum: 499554
 ActionSum: 100895
 Total matches: 3751
@@ -169,63 +214,6 @@ Total matches: 3751
 Sorted total rule size = 553
 Number of keys: 17642
 Num of groups is: 12
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 11
-Group index: 9, max number of wildcard: 0
-Group index: 10, max number of wildcard: 0
-Group index: 11, max number of wildcard: 0
-Total rules rearrange configure time is:532 ms 
-Total rules insertion configure time is:9846 ms 
-Total keys rearrange configure time is:754734 ms 
-Total keys search time is:257 ms 
-Total expanded count is: 9088
-Expand rule num is: 26
-Insert rule num is: 527
-Total insert rule num is: 9594
-Total insert trie_node count is: 107590
-Checksum: 499554
-ActionSum: 100895
-Total matches: 3751
-==================================================
-Sorted total rule size = 553
-Number of keys: 17642
-Num of groups is: 13
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 0
-Group index: 9, max number of wildcard: 11
-Group index: 10, max number of wildcard: 0
-Group index: 11, max number of wildcard: 0
-Group index: 12, max number of wildcard: 0
-Total rules rearrange configure time is:540 ms 
-Total rules insertion configure time is:10062 ms 
-Total keys rearrange configure time is:893898 ms 
-Total keys search time is:309 ms 
-Total expanded count is: 4610
-Expand rule num is: 4
-Insert rule num is: 549
-Total insert rule num is: 5155
-Total insert trie_node count is: 128237
-Checksum: 499554
-ActionSum: 100895
-Total matches: 3751
-==================================================
-Sorted total rule size = 553
-Number of keys: 17642
-Num of groups is: 14
 Group index: 0, max number of wildcard: 0
 Group index: 1, max number of wildcard: 0
 Group index: 2, max number of wildcard: 0
@@ -238,308 +226,22 @@ Group index: 8, max number of wildcard: 0
 Group index: 9, max number of wildcard: 5
 Group index: 10, max number of wildcard: 0
 Group index: 11, max number of wildcard: 0
-Group index: 12, max number of wildcard: 0
-Group index: 13, max number of wildcard: 0
-Total rules rearrange configure time is:551 ms 
-Total rules insertion configure time is:1787 ms 
-Total keys rearrange configure time is:1032564 ms 
-Total keys search time is:139 ms 
+Total rules rearrange configure time is:547 ms 
+Total rules insertion configure time is:1816 ms 
+Total keys rearrange configure time is:772465 ms 
+Total keys search time is:78 ms 
 Total expanded count is: 138
 Expand rule num is: 16
 Insert rule num is: 537
-Total insert rule num is: 669
-Total insert trie_node count is: 23480
-Checksum: 499554
-ActionSum: 100895
-Total matches: 3751
-==================================================
-Sorted total rule size = 553
-Number of keys: 17642
-Num of groups is: 15
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 0
-Group index: 9, max number of wildcard: 0
-Group index: 10, max number of wildcard: 6
-Group index: 11, max number of wildcard: 0
-Group index: 12, max number of wildcard: 0
-Group index: 13, max number of wildcard: 0
-Group index: 14, max number of wildcard: 0
-Total rules rearrange configure time is:579 ms 
-Total rules insertion configure time is:2128 ms 
-Total keys rearrange configure time is:1193460 ms 
-Total keys search time is:172 ms 
-Total expanded count is: 648
-Expand rule num is: 29
-Insert rule num is: 524
-Total insert rule num is: 1161
-Total insert trie_node count is: 26567
-Checksum: 499554
-ActionSum: 100895
-Total matches: 3751
-==================================================
-Sorted total rule size = 553
-Number of keys: 17642
-Num of groups is: 16
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 0
-Group index: 9, max number of wildcard: 0
-Group index: 10, max number of wildcard: 0
-Group index: 11, max number of wildcard: 11
-Group index: 12, max number of wildcard: 0
-Group index: 13, max number of wildcard: 0
-Group index: 14, max number of wildcard: 0
-Group index: 15, max number of wildcard: 0
-Total rules rearrange configure time is:588 ms 
-Total rules insertion configure time is:7285 ms 
-Total keys rearrange configure time is:1325623 ms 
-Total keys search time is:250 ms 
-Total expanded count is: 5952
-Expand rule num is: 14
-Insert rule num is: 539
-Total insert rule num is: 6486
-Total insert trie_node count is: 81964
-Checksum: 499554
-ActionSum: 100895
-Total matches: 3751
-==================================================
-Sorted total rule size = 553
-Number of keys: 17642
-Num of groups is: 2
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 11
-Total rules rearrange configure time is:651 ms 
-Total rules insertion configure time is:17562 ms 
-Total keys rearrange configure time is:17957 ms 
-Total keys search time is:348 ms 
-Total expanded count is: 6752
-Expand rule num is: 26
-Insert rule num is: 527
-Total insert rule num is: 7229
-Total insert trie_node count is: 229529
-Checksum: 499554
-ActionSum: 100895
-Total matches: 3751
-==================================================
-Sorted total rule size = 553
-Number of keys: 17642
-Num of groups is: 3
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 11
-Total rules rearrange configure time is:586 ms 
-Total rules insertion configure time is:17031 ms 
-Total keys rearrange configure time is:35858 ms 
-Total keys search time is:339 ms 
-Total expanded count is: 6464
-Expand rule num is: 13
-Insert rule num is: 540
-Total insert rule num is: 6999
-Total insert trie_node count is: 223381
+Total insert rule num is: 670
+Total insert trie_node count is: 22987
 Checksum: 499554
 ActionSum: 100895
 Total matches: 3751
 ==================================================
 Sorted total rule size = 1683
 Number of keys: 17642
-Num of groups is: 5
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 9
-Group index: 4, max number of wildcard: 1
-Total rules rearrange configure time is:2707 ms 
-Total rules insertion configure time is:34617 ms 
-Total keys rearrange configure time is:130571 ms 
-Total keys search time is:576 ms 
-Total expanded count is: 16054
-Expand rule num is: 290
-Insert rule num is: 1391
-Total insert rule num is: 17317
-Total insert trie_node count is: 432429
-Checksum: 4080789
-ActionSum: 122459
-Total matches: 4919
-==================================================
-Sorted total rule size = 1683
-Number of keys: 17642
-Num of groups is: 7
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 2
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 1
-Total rules rearrange configure time is:1980 ms 
-Total rules insertion configure time is:4423 ms 
-Total keys rearrange configure time is:259210 ms 
-Total keys search time is:233 ms 
-Total expanded count is: 24
-Expand rule num is: 11
-Insert rule num is: 1670
-Total insert rule num is: 1684
-Total insert trie_node count is: 53979
-Checksum: 4080789
-ActionSum: 122459
-Total matches: 4919
-==================================================
-Sorted total rule size = 1683
-Number of keys: 17642
-Num of groups is: 8
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 5
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 1
-Total rules rearrange configure time is:2010 ms 
-Total rules insertion configure time is:6727 ms 
-Total keys rearrange configure time is:342962 ms 
-Total keys search time is:211 ms 
-Total expanded count is: 1244
-Expand rule num is: 123
-Insert rule num is: 1558
-Total insert rule num is: 2783
-Total insert trie_node count is: 83593
-Checksum: 4080789
-ActionSum: 122459
-Total matches: 4919
-==================================================
-Sorted total rule size = 1683
-Number of keys: 17642
-Num of groups is: 11
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 15
-Group index: 7, max number of wildcard: 4
-Group index: 8, max number of wildcard: 0
-Group index: 9, max number of wildcard: 0
-Group index: 10, max number of wildcard: 1
-Total rules rearrange configure time is:604536 ms 
-Total rules insertion configure time is:538898 ms 
-Total keys rearrange configure time is:666894 ms 
-Total keys search time is:878 ms 
-Total expanded count is: 1152648
-Expand rule num is: 158
-Insert rule num is: 1523
-Total insert rule num is: 1154128
-Total insert trie_node count is: 3467895
-Checksum: 4080789
-ActionSum: 122459
-Total matches: 4919
-==================================================
-Sorted total rule size = 1683
-Number of keys: 17642
-Num of groups is: 12
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 5
-Group index: 9, max number of wildcard: 0
-Group index: 10, max number of wildcard: 0
-Group index: 11, max number of wildcard: 1
-Total rules rearrange configure time is:1691 ms 
-Total rules insertion configure time is:7010 ms 
-Total keys rearrange configure time is:777894 ms 
-Total keys search time is:476 ms 
-Total expanded count is: 1244
-Expand rule num is: 123
-Insert rule num is: 1558
-Total insert rule num is: 2788
-Total insert trie_node count is: 84283
-Checksum: 4080789
-ActionSum: 122459
-Total matches: 4919
-==================================================
-Sorted total rule size = 1683
-Number of keys: 17642
-Num of groups is: 14
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 0
-Group index: 9, max number of wildcard: 2
-Group index: 10, max number of wildcard: 0
-Group index: 11, max number of wildcard: 0
-Group index: 12, max number of wildcard: 0
-Group index: 13, max number of wildcard: 1
-Total rules rearrange configure time is:1592 ms 
-Total rules insertion configure time is:4451 ms 
-Total keys rearrange configure time is:1038900 ms 
-Total keys search time is:151 ms 
-Total expanded count is: 24
-Expand rule num is: 11
-Insert rule num is: 1670
-Total insert rule num is: 1684
-Total insert trie_node count is: 55352
-Checksum: 4080789
-ActionSum: 122459
-Total matches: 4919
-==================================================
-Sorted total rule size = 1683
-Number of keys: 17642
-Num of groups is: 15
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 0
-Group index: 9, max number of wildcard: 0
-Group index: 10, max number of wildcard: 4
-Group index: 11, max number of wildcard: 0
-Group index: 12, max number of wildcard: 0
-Group index: 13, max number of wildcard: 0
-Group index: 14, max number of wildcard: 1
-Total rules rearrange configure time is:1554 ms 
-Total rules insertion configure time is:5236 ms 
-Total keys rearrange configure time is:1220998 ms 
-Total keys search time is:505 ms 
-Total expanded count is: 356
-Expand rule num is: 43
-Insert rule num is: 1638
-Total insert rule num is: 1983
-Total insert trie_node count is: 64260
-Checksum: 4080789
-ActionSum: 122459
-Total matches: 4919
-==================================================
-Sorted total rule size = 1683
-Number of keys: 17642
-Num of groups is: 18
+Num of groups is: 121
 Group index: 0, max number of wildcard: 0
 Group index: 1, max number of wildcard: 0
 Group index: 2, max number of wildcard: 0
@@ -552,110 +254,1142 @@ Group index: 8, max number of wildcard: 0
 Group index: 9, max number of wildcard: 0
 Group index: 10, max number of wildcard: 0
 Group index: 11, max number of wildcard: 0
-Group index: 12, max number of wildcard: 2
+Group index: 12, max number of wildcard: 0
 Group index: 13, max number of wildcard: 0
 Group index: 14, max number of wildcard: 0
 Group index: 15, max number of wildcard: 0
 Group index: 16, max number of wildcard: 0
-Group index: 17, max number of wildcard: 1
-Total rules rearrange configure time is:1502 ms 
-Total rules insertion configure time is:4603 ms 
-Total keys rearrange configure time is:1759398 ms 
-Total keys search time is:286 ms 
-Total expanded count is: 60
-Expand rule num is: 20
-Insert rule num is: 1661
-Total insert rule num is: 1710
-Total insert trie_node count is: 57235
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 0
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 0
+Group index: 32, max number of wildcard: 0
+Group index: 33, max number of wildcard: 0
+Group index: 34, max number of wildcard: 0
+Group index: 35, max number of wildcard: 0
+Group index: 36, max number of wildcard: 0
+Group index: 37, max number of wildcard: 0
+Group index: 38, max number of wildcard: 0
+Group index: 39, max number of wildcard: 0
+Group index: 40, max number of wildcard: 0
+Group index: 41, max number of wildcard: 0
+Group index: 42, max number of wildcard: 0
+Group index: 43, max number of wildcard: 0
+Group index: 44, max number of wildcard: 0
+Group index: 45, max number of wildcard: 0
+Group index: 46, max number of wildcard: 0
+Group index: 47, max number of wildcard: 0
+Group index: 48, max number of wildcard: 0
+Group index: 49, max number of wildcard: 0
+Group index: 50, max number of wildcard: 0
+Group index: 51, max number of wildcard: 0
+Group index: 52, max number of wildcard: 0
+Group index: 53, max number of wildcard: 0
+Group index: 54, max number of wildcard: 0
+Group index: 55, max number of wildcard: 0
+Group index: 56, max number of wildcard: 0
+Group index: 57, max number of wildcard: 0
+Group index: 58, max number of wildcard: 0
+Group index: 59, max number of wildcard: 0
+Group index: 60, max number of wildcard: 0
+Group index: 61, max number of wildcard: 0
+Group index: 62, max number of wildcard: 0
+Group index: 63, max number of wildcard: 0
+Group index: 64, max number of wildcard: 0
+Group index: 65, max number of wildcard: 0
+Group index: 66, max number of wildcard: 0
+Group index: 67, max number of wildcard: 0
+Group index: 68, max number of wildcard: 0
+Group index: 69, max number of wildcard: 0
+Group index: 70, max number of wildcard: 0
+Group index: 71, max number of wildcard: 0
+Group index: 72, max number of wildcard: 0
+Group index: 73, max number of wildcard: 0
+Group index: 74, max number of wildcard: 0
+Group index: 75, max number of wildcard: 0
+Group index: 76, max number of wildcard: 0
+Group index: 77, max number of wildcard: 0
+Group index: 78, max number of wildcard: 0
+Group index: 79, max number of wildcard: 0
+Group index: 80, max number of wildcard: 0
+Group index: 81, max number of wildcard: 0
+Group index: 82, max number of wildcard: 0
+Group index: 83, max number of wildcard: 0
+Group index: 84, max number of wildcard: 0
+Group index: 85, max number of wildcard: 0
+Group index: 86, max number of wildcard: 0
+Group index: 87, max number of wildcard: 0
+Group index: 88, max number of wildcard: 0
+Group index: 89, max number of wildcard: 0
+Group index: 90, max number of wildcard: 0
+Group index: 91, max number of wildcard: 1
+Group index: 92, max number of wildcard: 0
+Group index: 93, max number of wildcard: 0
+Group index: 94, max number of wildcard: 0
+Group index: 95, max number of wildcard: 0
+Group index: 96, max number of wildcard: 0
+Group index: 97, max number of wildcard: 0
+Group index: 98, max number of wildcard: 0
+Group index: 99, max number of wildcard: 0
+Group index: 100, max number of wildcard: 0
+Group index: 101, max number of wildcard: 0
+Group index: 102, max number of wildcard: 0
+Group index: 103, max number of wildcard: 0
+Group index: 104, max number of wildcard: 0
+Group index: 105, max number of wildcard: 0
+Group index: 106, max number of wildcard: 0
+Group index: 107, max number of wildcard: 0
+Group index: 108, max number of wildcard: 0
+Group index: 109, max number of wildcard: 0
+Group index: 110, max number of wildcard: 0
+Group index: 111, max number of wildcard: 0
+Group index: 112, max number of wildcard: 0
+Group index: 113, max number of wildcard: 0
+Group index: 114, max number of wildcard: 0
+Group index: 115, max number of wildcard: 0
+Group index: 116, max number of wildcard: 0
+Group index: 117, max number of wildcard: 0
+Group index: 118, max number of wildcard: 0
+Group index: 119, max number of wildcard: 0
+Group index: 120, max number of wildcard: 0
+Total rules rearrange configure time is:2268 ms 
+Total rules insertion configure time is:4907 ms 
+Total keys rearrange configure time is:75872473 ms 
+Total keys search time is:1296 ms 
+Total expanded count is: 2
+Expand rule num is: 1
+Insert rule num is: 1680
+Total insert rule num is: 1672
+Total insert trie_node count is: 62423
 Checksum: 4080789
 ActionSum: 122459
 Total matches: 4919
 ==================================================
-Sorted total rule size = 1911
+Sorted total rule size = 1683
 Number of keys: 17642
-Num of groups is: 5
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 1
-Group index: 4, max number of wildcard: 11
-Total rules rearrange configure time is:3753 ms 
-Total rules insertion configure time is:58064 ms 
-Total keys rearrange configure time is:129177 ms 
-Total keys search time is:684 ms 
-Total expanded count is: 58676
-Expand rule num is: 147
-Insert rule num is: 1759
-Total insert rule num is: 59294
-Total insert trie_node count is: 596113
-Checksum: 4325044
-ActionSum: 127629
-Total matches: 5337
-==================================================
-Sorted total rule size = 1911
-Number of keys: 17642
-Num of groups is: 6
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 1
-Group index: 5, max number of wildcard: 11
-Total rules rearrange configure time is:3118 ms 
-Total rules insertion configure time is:48937 ms 
-Total keys rearrange configure time is:173420 ms 
-Total keys search time is:568 ms 
-Total expanded count is: 37056
-Expand rule num is: 43
-Insert rule num is: 1863
-Total insert rule num is: 38885
-Total insert trie_node count is: 547846
-Checksum: 4325044
-ActionSum: 127629
-Total matches: 5337
-==================================================
-Sorted total rule size = 1911
-Number of keys: 17642
-Num of groups is: 7
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 2
-Group index: 6, max number of wildcard: 0
-Total rules rearrange configure time is:2840 ms 
-Total rules insertion configure time is:5345 ms 
-Total keys rearrange configure time is:258423 ms 
-Total keys search time is:353 ms 
-Total expanded count is: 152
-Expand rule num is: 50
-Insert rule num is: 1856
-Total insert rule num is: 1974
-Total insert trie_node count is: 70376
-Checksum: 4325044
-ActionSum: 127629
-Total matches: 5337
-==================================================
-Sorted total rule size = 1911
-Number of keys: 17642
-Num of groups is: 8
+Num of groups is: 75
 Group index: 0, max number of wildcard: 0
 Group index: 1, max number of wildcard: 0
 Group index: 2, max number of wildcard: 0
 Group index: 3, max number of wildcard: 0
 Group index: 4, max number of wildcard: 0
 Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 4
+Group index: 6, max number of wildcard: 0
 Group index: 7, max number of wildcard: 0
-Total rules rearrange configure time is:2606 ms 
-Total rules insertion configure time is:5700 ms 
-Total keys rearrange configure time is:336511 ms 
-Total keys search time is:127 ms 
-Total expanded count is: 748
-Expand rule num is: 103
-Insert rule num is: 1803
-Total insert rule num is: 2508
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 0
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 0
+Group index: 32, max number of wildcard: 0
+Group index: 33, max number of wildcard: 0
+Group index: 34, max number of wildcard: 0
+Group index: 35, max number of wildcard: 0
+Group index: 36, max number of wildcard: 0
+Group index: 37, max number of wildcard: 0
+Group index: 38, max number of wildcard: 0
+Group index: 39, max number of wildcard: 0
+Group index: 40, max number of wildcard: 0
+Group index: 41, max number of wildcard: 0
+Group index: 42, max number of wildcard: 0
+Group index: 43, max number of wildcard: 0
+Group index: 44, max number of wildcard: 0
+Group index: 45, max number of wildcard: 0
+Group index: 46, max number of wildcard: 0
+Group index: 47, max number of wildcard: 0
+Group index: 48, max number of wildcard: 0
+Group index: 49, max number of wildcard: 0
+Group index: 50, max number of wildcard: 0
+Group index: 51, max number of wildcard: 0
+Group index: 52, max number of wildcard: 0
+Group index: 53, max number of wildcard: 0
+Group index: 54, max number of wildcard: 0
+Group index: 55, max number of wildcard: 0
+Group index: 56, max number of wildcard: 1
+Group index: 57, max number of wildcard: 0
+Group index: 58, max number of wildcard: 0
+Group index: 59, max number of wildcard: 0
+Group index: 60, max number of wildcard: 0
+Group index: 61, max number of wildcard: 0
+Group index: 62, max number of wildcard: 0
+Group index: 63, max number of wildcard: 0
+Group index: 64, max number of wildcard: 0
+Group index: 65, max number of wildcard: 0
+Group index: 66, max number of wildcard: 0
+Group index: 67, max number of wildcard: 0
+Group index: 68, max number of wildcard: 0
+Group index: 69, max number of wildcard: 0
+Group index: 70, max number of wildcard: 0
+Group index: 71, max number of wildcard: 0
+Group index: 72, max number of wildcard: 0
+Group index: 73, max number of wildcard: 0
+Group index: 74, max number of wildcard: 0
+Total rules rearrange configure time is:1898 ms 
+Total rules insertion configure time is:5121 ms 
+Total keys rearrange configure time is:29822156 ms 
+Total keys search time is:1240 ms 
+Total expanded count is: 4
+Expand rule num is: 2
+Insert rule num is: 1679
+Total insert rule num is: 1673
+Total insert trie_node count is: 60764
+Checksum: 4080789
+ActionSum: 122459
+Total matches: 4919
+==================================================
+Sorted total rule size = 1683
+Number of keys: 17642
+Num of groups is: 59
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 0
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 0
+Group index: 32, max number of wildcard: 0
+Group index: 33, max number of wildcard: 0
+Group index: 34, max number of wildcard: 0
+Group index: 35, max number of wildcard: 0
+Group index: 36, max number of wildcard: 0
+Group index: 37, max number of wildcard: 0
+Group index: 38, max number of wildcard: 0
+Group index: 39, max number of wildcard: 0
+Group index: 40, max number of wildcard: 0
+Group index: 41, max number of wildcard: 0
+Group index: 42, max number of wildcard: 0
+Group index: 43, max number of wildcard: 0
+Group index: 44, max number of wildcard: 1
+Group index: 45, max number of wildcard: 0
+Group index: 46, max number of wildcard: 0
+Group index: 47, max number of wildcard: 0
+Group index: 48, max number of wildcard: 0
+Group index: 49, max number of wildcard: 0
+Group index: 50, max number of wildcard: 0
+Group index: 51, max number of wildcard: 0
+Group index: 52, max number of wildcard: 0
+Group index: 53, max number of wildcard: 0
+Group index: 54, max number of wildcard: 0
+Group index: 55, max number of wildcard: 0
+Group index: 56, max number of wildcard: 0
+Group index: 57, max number of wildcard: 1
+Group index: 58, max number of wildcard: 0
+Total rules rearrange configure time is:1790 ms 
+Total rules insertion configure time is:5040 ms 
+Total keys rearrange configure time is:18633814 ms 
+Total keys search time is:613 ms 
+Total expanded count is: 8
+Expand rule num is: 4
+Insert rule num is: 1677
+Total insert rule num is: 1675
+Total insert trie_node count is: 60003
+Checksum: 4080789
+ActionSum: 122459
+Total matches: 4919
+==================================================
+Sorted total rule size = 1683
+Number of keys: 17642
+Num of groups is: 49
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 0
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 0
+Group index: 32, max number of wildcard: 0
+Group index: 33, max number of wildcard: 0
+Group index: 34, max number of wildcard: 0
+Group index: 35, max number of wildcard: 0
+Group index: 36, max number of wildcard: 0
+Group index: 37, max number of wildcard: 2
+Group index: 38, max number of wildcard: 0
+Group index: 39, max number of wildcard: 0
+Group index: 40, max number of wildcard: 0
+Group index: 41, max number of wildcard: 0
+Group index: 42, max number of wildcard: 0
+Group index: 43, max number of wildcard: 0
+Group index: 44, max number of wildcard: 0
+Group index: 45, max number of wildcard: 0
+Group index: 46, max number of wildcard: 0
+Group index: 47, max number of wildcard: 1
+Group index: 48, max number of wildcard: 0
+Total rules rearrange configure time is:1658 ms 
+Total rules insertion configure time is:4924 ms 
+Total keys rearrange configure time is:12676557 ms 
+Total keys search time is:692 ms 
+Total expanded count is: 24
+Expand rule num is: 11
+Insert rule num is: 1670
+Total insert rule num is: 1684
+Total insert trie_node count is: 59362
+Checksum: 4080789
+ActionSum: 122459
+Total matches: 4919
+==================================================
+Sorted total rule size = 1683
+Number of keys: 17642
+Num of groups is: 39
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 1
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 0
+Group index: 32, max number of wildcard: 0
+Group index: 33, max number of wildcard: 0
+Group index: 34, max number of wildcard: 0
+Group index: 35, max number of wildcard: 0
+Group index: 36, max number of wildcard: 0
+Group index: 37, max number of wildcard: 1
+Group index: 38, max number of wildcard: 0
+Total rules rearrange configure time is:1626 ms 
+Total rules insertion configure time is:4868 ms 
+Total keys rearrange configure time is:8156681 ms 
+Total keys search time is:207 ms 
+Total expanded count is: 12
+Expand rule num is: 6
+Insert rule num is: 1675
+Total insert rule num is: 1677
+Total insert trie_node count is: 58377
+Checksum: 4080789
+ActionSum: 122459
+Total matches: 4919
+==================================================
+Sorted total rule size = 1683
+Number of keys: 17642
+Num of groups is: 29
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 1
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 1
+Group index: 28, max number of wildcard: 0
+Total rules rearrange configure time is:1561 ms 
+Total rules insertion configure time is:4673 ms 
+Total keys rearrange configure time is:4500249 ms 
+Total keys search time is:381 ms 
+Total expanded count is: 4
+Expand rule num is: 2
+Insert rule num is: 1679
+Total insert rule num is: 1673
+Total insert trie_node count is: 56614
+Checksum: 4080789
+ActionSum: 122459
+Total matches: 4919
+==================================================
+Sorted total rule size = 1683
+Number of keys: 17642
+Num of groups is: 23
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 12
+Group index: 17, max number of wildcard: 2
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 4
+Group index: 22, max number of wildcard: 1
+Total rules rearrange configure time is:1659 ms 
+Total rules insertion configure time is:252946 ms 
+Total keys rearrange configure time is:2847229 ms 
+Total keys search time is:772 ms 
+Total expanded count is: 173154
+Expand rule num is: 271
+Insert rule num is: 1410
+Total insert rule num is: 174545
+Total insert trie_node count is: 3160192
+Checksum: 4080789
+ActionSum: 122459
+Total matches: 4919
+==================================================
+Sorted total rule size = 1683
+Number of keys: 17642
+Num of groups is: 20
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 17
+Group index: 14, max number of wildcard: 2
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 7
+Group index: 18, max number of wildcard: 1
+Group index: 19, max number of wildcard: 0
+Total rules rearrange configure time is:1744 ms 
+Total rules insertion configure time is:4014907 ms 
+Total keys rearrange configure time is:2191161 ms 
+Total keys search time is:4312 ms 
+Total expanded count is: 3701418
+Expand rule num is: 270
+Insert rule num is: 1411
+Total insert rule num is: 3702686
+Total insert trie_node count is: 43772971
+Checksum: 4080789
+ActionSum: 122459
+Total matches: 4919
+==================================================
+Sorted total rule size = 1911
+Number of keys: 17642
+Num of groups is: 152
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 0
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 0
+Group index: 32, max number of wildcard: 0
+Group index: 33, max number of wildcard: 0
+Group index: 34, max number of wildcard: 0
+Group index: 35, max number of wildcard: 0
+Group index: 36, max number of wildcard: 0
+Group index: 37, max number of wildcard: 0
+Group index: 38, max number of wildcard: 0
+Group index: 39, max number of wildcard: 0
+Group index: 40, max number of wildcard: 0
+Group index: 41, max number of wildcard: 0
+Group index: 42, max number of wildcard: 0
+Group index: 43, max number of wildcard: 0
+Group index: 44, max number of wildcard: 0
+Group index: 45, max number of wildcard: 0
+Group index: 46, max number of wildcard: 0
+Group index: 47, max number of wildcard: 0
+Group index: 48, max number of wildcard: 0
+Group index: 49, max number of wildcard: 0
+Group index: 50, max number of wildcard: 0
+Group index: 51, max number of wildcard: 0
+Group index: 52, max number of wildcard: 0
+Group index: 53, max number of wildcard: 0
+Group index: 54, max number of wildcard: 0
+Group index: 55, max number of wildcard: 0
+Group index: 56, max number of wildcard: 0
+Group index: 57, max number of wildcard: 0
+Group index: 58, max number of wildcard: 0
+Group index: 59, max number of wildcard: 0
+Group index: 60, max number of wildcard: 0
+Group index: 61, max number of wildcard: 0
+Group index: 62, max number of wildcard: 0
+Group index: 63, max number of wildcard: 0
+Group index: 64, max number of wildcard: 0
+Group index: 65, max number of wildcard: 0
+Group index: 66, max number of wildcard: 0
+Group index: 67, max number of wildcard: 0
+Group index: 68, max number of wildcard: 0
+Group index: 69, max number of wildcard: 0
+Group index: 70, max number of wildcard: 0
+Group index: 71, max number of wildcard: 0
+Group index: 72, max number of wildcard: 0
+Group index: 73, max number of wildcard: 0
+Group index: 74, max number of wildcard: 0
+Group index: 75, max number of wildcard: 0
+Group index: 76, max number of wildcard: 0
+Group index: 77, max number of wildcard: 0
+Group index: 78, max number of wildcard: 0
+Group index: 79, max number of wildcard: 0
+Group index: 80, max number of wildcard: 0
+Group index: 81, max number of wildcard: 0
+Group index: 82, max number of wildcard: 0
+Group index: 83, max number of wildcard: 0
+Group index: 84, max number of wildcard: 0
+Group index: 85, max number of wildcard: 0
+Group index: 86, max number of wildcard: 0
+Group index: 87, max number of wildcard: 0
+Group index: 88, max number of wildcard: 0
+Group index: 89, max number of wildcard: 0
+Group index: 90, max number of wildcard: 0
+Group index: 91, max number of wildcard: 0
+Group index: 92, max number of wildcard: 0
+Group index: 93, max number of wildcard: 0
+Group index: 94, max number of wildcard: 0
+Group index: 95, max number of wildcard: 0
+Group index: 96, max number of wildcard: 0
+Group index: 97, max number of wildcard: 0
+Group index: 98, max number of wildcard: 0
+Group index: 99, max number of wildcard: 0
+Group index: 100, max number of wildcard: 0
+Group index: 101, max number of wildcard: 0
+Group index: 102, max number of wildcard: 0
+Group index: 103, max number of wildcard: 0
+Group index: 104, max number of wildcard: 0
+Group index: 105, max number of wildcard: 0
+Group index: 106, max number of wildcard: 0
+Group index: 107, max number of wildcard: 0
+Group index: 108, max number of wildcard: 0
+Group index: 109, max number of wildcard: 0
+Group index: 110, max number of wildcard: 0
+Group index: 111, max number of wildcard: 0
+Group index: 112, max number of wildcard: 0
+Group index: 113, max number of wildcard: 0
+Group index: 114, max number of wildcard: 0
+Group index: 115, max number of wildcard: 0
+Group index: 116, max number of wildcard: 0
+Group index: 117, max number of wildcard: 0
+Group index: 118, max number of wildcard: 0
+Group index: 119, max number of wildcard: 0
+Group index: 120, max number of wildcard: 0
+Group index: 121, max number of wildcard: 0
+Group index: 122, max number of wildcard: 0
+Group index: 123, max number of wildcard: 0
+Group index: 124, max number of wildcard: 0
+Group index: 125, max number of wildcard: 0
+Group index: 126, max number of wildcard: 0
+Group index: 127, max number of wildcard: 1
+Group index: 128, max number of wildcard: 0
+Group index: 129, max number of wildcard: 0
+Group index: 130, max number of wildcard: 0
+Group index: 131, max number of wildcard: 0
+Group index: 132, max number of wildcard: 0
+Group index: 133, max number of wildcard: 0
+Group index: 134, max number of wildcard: 0
+Group index: 135, max number of wildcard: 0
+Group index: 136, max number of wildcard: 0
+Group index: 137, max number of wildcard: 0
+Group index: 138, max number of wildcard: 0
+Group index: 139, max number of wildcard: 0
+Group index: 140, max number of wildcard: 0
+Group index: 141, max number of wildcard: 0
+Group index: 142, max number of wildcard: 0
+Group index: 143, max number of wildcard: 0
+Group index: 144, max number of wildcard: 0
+Group index: 145, max number of wildcard: 0
+Group index: 146, max number of wildcard: 0
+Group index: 147, max number of wildcard: 0
+Group index: 148, max number of wildcard: 0
+Group index: 149, max number of wildcard: 0
+Group index: 150, max number of wildcard: 0
+Group index: 151, max number of wildcard: 0
+Total rules rearrange configure time is:2718 ms 
+Total rules insertion configure time is:5800 ms 
+Total keys rearrange configure time is:118706162 ms 
+Total keys search time is:1094 ms 
+Total expanded count is: 6
+Expand rule num is: 3
+Insert rule num is: 1904
+Total insert rule num is: 1878
+Total insert trie_node count is: 78304
+Checksum: 4325882
+ActionSum: 127629
+Total matches: 5337
+==================================================
+Sorted total rule size = 1911
+Number of keys: 17642
+Num of groups is: 94
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 0
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 0
+Group index: 32, max number of wildcard: 0
+Group index: 33, max number of wildcard: 0
+Group index: 34, max number of wildcard: 0
+Group index: 35, max number of wildcard: 0
+Group index: 36, max number of wildcard: 0
+Group index: 37, max number of wildcard: 0
+Group index: 38, max number of wildcard: 0
+Group index: 39, max number of wildcard: 0
+Group index: 40, max number of wildcard: 0
+Group index: 41, max number of wildcard: 0
+Group index: 42, max number of wildcard: 0
+Group index: 43, max number of wildcard: 0
+Group index: 44, max number of wildcard: 0
+Group index: 45, max number of wildcard: 0
+Group index: 46, max number of wildcard: 0
+Group index: 47, max number of wildcard: 0
+Group index: 48, max number of wildcard: 0
+Group index: 49, max number of wildcard: 0
+Group index: 50, max number of wildcard: 0
+Group index: 51, max number of wildcard: 0
+Group index: 52, max number of wildcard: 0
+Group index: 53, max number of wildcard: 0
+Group index: 54, max number of wildcard: 0
+Group index: 55, max number of wildcard: 0
+Group index: 56, max number of wildcard: 0
+Group index: 57, max number of wildcard: 0
+Group index: 58, max number of wildcard: 0
+Group index: 59, max number of wildcard: 0
+Group index: 60, max number of wildcard: 0
+Group index: 61, max number of wildcard: 0
+Group index: 62, max number of wildcard: 0
+Group index: 63, max number of wildcard: 0
+Group index: 64, max number of wildcard: 0
+Group index: 65, max number of wildcard: 0
+Group index: 66, max number of wildcard: 0
+Group index: 67, max number of wildcard: 0
+Group index: 68, max number of wildcard: 0
+Group index: 69, max number of wildcard: 0
+Group index: 70, max number of wildcard: 0
+Group index: 71, max number of wildcard: 0
+Group index: 72, max number of wildcard: 0
+Group index: 73, max number of wildcard: 0
+Group index: 74, max number of wildcard: 0
+Group index: 75, max number of wildcard: 0
+Group index: 76, max number of wildcard: 0
+Group index: 77, max number of wildcard: 0
+Group index: 78, max number of wildcard: 0
+Group index: 79, max number of wildcard: 1
+Group index: 80, max number of wildcard: 0
+Group index: 81, max number of wildcard: 0
+Group index: 82, max number of wildcard: 0
+Group index: 83, max number of wildcard: 0
+Group index: 84, max number of wildcard: 0
+Group index: 85, max number of wildcard: 0
+Group index: 86, max number of wildcard: 0
+Group index: 87, max number of wildcard: 0
+Group index: 88, max number of wildcard: 0
+Group index: 89, max number of wildcard: 0
+Group index: 90, max number of wildcard: 0
+Group index: 91, max number of wildcard: 0
+Group index: 92, max number of wildcard: 0
+Group index: 93, max number of wildcard: 0
+Total rules rearrange configure time is:2264 ms 
+Total rules insertion configure time is:5932 ms 
+Total keys rearrange configure time is:46579868 ms 
+Total keys search time is:663 ms 
+Total expanded count is: 10
+Expand rule num is: 5
+Insert rule num is: 1901
+Total insert rule num is: 1879
+Total insert trie_node count is: 76688
+Checksum: 4325044
+ActionSum: 127629
+Total matches: 5337
+==================================================
+Sorted total rule size = 1911
+Number of keys: 17642
+Num of groups is: 75
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 0
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 0
+Group index: 32, max number of wildcard: 0
+Group index: 33, max number of wildcard: 0
+Group index: 34, max number of wildcard: 0
+Group index: 35, max number of wildcard: 0
+Group index: 36, max number of wildcard: 0
+Group index: 37, max number of wildcard: 0
+Group index: 38, max number of wildcard: 0
+Group index: 39, max number of wildcard: 0
+Group index: 40, max number of wildcard: 0
+Group index: 41, max number of wildcard: 0
+Group index: 42, max number of wildcard: 0
+Group index: 43, max number of wildcard: 0
+Group index: 44, max number of wildcard: 0
+Group index: 45, max number of wildcard: 0
+Group index: 46, max number of wildcard: 0
+Group index: 47, max number of wildcard: 0
+Group index: 48, max number of wildcard: 0
+Group index: 49, max number of wildcard: 0
+Group index: 50, max number of wildcard: 0
+Group index: 51, max number of wildcard: 0
+Group index: 52, max number of wildcard: 0
+Group index: 53, max number of wildcard: 0
+Group index: 54, max number of wildcard: 0
+Group index: 55, max number of wildcard: 0
+Group index: 56, max number of wildcard: 0
+Group index: 57, max number of wildcard: 0
+Group index: 58, max number of wildcard: 1
+Group index: 59, max number of wildcard: 0
+Group index: 60, max number of wildcard: 0
+Group index: 61, max number of wildcard: 0
+Group index: 62, max number of wildcard: 0
+Group index: 63, max number of wildcard: 1
+Group index: 64, max number of wildcard: 0
+Group index: 65, max number of wildcard: 0
+Group index: 66, max number of wildcard: 0
+Group index: 67, max number of wildcard: 0
+Group index: 68, max number of wildcard: 0
+Group index: 69, max number of wildcard: 0
+Group index: 70, max number of wildcard: 0
+Group index: 71, max number of wildcard: 0
+Group index: 72, max number of wildcard: 0
+Group index: 73, max number of wildcard: 0
+Group index: 74, max number of wildcard: 0
+Total rules rearrange configure time is:2064 ms 
+Total rules insertion configure time is:5772 ms 
+Total keys rearrange configure time is:29864731 ms 
+Total keys search time is:658 ms 
+Total expanded count is: 12
+Expand rule num is: 6
+Insert rule num is: 1900
+Total insert rule num is: 1880
+Total insert trie_node count is: 76070
+Checksum: 4325044
+ActionSum: 127629
+Total matches: 5337
+==================================================
+Sorted total rule size = 1911
+Number of keys: 17642
+Num of groups is: 63
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 0
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 0
+Group index: 32, max number of wildcard: 0
+Group index: 33, max number of wildcard: 0
+Group index: 34, max number of wildcard: 0
+Group index: 35, max number of wildcard: 0
+Group index: 36, max number of wildcard: 0
+Group index: 37, max number of wildcard: 0
+Group index: 38, max number of wildcard: 0
+Group index: 39, max number of wildcard: 0
+Group index: 40, max number of wildcard: 0
+Group index: 41, max number of wildcard: 0
+Group index: 42, max number of wildcard: 0
+Group index: 43, max number of wildcard: 0
+Group index: 44, max number of wildcard: 0
+Group index: 45, max number of wildcard: 0
+Group index: 46, max number of wildcard: 0
+Group index: 47, max number of wildcard: 0
+Group index: 48, max number of wildcard: 1
+Group index: 49, max number of wildcard: 0
+Group index: 50, max number of wildcard: 0
+Group index: 51, max number of wildcard: 0
+Group index: 52, max number of wildcard: 1
+Group index: 53, max number of wildcard: 0
+Group index: 54, max number of wildcard: 0
+Group index: 55, max number of wildcard: 0
+Group index: 56, max number of wildcard: 0
+Group index: 57, max number of wildcard: 0
+Group index: 58, max number of wildcard: 0
+Group index: 59, max number of wildcard: 0
+Group index: 60, max number of wildcard: 0
+Group index: 61, max number of wildcard: 0
+Group index: 62, max number of wildcard: 0
+Total rules rearrange configure time is:1980 ms 
+Total rules insertion configure time is:5686 ms 
+Total keys rearrange configure time is:20982717 ms 
+Total keys search time is:807 ms 
+Total expanded count is: 10
+Expand rule num is: 5
+Insert rule num is: 1901
+Total insert rule num is: 1879
+Total insert trie_node count is: 75521
+Checksum: 4325044
+ActionSum: 127629
+Total matches: 5337
+==================================================
+Sorted total rule size = 1911
+Number of keys: 17642
+Num of groups is: 50
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 0
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 0
+Group index: 32, max number of wildcard: 0
+Group index: 33, max number of wildcard: 0
+Group index: 34, max number of wildcard: 0
+Group index: 35, max number of wildcard: 0
+Group index: 36, max number of wildcard: 0
+Group index: 37, max number of wildcard: 0
+Group index: 38, max number of wildcard: 1
+Group index: 39, max number of wildcard: 0
+Group index: 40, max number of wildcard: 0
+Group index: 41, max number of wildcard: 0
+Group index: 42, max number of wildcard: 11
+Group index: 43, max number of wildcard: 0
+Group index: 44, max number of wildcard: 0
+Group index: 45, max number of wildcard: 0
+Group index: 46, max number of wildcard: 0
+Group index: 47, max number of wildcard: 0
+Group index: 48, max number of wildcard: 0
+Group index: 49, max number of wildcard: 0
+Total rules rearrange configure time is:1850 ms 
+Total rules insertion configure time is:6745 ms 
+Total keys rearrange configure time is:12581803 ms 
+Total keys search time is:807 ms 
+Total expanded count is: 2050
+Expand rule num is: 2
+Insert rule num is: 1904
+Total insert rule num is: 3922
+Total insert trie_node count is: 83052
+Checksum: 4325044
+ActionSum: 127629
+Total matches: 5337
+==================================================
+Sorted total rule size = 1911
+Number of keys: 17642
+Num of groups is: 37
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 1
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 1
+Group index: 32, max number of wildcard: 0
+Group index: 33, max number of wildcard: 0
+Group index: 34, max number of wildcard: 0
+Group index: 35, max number of wildcard: 0
+Group index: 36, max number of wildcard: 0
+Total rules rearrange configure time is:1810 ms 
+Total rules insertion configure time is:5582 ms 
+Total keys rearrange configure time is:7309596 ms 
+Total keys search time is:623 ms 
+Total expanded count is: 64
+Expand rule num is: 32
+Insert rule num is: 1874
+Total insert rule num is: 1905
+Total insert trie_node count is: 74442
+Checksum: 4325044
+ActionSum: 127629
+Total matches: 5337
+==================================================
+Sorted total rule size = 1911
+Number of keys: 17642
+Num of groups is: 30
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 1
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 1
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 0
+Total rules rearrange configure time is:1727 ms 
+Total rules insertion configure time is:5559 ms 
+Total keys rearrange configure time is:4966177 ms 
+Total keys search time is:824 ms 
+Total expanded count is: 26
+Expand rule num is: 13
+Insert rule num is: 1893
+Total insert rule num is: 1887
 Total insert trie_node count is: 73481
 Checksum: 4325044
 ActionSum: 127629
@@ -663,58 +1397,7 @@ Total matches: 5337
 ==================================================
 Sorted total rule size = 1911
 Number of keys: 17642
-Num of groups is: 9
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 5
-Group index: 8, max number of wildcard: 0
-Total rules rearrange configure time is:2455 ms 
-Total rules insertion configure time is:6492 ms 
-Total keys rearrange configure time is:429215 ms 
-Total keys search time is:509 ms 
-Total expanded count is: 1796
-Expand rule num is: 156
-Insert rule num is: 1750
-Total insert rule num is: 3475
-Total insert trie_node count is: 79540
-Checksum: 4325044
-ActionSum: 127629
-Total matches: 5337
-==================================================
-Sorted total rule size = 1911
-Number of keys: 17642
-Num of groups is: 10
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 1
-Group index: 8, max number of wildcard: 11
-Group index: 9, max number of wildcard: 0
-Total rules rearrange configure time is:2449 ms 
-Total rules insertion configure time is:34128 ms 
-Total keys rearrange configure time is:524242 ms 
-Total keys search time is:573 ms 
-Total expanded count is: 52566
-Expand rule num is: 156
-Insert rule num is: 1750
-Total insert rule num is: 53258
-Total insert trie_node count is: 277730
-Checksum: 4325044
-ActionSum: 127629
-Total matches: 5337
-==================================================
-Sorted total rule size = 1911
-Number of keys: 17642
-Num of groups is: 11
+Num of groups is: 25
 Group index: 0, max number of wildcard: 0
 Group index: 1, max number of wildcard: 0
 Group index: 2, max number of wildcard: 0
@@ -723,426 +1406,458 @@ Group index: 4, max number of wildcard: 0
 Group index: 5, max number of wildcard: 0
 Group index: 6, max number of wildcard: 0
 Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 1
-Group index: 9, max number of wildcard: 11
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
 Group index: 10, max number of wildcard: 0
-Total rules rearrange configure time is:2246 ms 
-Total rules insertion configure time is:38345 ms 
-Total keys rearrange configure time is:635522 ms 
-Total keys search time is:694 ms 
-Total expanded count is: 49368
-Expand rule num is: 98
-Insert rule num is: 1808
-Total insert rule num is: 50120
-Total insert trie_node count is: 351686
-Checksum: 4325044
-ActionSum: 127629
-Total matches: 5337
-==================================================
-Sorted total rule size = 1911
-Number of keys: 17642
-Num of groups is: 12
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 0
-Group index: 9, max number of wildcard: 1
-Group index: 10, max number of wildcard: 11
-Group index: 11, max number of wildcard: 0
-Total rules rearrange configure time is:2202 ms 
-Total rules insertion configure time is:32069 ms 
-Total keys rearrange configure time is:758333 ms 
-Total keys search time is:527 ms 
-Total expanded count is: 36888
-Expand rule num is: 33
-Insert rule num is: 1873
-Total insert rule num is: 38729
-Total insert trie_node count is: 316514
-Checksum: 4325044
-ActionSum: 127629
-Total matches: 5337
-==================================================
-Sorted total rule size = 1911
-Number of keys: 17642
-Num of groups is: 13
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 0
-Group index: 9, max number of wildcard: 0
-Group index: 10, max number of wildcard: 1
 Group index: 11, max number of wildcard: 0
 Group index: 12, max number of wildcard: 0
-Total rules rearrange configure time is:2152 ms 
-Total rules insertion configure time is:5309 ms 
-Total keys rearrange configure time is:883519 ms 
-Total keys search time is:460 ms 
-Total expanded count is: 14
-Expand rule num is: 7
-Insert rule num is: 1900
-Total insert rule num is: 1883
-Total insert trie_node count is: 71120
-Checksum: 4325044
-ActionSum: 127629
-Total matches: 5337
-==================================================
-Sorted total rule size = 1911
-Number of keys: 17642
-Num of groups is: 14
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 0
-Group index: 9, max number of wildcard: 0
-Group index: 10, max number of wildcard: 0
-Group index: 11, max number of wildcard: 2
-Group index: 12, max number of wildcard: 0
-Group index: 13, max number of wildcard: 0
-Total rules rearrange configure time is:2072 ms 
-Total rules insertion configure time is:5363 ms 
-Total keys rearrange configure time is:1034654 ms 
-Total keys search time is:192 ms 
-Total expanded count is: 82
-Expand rule num is: 36
-Insert rule num is: 1870
-Total insert rule num is: 1919
-Total insert trie_node count is: 71730
-Checksum: 4325044
-ActionSum: 127629
-Total matches: 5337
-==================================================
-Sorted total rule size = 1911
-Number of keys: 17642
-Num of groups is: 15
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 0
-Group index: 9, max number of wildcard: 0
-Group index: 10, max number of wildcard: 0
-Group index: 11, max number of wildcard: 1
-Group index: 12, max number of wildcard: 3
 Group index: 13, max number of wildcard: 0
 Group index: 14, max number of wildcard: 0
-Total rules rearrange configure time is:1954 ms 
-Total rules insertion configure time is:5607 ms 
-Total keys rearrange configure time is:1203042 ms 
-Total keys search time is:488 ms 
-Total expanded count is: 326
-Expand rule num is: 79
-Insert rule num is: 1827
-Total insert rule num is: 2116
-Total insert trie_node count is: 73316
-Checksum: 4325044
-ActionSum: 127629
-Total matches: 5337
-==================================================
-Sorted total rule size = 1911
-Number of keys: 17642
-Num of groups is: 16
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 0
-Group index: 9, max number of wildcard: 0
-Group index: 10, max number of wildcard: 0
-Group index: 11, max number of wildcard: 0
-Group index: 12, max number of wildcard: 1
-Group index: 13, max number of wildcard: 4
-Group index: 14, max number of wildcard: 0
 Group index: 15, max number of wildcard: 0
-Total rules rearrange configure time is:1852 ms 
-Total rules insertion configure time is:5896 ms 
-Total keys rearrange configure time is:1341782 ms 
-Total keys search time is:214 ms 
-Total expanded count is: 748
-Expand rule num is: 103
-Insert rule num is: 1803
-Total insert rule num is: 2510
-Total insert trie_node count is: 75442
-Checksum: 4325044
-ActionSum: 127629
-Total matches: 5337
-==================================================
-Sorted total rule size = 1911
-Number of keys: 17642
-Num of groups is: 17
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 0
-Group index: 9, max number of wildcard: 0
-Group index: 10, max number of wildcard: 0
-Group index: 11, max number of wildcard: 0
-Group index: 12, max number of wildcard: 0
-Group index: 13, max number of wildcard: 1
-Group index: 14, max number of wildcard: 11
-Group index: 15, max number of wildcard: 0
-Group index: 16, max number of wildcard: 0
-Total rules rearrange configure time is:1941 ms 
-Total rules insertion configure time is:31154 ms 
-Total keys rearrange configure time is:1527994 ms 
-Total keys search time is:762 ms 
-Total expanded count is: 47482
-Expand rule num is: 77
-Insert rule num is: 1829
-Total insert rule num is: 48255
-Total insert trie_node count is: 257625
-Checksum: 4325044
-ActionSum: 127629
-Total matches: 5337
-==================================================
-Sorted total rule size = 1911
-Number of keys: 17642
-Num of groups is: 18
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 0
-Group index: 9, max number of wildcard: 0
-Group index: 10, max number of wildcard: 0
-Group index: 11, max number of wildcard: 0
-Group index: 12, max number of wildcard: 0
-Group index: 13, max number of wildcard: 0
-Group index: 14, max number of wildcard: 1
-Group index: 15, max number of wildcard: 11
 Group index: 16, max number of wildcard: 0
 Group index: 17, max number of wildcard: 0
-Total rules rearrange configure time is:1953 ms 
-Total rules insertion configure time is:30204 ms 
-Total keys rearrange configure time is:1717437 ms 
-Total keys search time is:590 ms 
-Total expanded count is: 36884
-Expand rule num is: 31
-Insert rule num is: 1875
-Total insert rule num is: 38727
-Total insert trie_node count is: 284947
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 1
+Group index: 20, max number of wildcard: 1
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Total rules rearrange configure time is:221103 ms 
+Total rules insertion configure time is:5552 ms 
+Total keys rearrange configure time is:3283544 ms 
+Total keys search time is:466 ms 
+Total expanded count is: 14
+Expand rule num is: 7
+Insert rule num is: 1899
+Total insert rule num is: 1881
+Total insert trie_node count is: 72597
 Checksum: 4325044
 ActionSum: 127629
 Total matches: 5337
 ==================================================
 Sorted total rule size = 2925
 Number of keys: 17642
-Num of groups is: 5
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 1
-Group index: 3, max number of wildcard: 12
-Group index: 4, max number of wildcard: 1
-Total rules rearrange configure time is:6619 ms 
-Total rules insertion configure time is:122979 ms 
-Total keys rearrange configure time is:134134 ms 
-Total keys search time is:1202 ms 
-Total expanded count is: 61182
-Expand rule num is: 517
-Insert rule num is: 2405
-Total insert rule num is: 62526
-Total insert trie_node count is: 1505773
-Checksum: 9285955
-ActionSum: 179839
-Total matches: 7344
-==================================================
-Sorted total rule size = 2925
-Number of keys: 17642
-Num of groups is: 7
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 1
-Group index: 4, max number of wildcard: 1
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 1
-Total rules rearrange configure time is:5164 ms 
-Total rules insertion configure time is:7313 ms 
-Total keys rearrange configure time is:277465 ms 
-Total keys search time is:295 ms 
-Total expanded count is: 32
-Expand rule num is: 16
-Insert rule num is: 2906
-Total insert rule num is: 2904
-Total insert trie_node count is: 84240
-Checksum: 9285955
-ActionSum: 179839
-Total matches: 7344
-==================================================
-Sorted total rule size = 2925
-Number of keys: 17642
-Num of groups is: 8
+Num of groups is: 195
 Group index: 0, max number of wildcard: 0
 Group index: 1, max number of wildcard: 0
 Group index: 2, max number of wildcard: 0
 Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 1
-Group index: 5, max number of wildcard: 5
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
 Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 1
-Total rules rearrange configure time is:4816 ms 
-Total rules insertion configure time is:11371 ms 
-Total keys rearrange configure time is:364916 ms 
-Total keys search time is:775 ms 
-Total expanded count is: 2286
-Expand rule num is: 222
-Insert rule num is: 2700
-Total insert rule num is: 4922
-Total insert trie_node count is: 137395
-Checksum: 9285955
-ActionSum: 179839
-Total matches: 7344
-==================================================
-Sorted total rule size = 2925
-Number of keys: 17642
-Num of groups is: 11
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 1
-Group index: 7, max number of wildcard: 4
-Group index: 8, max number of wildcard: 0
-Group index: 9, max number of wildcard: 0
-Group index: 10, max number of wildcard: 1
-Total rules rearrange configure time is:3848 ms 
-Total rules insertion configure time is:7622 ms 
-Total keys rearrange configure time is:680947 ms 
-Total keys search time is:375 ms 
-Total expanded count is: 276
-Expand rule num is: 51
-Insert rule num is: 2871
-Total insert rule num is: 3111
-Total insert trie_node count is: 92502
-Checksum: 9285955
-ActionSum: 179839
-Total matches: 7344
-==================================================
-Sorted total rule size = 2925
-Number of keys: 17642
-Num of groups is: 12
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 1
 Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 5
-Group index: 9, max number of wildcard: 0
-Group index: 10, max number of wildcard: 0
-Group index: 11, max number of wildcard: 1
-Total rules rearrange configure time is:3468 ms 
-Total rules insertion configure time is:11516 ms 
-Total keys rearrange configure time is:809784 ms 
-Total keys search time is:889 ms 
-Total expanded count is: 2190
-Expand rule num is: 219
-Insert rule num is: 2703
-Total insert rule num is: 4844
-Total insert trie_node count is: 137725
-Checksum: 9285955
-ActionSum: 179839
-Total matches: 7344
-==================================================
-Sorted total rule size = 2925
-Number of keys: 17642
-Num of groups is: 14
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 1
 Group index: 8, max number of wildcard: 0
-Group index: 9, max number of wildcard: 1
+Group index: 9, max number of wildcard: 0
 Group index: 10, max number of wildcard: 0
 Group index: 11, max number of wildcard: 0
 Group index: 12, max number of wildcard: 0
-Group index: 13, max number of wildcard: 1
-Total rules rearrange configure time is:3434 ms 
-Total rules insertion configure time is:7126 ms 
-Total keys rearrange configure time is:1074766 ms 
-Total keys search time is:410 ms 
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 0
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 0
+Group index: 32, max number of wildcard: 0
+Group index: 33, max number of wildcard: 0
+Group index: 34, max number of wildcard: 0
+Group index: 35, max number of wildcard: 0
+Group index: 36, max number of wildcard: 0
+Group index: 37, max number of wildcard: 0
+Group index: 38, max number of wildcard: 0
+Group index: 39, max number of wildcard: 0
+Group index: 40, max number of wildcard: 0
+Group index: 41, max number of wildcard: 0
+Group index: 42, max number of wildcard: 0
+Group index: 43, max number of wildcard: 0
+Group index: 44, max number of wildcard: 0
+Group index: 45, max number of wildcard: 0
+Group index: 46, max number of wildcard: 0
+Group index: 47, max number of wildcard: 0
+Group index: 48, max number of wildcard: 0
+Group index: 49, max number of wildcard: 0
+Group index: 50, max number of wildcard: 0
+Group index: 51, max number of wildcard: 0
+Group index: 52, max number of wildcard: 0
+Group index: 53, max number of wildcard: 0
+Group index: 54, max number of wildcard: 0
+Group index: 55, max number of wildcard: 0
+Group index: 56, max number of wildcard: 0
+Group index: 57, max number of wildcard: 0
+Group index: 58, max number of wildcard: 0
+Group index: 59, max number of wildcard: 0
+Group index: 60, max number of wildcard: 0
+Group index: 61, max number of wildcard: 0
+Group index: 62, max number of wildcard: 0
+Group index: 63, max number of wildcard: 0
+Group index: 64, max number of wildcard: 0
+Group index: 65, max number of wildcard: 0
+Group index: 66, max number of wildcard: 0
+Group index: 67, max number of wildcard: 0
+Group index: 68, max number of wildcard: 0
+Group index: 69, max number of wildcard: 0
+Group index: 70, max number of wildcard: 0
+Group index: 71, max number of wildcard: 0
+Group index: 72, max number of wildcard: 0
+Group index: 73, max number of wildcard: 0
+Group index: 74, max number of wildcard: 0
+Group index: 75, max number of wildcard: 0
+Group index: 76, max number of wildcard: 0
+Group index: 77, max number of wildcard: 0
+Group index: 78, max number of wildcard: 0
+Group index: 79, max number of wildcard: 0
+Group index: 80, max number of wildcard: 0
+Group index: 81, max number of wildcard: 0
+Group index: 82, max number of wildcard: 0
+Group index: 83, max number of wildcard: 0
+Group index: 84, max number of wildcard: 0
+Group index: 85, max number of wildcard: 0
+Group index: 86, max number of wildcard: 0
+Group index: 87, max number of wildcard: 0
+Group index: 88, max number of wildcard: 0
+Group index: 89, max number of wildcard: 0
+Group index: 90, max number of wildcard: 0
+Group index: 91, max number of wildcard: 0
+Group index: 92, max number of wildcard: 0
+Group index: 93, max number of wildcard: 0
+Group index: 94, max number of wildcard: 0
+Group index: 95, max number of wildcard: 0
+Group index: 96, max number of wildcard: 0
+Group index: 97, max number of wildcard: 0
+Group index: 98, max number of wildcard: 0
+Group index: 99, max number of wildcard: 0
+Group index: 100, max number of wildcard: 0
+Group index: 101, max number of wildcard: 0
+Group index: 102, max number of wildcard: 0
+Group index: 103, max number of wildcard: 0
+Group index: 104, max number of wildcard: 0
+Group index: 105, max number of wildcard: 0
+Group index: 106, max number of wildcard: 0
+Group index: 107, max number of wildcard: 0
+Group index: 108, max number of wildcard: 0
+Group index: 109, max number of wildcard: 0
+Group index: 110, max number of wildcard: 0
+Group index: 111, max number of wildcard: 0
+Group index: 112, max number of wildcard: 0
+Group index: 113, max number of wildcard: 0
+Group index: 114, max number of wildcard: 0
+Group index: 115, max number of wildcard: 0
+Group index: 116, max number of wildcard: 0
+Group index: 117, max number of wildcard: 0
+Group index: 118, max number of wildcard: 0
+Group index: 119, max number of wildcard: 0
+Group index: 120, max number of wildcard: 0
+Group index: 121, max number of wildcard: 0
+Group index: 122, max number of wildcard: 0
+Group index: 123, max number of wildcard: 0
+Group index: 124, max number of wildcard: 0
+Group index: 125, max number of wildcard: 0
+Group index: 126, max number of wildcard: 0
+Group index: 127, max number of wildcard: 0
+Group index: 128, max number of wildcard: 1
+Group index: 129, max number of wildcard: 0
+Group index: 130, max number of wildcard: 0
+Group index: 131, max number of wildcard: 0
+Group index: 132, max number of wildcard: 0
+Group index: 133, max number of wildcard: 0
+Group index: 134, max number of wildcard: 0
+Group index: 135, max number of wildcard: 0
+Group index: 136, max number of wildcard: 0
+Group index: 137, max number of wildcard: 0
+Group index: 138, max number of wildcard: 0
+Group index: 139, max number of wildcard: 0
+Group index: 140, max number of wildcard: 0
+Group index: 141, max number of wildcard: 0
+Group index: 142, max number of wildcard: 0
+Group index: 143, max number of wildcard: 0
+Group index: 144, max number of wildcard: 0
+Group index: 145, max number of wildcard: 0
+Group index: 146, max number of wildcard: 0
+Group index: 147, max number of wildcard: 1
+Group index: 148, max number of wildcard: 0
+Group index: 149, max number of wildcard: 0
+Group index: 150, max number of wildcard: 0
+Group index: 151, max number of wildcard: 0
+Group index: 152, max number of wildcard: 0
+Group index: 153, max number of wildcard: 0
+Group index: 154, max number of wildcard: 0
+Group index: 155, max number of wildcard: 0
+Group index: 156, max number of wildcard: 0
+Group index: 157, max number of wildcard: 0
+Group index: 158, max number of wildcard: 0
+Group index: 159, max number of wildcard: 0
+Group index: 160, max number of wildcard: 0
+Group index: 161, max number of wildcard: 0
+Group index: 162, max number of wildcard: 0
+Group index: 163, max number of wildcard: 0
+Group index: 164, max number of wildcard: 0
+Group index: 165, max number of wildcard: 0
+Group index: 166, max number of wildcard: 0
+Group index: 167, max number of wildcard: 0
+Group index: 168, max number of wildcard: 0
+Group index: 169, max number of wildcard: 0
+Group index: 170, max number of wildcard: 0
+Group index: 171, max number of wildcard: 0
+Group index: 172, max number of wildcard: 0
+Group index: 173, max number of wildcard: 0
+Group index: 174, max number of wildcard: 0
+Group index: 175, max number of wildcard: 0
+Group index: 176, max number of wildcard: 0
+Group index: 177, max number of wildcard: 0
+Group index: 178, max number of wildcard: 0
+Group index: 179, max number of wildcard: 0
+Group index: 180, max number of wildcard: 0
+Group index: 181, max number of wildcard: 0
+Group index: 182, max number of wildcard: 0
+Group index: 183, max number of wildcard: 0
+Group index: 184, max number of wildcard: 0
+Group index: 185, max number of wildcard: 0
+Group index: 186, max number of wildcard: 0
+Group index: 187, max number of wildcard: 0
+Group index: 188, max number of wildcard: 0
+Group index: 189, max number of wildcard: 0
+Group index: 190, max number of wildcard: 0
+Group index: 191, max number of wildcard: 0
+Group index: 192, max number of wildcard: 0
+Group index: 193, max number of wildcard: 0
+Group index: 194, max number of wildcard: 0
+Total rules rearrange configure time is:3890 ms 
+Total rules insertion configure time is:8038 ms 
+Total keys rearrange configure time is:192212779 ms 
+Total keys search time is:3857 ms 
+Total expanded count is: 8
+Expand rule num is: 4
+Insert rule num is: 2918
+Total insert rule num is: 2893
+Total insert trie_node count is: 100207
+Checksum: 9285955
+ActionSum: 179839
+Total matches: 7344
+==================================================
+Sorted total rule size = 2925
+Number of keys: 17642
+Sorted total rule size = 2925
+Number of keys: 17642
+Num of groups is: 95
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 0
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 0
+Group index: 32, max number of wildcard: 0
+Group index: 33, max number of wildcard: 0
+Group index: 34, max number of wildcard: 0
+Group index: 35, max number of wildcard: 0
+Group index: 36, max number of wildcard: 0
+Group index: 37, max number of wildcard: 0
+Group index: 38, max number of wildcard: 0
+Group index: 39, max number of wildcard: 0
+Group index: 40, max number of wildcard: 0
+Group index: 41, max number of wildcard: 0
+Group index: 42, max number of wildcard: 0
+Group index: 43, max number of wildcard: 0
+Group index: 44, max number of wildcard: 0
+Group index: 45, max number of wildcard: 0
+Group index: 46, max number of wildcard: 0
+Group index: 47, max number of wildcard: 0
+Group index: 48, max number of wildcard: 0
+Group index: 49, max number of wildcard: 0
+Group index: 50, max number of wildcard: 0
+Group index: 51, max number of wildcard: 0
+Group index: 52, max number of wildcard: 0
+Group index: 53, max number of wildcard: 0
+Group index: 54, max number of wildcard: 0
+Group index: 55, max number of wildcard: 0
+Group index: 56, max number of wildcard: 0
+Group index: 57, max number of wildcard: 0
+Group index: 58, max number of wildcard: 0
+Group index: 59, max number of wildcard: 0
+Group index: 60, max number of wildcard: 0
+Group index: 61, max number of wildcard: 0
+Group index: 62, max number of wildcard: 0
+Group index: 63, max number of wildcard: 1
+Group index: 64, max number of wildcard: 0
+Group index: 65, max number of wildcard: 0
+Group index: 66, max number of wildcard: 0
+Group index: 67, max number of wildcard: 0
+Group index: 68, max number of wildcard: 0
+Group index: 69, max number of wildcard: 0
+Group index: 70, max number of wildcard: 0
+Group index: 71, max number of wildcard: 0
+Group index: 72, max number of wildcard: 1
+Group index: 73, max number of wildcard: 0
+Group index: 74, max number of wildcard: 0
+Group index: 75, max number of wildcard: 0
+Group index: 76, max number of wildcard: 0
+Group index: 77, max number of wildcard: 0
+Group index: 78, max number of wildcard: 0
+Group index: 79, max number of wildcard: 0
+Group index: 80, max number of wildcard: 0
+Group index: 81, max number of wildcard: 0
+Group index: 82, max number of wildcard: 0
+Group index: 83, max number of wildcard: 0
+Group index: 84, max number of wildcard: 0
+Group index: 85, max number of wildcard: 0
+Group index: 86, max number of wildcard: 0
+Group index: 87, max number of wildcard: 0
+Group index: 88, max number of wildcard: 0
+Group index: 89, max number of wildcard: 0
+Group index: 90, max number of wildcard: 0
+Group index: 91, max number of wildcard: 0
+Group index: 92, max number of wildcard: 0
+Group index: 93, max number of wildcard: 0
+Group index: 94, max number of wildcard: 0
+Total rules rearrange configure time is:3060 ms 
+Total rules insertion configure time is:8139 ms 
+Total keys rearrange configure time is:48683743 ms 
+Total keys search time is:1412 ms 
+Total expanded count is: 14
+Expand rule num is: 7
+Insert rule num is: 2915
+Total insert rule num is: 2896
+Total insert trie_node count is: 96749
+Checksum: 9285955
+ActionSum: 179839
+Total matches: 7344
+==================================================
+Sorted total rule size = 2925
+Number of keys: 17642
+Num of groups is: 79
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 0
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 0
+Group index: 32, max number of wildcard: 0
+Group index: 33, max number of wildcard: 0
+Group index: 34, max number of wildcard: 0
+Group index: 35, max number of wildcard: 0
+Group index: 36, max number of wildcard: 0
+Group index: 37, max number of wildcard: 0
+Group index: 38, max number of wildcard: 0
+Group index: 39, max number of wildcard: 0
+Group index: 40, max number of wildcard: 0
+Group index: 41, max number of wildcard: 0
+Group index: 42, max number of wildcard: 0
+Group index: 43, max number of wildcard: 0
+Group index: 44, max number of wildcard: 0
+Group index: 45, max number of wildcard: 0
+Group index: 46, max number of wildcard: 0
+Group index: 47, max number of wildcard: 0
+Group index: 48, max number of wildcard: 0
+Group index: 49, max number of wildcard: 0
+Group index: 50, max number of wildcard: 0
+Group index: 51, max number of wildcard: 0
+Group index: 52, max number of wildcard: 0
+Group index: 53, max number of wildcard: 1
+Group index: 54, max number of wildcard: 0
+Group index: 55, max number of wildcard: 0
+Group index: 56, max number of wildcard: 0
+Group index: 57, max number of wildcard: 0
+Group index: 58, max number of wildcard: 0
+Group index: 59, max number of wildcard: 0
+Group index: 60, max number of wildcard: 1
+Group index: 61, max number of wildcard: 0
+Group index: 62, max number of wildcard: 0
+Group index: 63, max number of wildcard: 0
+Group index: 64, max number of wildcard: 0
+Group index: 65, max number of wildcard: 0
+Group index: 66, max number of wildcard: 0
+Group index: 67, max number of wildcard: 0
+Group index: 68, max number of wildcard: 0
+Group index: 69, max number of wildcard: 0
+Group index: 70, max number of wildcard: 0
+Group index: 71, max number of wildcard: 0
+Group index: 72, max number of wildcard: 0
+Group index: 73, max number of wildcard: 0
+Group index: 74, max number of wildcard: 0
+Group index: 75, max number of wildcard: 0
+Group index: 76, max number of wildcard: 0
+Group index: 77, max number of wildcard: 0
+Group index: 78, max number of wildcard: 0
+Total rules rearrange configure time is:2932 ms 
+Total rules insertion configure time is:7961 ms 
+Total keys rearrange configure time is:34498535 ms 
+Total keys search time is:1195 ms 
 Total expanded count is: 22
 Expand rule num is: 11
 Insert rule num is: 2911
-Total insert rule num is: 2899
-Total insert trie_node count is: 86459
+Total insert rule num is: 2900
+Total insert trie_node count is: 95366
 Checksum: 9285955
 ActionSum: 179839
 Total matches: 7344
 ==================================================
 Sorted total rule size = 2925
 Number of keys: 17642
-Num of groups is: 15
-Group index: 0, max number of wildcard: 0
-Group index: 1, max number of wildcard: 0
-Group index: 2, max number of wildcard: 0
-Group index: 3, max number of wildcard: 0
-Group index: 4, max number of wildcard: 0
-Group index: 5, max number of wildcard: 0
-Group index: 6, max number of wildcard: 0
-Group index: 7, max number of wildcard: 0
-Group index: 8, max number of wildcard: 1
-Group index: 9, max number of wildcard: 0
-Group index: 10, max number of wildcard: 4
-Group index: 11, max number of wildcard: 0
-Group index: 12, max number of wildcard: 0
-Group index: 13, max number of wildcard: 0
-Group index: 14, max number of wildcard: 1
-Total rules rearrange configure time is:3176 ms 
-Total rules insertion configure time is:8692 ms 
-Total keys rearrange configure time is:1251580 ms 
-Total keys search time is:861 ms 
-Total expanded count is: 676
-Expand rule num is: 76
-Insert rule num is: 2846
-Total insert rule num is: 3485
-Total insert trie_node count is: 103516
-Checksum: 9285955
-ActionSum: 179839
-Total matches: 7344
-==================================================
-Sorted total rule size = 2925
-Number of keys: 17642
-Num of groups is: 18
+Num of groups is: 63
 Group index: 0, max number of wildcard: 0
 Group index: 1, max number of wildcard: 0
 Group index: 2, max number of wildcard: 0
@@ -1153,23 +1868,234 @@ Group index: 6, max number of wildcard: 0
 Group index: 7, max number of wildcard: 0
 Group index: 8, max number of wildcard: 0
 Group index: 9, max number of wildcard: 0
-Group index: 10, max number of wildcard: 1
+Group index: 10, max number of wildcard: 0
 Group index: 11, max number of wildcard: 0
-Group index: 12, max number of wildcard: 2
+Group index: 12, max number of wildcard: 0
 Group index: 13, max number of wildcard: 0
 Group index: 14, max number of wildcard: 0
 Group index: 15, max number of wildcard: 0
 Group index: 16, max number of wildcard: 0
-Group index: 17, max number of wildcard: 1
-Total rules rearrange configure time is:2952 ms 
-Total rules insertion configure time is:7468 ms 
-Total keys rearrange configure time is:1799187 ms 
-Total keys search time is:409 ms 
-Total expanded count is: 112
-Expand rule num is: 37
-Insert rule num is: 2885
-Total insert rule num is: 2963
-Total insert trie_node count is: 90044
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 0
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 0
+Group index: 32, max number of wildcard: 0
+Group index: 33, max number of wildcard: 0
+Group index: 34, max number of wildcard: 0
+Group index: 35, max number of wildcard: 0
+Group index: 36, max number of wildcard: 0
+Group index: 37, max number of wildcard: 0
+Group index: 38, max number of wildcard: 0
+Group index: 39, max number of wildcard: 0
+Group index: 40, max number of wildcard: 0
+Group index: 41, max number of wildcard: 0
+Group index: 42, max number of wildcard: 1
+Group index: 43, max number of wildcard: 0
+Group index: 44, max number of wildcard: 0
+Group index: 45, max number of wildcard: 0
+Group index: 46, max number of wildcard: 0
+Group index: 47, max number of wildcard: 1
+Group index: 48, max number of wildcard: 0
+Group index: 49, max number of wildcard: 0
+Group index: 50, max number of wildcard: 0
+Group index: 51, max number of wildcard: 0
+Group index: 52, max number of wildcard: 0
+Group index: 53, max number of wildcard: 0
+Group index: 54, max number of wildcard: 0
+Group index: 55, max number of wildcard: 0
+Group index: 56, max number of wildcard: 0
+Group index: 57, max number of wildcard: 0
+Group index: 58, max number of wildcard: 0
+Group index: 59, max number of wildcard: 0
+Group index: 60, max number of wildcard: 1
+Group index: 61, max number of wildcard: 0
+Group index: 62, max number of wildcard: 0
+Total rules rearrange configure time is:2808 ms 
+Total rules insertion configure time is:8166 ms 
+Total keys rearrange configure time is:20253846 ms 
+Total keys search time is:861 ms 
+Total expanded count is: 12
+Expand rule num is: 6
+Insert rule num is: 2916
+Total insert rule num is: 2895
+Total insert trie_node count is: 94044
+Checksum: 9285955
+ActionSum: 179839
+Total matches: 7344
+==================================================
+Sorted total rule size = 2925
+Number of keys: 17642
+Num of groups is: 47
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 0
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 1
+Group index: 32, max number of wildcard: 0
+Group index: 33, max number of wildcard: 0
+Group index: 34, max number of wildcard: 3
+Group index: 35, max number of wildcard: 1
+Group index: 36, max number of wildcard: 0
+Group index: 37, max number of wildcard: 0
+Group index: 38, max number of wildcard: 0
+Group index: 39, max number of wildcard: 0
+Group index: 40, max number of wildcard: 0
+Group index: 41, max number of wildcard: 0
+Group index: 42, max number of wildcard: 0
+Group index: 43, max number of wildcard: 0
+Group index: 44, max number of wildcard: 2
+Group index: 45, max number of wildcard: 1
+Group index: 46, max number of wildcard: 0
+Total rules rearrange configure time is:2753 ms 
+Total rules insertion configure time is:9342 ms 
+Total keys rearrange configure time is:12230545 ms 
+Total keys search time is:1217 ms 
+Total expanded count is: 622
+Expand rule num is: 208
+Insert rule num is: 2714
+Total insert rule num is: 3299
+Total insert trie_node count is: 111469
+Checksum: 9285955
+ActionSum: 179839
+Total matches: 7344
+==================================================
+Sorted total rule size = 2925
+Number of keys: 17642
+Num of groups is: 38
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 0
+Group index: 22, max number of wildcard: 0
+Group index: 23, max number of wildcard: 0
+Group index: 24, max number of wildcard: 0
+Group index: 25, max number of wildcard: 1
+Group index: 26, max number of wildcard: 9
+Group index: 27, max number of wildcard: 2
+Group index: 28, max number of wildcard: 1
+Group index: 29, max number of wildcard: 0
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 0
+Group index: 32, max number of wildcard: 0
+Group index: 33, max number of wildcard: 0
+Group index: 34, max number of wildcard: 2
+Group index: 35, max number of wildcard: 2
+Group index: 36, max number of wildcard: 1
+Group index: 37, max number of wildcard: 0
+Total rules rearrange configure time is:2832 ms 
+Total rules insertion configure time is:38581 ms 
+Total keys rearrange configure time is:7891018 ms 
+Total keys search time is:1480 ms 
+Total expanded count is: 19170
+Expand rule num is: 430
+Insert rule num is: 2492
+Total insert rule num is: 21578
+Total insert trie_node count is: 481860
+Checksum: 9285955
+ActionSum: 179839
+Total matches: 7344
+==================================================
+Sorted total rule size = 2925
+Number of keys: 17642
+Num of groups is: 33
+Group index: 0, max number of wildcard: 0
+Group index: 1, max number of wildcard: 0
+Group index: 2, max number of wildcard: 0
+Group index: 3, max number of wildcard: 0
+Group index: 4, max number of wildcard: 0
+Group index: 5, max number of wildcard: 0
+Group index: 6, max number of wildcard: 0
+Group index: 7, max number of wildcard: 0
+Group index: 8, max number of wildcard: 0
+Group index: 9, max number of wildcard: 0
+Group index: 10, max number of wildcard: 0
+Group index: 11, max number of wildcard: 0
+Group index: 12, max number of wildcard: 0
+Group index: 13, max number of wildcard: 0
+Group index: 14, max number of wildcard: 0
+Group index: 15, max number of wildcard: 0
+Group index: 16, max number of wildcard: 0
+Group index: 17, max number of wildcard: 0
+Group index: 18, max number of wildcard: 0
+Group index: 19, max number of wildcard: 0
+Group index: 20, max number of wildcard: 0
+Group index: 21, max number of wildcard: 1
+Group index: 22, max number of wildcard: 4
+Group index: 23, max number of wildcard: 2
+Group index: 24, max number of wildcard: 2
+Group index: 25, max number of wildcard: 0
+Group index: 26, max number of wildcard: 0
+Group index: 27, max number of wildcard: 0
+Group index: 28, max number of wildcard: 0
+Group index: 29, max number of wildcard: 1
+Group index: 30, max number of wildcard: 0
+Group index: 31, max number of wildcard: 1
+Group index: 32, max number of wildcard: 0
+Total rules rearrange configure time is:2832 ms 
+Total rules insertion configure time is:10877 ms 
+Total keys rearrange configure time is:5686492 ms 
+Total keys search time is:1279 ms 
+Total expanded count is: 1616
+Expand rule num is: 436
+Insert rule num is: 2486
+Total insert rule num is: 4052
+Total insert trie_node count is: 136196
 Checksum: 9285955
 ActionSum: 179839
 Total matches: 7344
