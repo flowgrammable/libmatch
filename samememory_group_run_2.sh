@@ -7,25 +7,25 @@ echo "=====553====="
 #./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/newRule_less12_553.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action553.txt 1200 >> result_try1.txt
 #./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/newRule_less12_553.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action553.txt 1500 >> result_try1.txt
 #./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/newRule_less12_553.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action553.txt 2000 >> result_try1.txt
-./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/newRule_less12_553.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action553.txt 2500 >> result_try1.txt
-./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/newRule_less12_553.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action553.txt 3000 >> result_try1.txt
-./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/newRule_less12_553.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action553.txt 3500 >> result_try1.txt
-./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/newRule_less12_553.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action553.txt 4000 >> result_try1.txt
-./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/newRule_less12_553.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action553.txt 4500 >> result_try1.txt
-./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/newRule_less12_553.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action553.txt 5000 >> result_try1.txt
+#./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/newRule_less12_553.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action553.txt 2500 >> result_try1.txt
+#./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/newRule_less12_553.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action553.txt 3000 >> result_try1.txt
+#./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/newRule_less12_553.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action553.txt 3500 >> result_try1.txt
+#./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/newRule_less12_553.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action553.txt 4000 >> result_try1.txt
+#./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/newRule_less12_553.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action553.txt 4500 >> result_try1.txt
+#./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/newRule_less12_553.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action553.txt 5000 >> result_try1.txt
 #./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/newRule_less12_553.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action553.txt 2 >> result_try1.txt
 #./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/newRule_less12_553.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action553.txt 3 >> result_try1.txt
 
 #./optimized_libmatch/test/linear_arbitrary.test ~/libmatch/test/Benchmarks/ping_small_64bit.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action605.txt >> result_try1.txt
 #./optimized_libmatch/test/basic_trie_group.test ~/libmatch/test/Benchmarks/ping_small_64bit.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action605.txt >> result_try1.txt
 
-./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/1683.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action1683.txt 3500 >> result_try1.txt
+#/optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/1683.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action1683.txt 3500 >> result_try1.txt
 #./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/1683.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action1683.txt 6 >> result_try1.txt
-./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/1683.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action1683.txt 4000 >> result_try1.txt
-./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/1683.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action1683.txt 4500 >> result_try1.txt
+#/optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/1683.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action1683.txt 4000 >> result_try1.txt
+#/optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/1683.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action1683.txt 4500 >> result_try1.txt
 #./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/1683.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action1683.txt 9 >> result_try1.txt
 #./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/1683.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action1683.txt 10 >> result_try1.txt
-./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/1683.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action1683.txt 5000 >> result_try1.txt
+#/optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/1683.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action1683.txt 5000 >> result_try1.txt
 #./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/1683.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action1683.txt 1500 >> result_try1.txt
 #./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/1683.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action1683.txt 13 >> result_try1.txt
 #./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/1683.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action1683.txt 2000 >> result_try1.txt
@@ -71,7 +71,7 @@ echo "=====553====="
 ./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/ping_big_64bit_original.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action2925.txt 6000 >> result_try1.txt
 #./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/ping_big_64bit_original.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action2925.txt 16 >> result_try1.txt
 #./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/ping_big_64bit_original.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action2925.txt 17 >> result_try1.txt
-./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/ping_big_64bit_original.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action2925.txt 6500 >> result_try1.txt
+#./optimized_libmatch/test/optimized_group_search_reviewed.test ~/libmatch/test/Benchmarks/ping_big_64bit_original.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action2925.txt 6500 >> result_try1.txt
 #./optimized_libmatch/test/linear_arbitrary.test ~/libmatch/test/Benchmarks/ping_big_64bit_original.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action2925.txt >> result_try1.txt
 #./optimized_libmatch/test/basic_trie_group.test ~/libmatch/test/Benchmarks/ping_big_64bit_original.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action2925.txt >> result_try1.txt
 
