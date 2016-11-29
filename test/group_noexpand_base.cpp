@@ -651,13 +651,13 @@ int main(int argc, char* argv[])
     */
     //vector<Rule> mergedTable(bigArray[j]); // In order to avoid the merge_rules function
 
-    vector<Rule> mergedTable = merge_rules(bigArray[j]);
+    //vector<Rule> mergedTable = merge_rules(bigArray[j]);
 
-    vector<int> delta_need = generate_delta(mergedTable);
+    vector<int> delta_need = generate_delta(bigArray[j]);
     // Push each delta vector into the 2D vector
     delta_vector.push_back(delta_need);
     //vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
-    vector<Rule> newnewTable = rules_rearrange(mergedTable, delta_need);
+    vector<Rule> newnewTable = rules_rearrange(bigArray[j], delta_need);
 
 
     /*
@@ -832,7 +832,7 @@ int main(int argc, char* argv[])
   cout << "Total expanded count is:" << " " << sum_trie_expand_count << endl;
   cout << "Expand rule num is:" << " " << expandRule_num << endl;
   cout << "Insert rule num is:" << " " << insertRule_num << endl;
-  cout << "Total insert rule num is:" << " " << sum_trie_count << endl;
+  cout << "Total actual insert rule num is:" << " " << sum_trie_count << endl;
   cout << "Total insert trie_node count is:" << " " << sum_trie_node_count << endl;
   cout << "Checksum: " << checksum << endl;
   cout << "ActionSum: " << actionSum << endl;
