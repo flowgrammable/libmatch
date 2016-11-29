@@ -461,7 +461,7 @@ int main(int argc, char* argv[])
     }
   }
   file2.close();
-  threshold = stoull(argv[4]);
+  //threshold = stoull(argv[4]);
   ifstream file (argv[1]);
   // Read the rules from txt file
   vector<Rule> oldpingRulesTable;
