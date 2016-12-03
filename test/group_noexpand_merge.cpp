@@ -662,7 +662,7 @@ int main(int argc, char* argv[])
         else {
           // Avoid the memory overflow, expand too much
           // Set the threshold to "20"
-          if ( tries[j].get_new_num( newnewTable.at (k))  < 12 ) {
+          if ( tries[j].get_new_num( newnewTable.at (k))  < 20 ) {
           // becasue we control the number of expanding wildcard
           // so don't need to delete rules manually
           //cout << "group index=" << j << ", index num: " << k << "," << "value: "<< newnewTable[k].value << "," << "mask: "
