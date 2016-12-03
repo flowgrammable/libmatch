@@ -34,7 +34,7 @@ echo "=====207_1====="
 ./optimized_libmatch/test/group_search_reviewed.test ~/libmatch/test/Benchmarks/207_1.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action207.txt 17 >> result_try1.txt
 ./optimized_libmatch/test/group_search_reviewed.test ~/libmatch/test/Benchmarks/207_1.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action207.txt 18 >> result_try1.txt
 ./optimized_libmatch/test/group_noexpand_base.test ~/libmatch/test/Benchmarks/207_1.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action207.txt >> result_try1.txt
-./optimized_libmatch/test/group_noexpand_merge.test ~/libmatch/test/Benchmarks/207_1.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action207.txt >> result_try1.txt
+#./optimized_libmatch/test/group_noexpand_merge.test ~/libmatch/test/Benchmarks/207_1.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action207.txt >> result_try1.txt
 #./optimized_libmatch/test/basic_trie_group.test ~/libmatch/test/Benchmarks/207_1.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action207.txt >> result_try1.txt
 
 echo "=====207 original====="
@@ -73,7 +73,7 @@ echo "=====461====="
 ./optimized_libmatch/test/group_search_reviewed.test ~/libmatch/test/Benchmarks/461.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action461.txt 17 >> result_try1.txt
 ./optimized_libmatch/test/group_search_reviewed.test ~/libmatch/test/Benchmarks/461.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action461.txt 18 >> result_try1.txt
 ./optimized_libmatch/test/group_noexpand_base.test ~/libmatch/test/Benchmarks/461.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action461.txt >> result_try1.txt
-./optimized_libmatch/test/group_noexpand_merge.test ~/libmatch/test/Benchmarks/461.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action461.txt >> result_try1.txt
+#./optimized_libmatch/test/group_noexpand_merge.test ~/libmatch/test/Benchmarks/461.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action461.txt >> result_try1.txt
 #./optimized_libmatch/test/basic_trie_group.test ~/libmatch/test/Benchmarks/461.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action461.txt >> result_try1.txt
 
 echo "=====461_1====="
@@ -152,7 +152,7 @@ echo "=====605====="
 ./optimized_libmatch/test/group_search_reviewed.test ~/libmatch/test/Benchmarks/ping_small_64bit.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action605.txt 17 >> result_try1.txt
 ./optimized_libmatch/test/group_search_reviewed.test ~/libmatch/test/Benchmarks/ping_small_64bit.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action605.txt 18 >> result_try1.txt
 ./optimized_libmatch/test/group_noexpand_base.test ~/libmatch/test/Benchmarks/ping_small_64bit.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action605.txt >> result_try1.txt
-./optimized_libmatch/test/group_noexpand_merge.test ~/libmatch/test/Benchmarks/ping_small_64bit.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action605.txt >> result_try1.txt
+#./optimized_libmatch/test/group_noexpand_merge.test ~/libmatch/test/Benchmarks/ping_small_64bit.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action605.txt >> result_try1.txt
 #./optimized_libmatch/test/basic_trie_group.test ~/libmatch/test/Benchmarks/ping_small_64bit.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action605.txt >> result_try1.txt
 
 
