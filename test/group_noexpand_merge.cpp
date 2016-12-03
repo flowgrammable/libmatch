@@ -462,7 +462,7 @@ int main(int argc, char* argv[])
   }
   file2.close();
   // Set the hard line for the memory cost == number of trie node
-  threshold = stoull(argv[4]);
+  //threshold = stoull(argv[4]);
   ifstream file (argv[1]);
   // Read the rules from txt file
   vector<Rule> oldpingRulesTable;
@@ -547,7 +547,7 @@ int main(int argc, char* argv[])
       vector<Rule> new_table_list = rules_rearrange(
             newList, new_generated_delta );
       for ( int k = 0; k < new_table_list.size(); k++ ) {
- //Trie trie1; // for caculating the trie1.new_num
+        //Trie trie1; // for caculating the trie1.new_num
         // for guarantee avoding the bad memory alloc
         if ( is_prefix(new_table_list.at (k)) ) {
           // if this is prefix rules, don't need to expand
@@ -666,7 +666,7 @@ int main(int argc, char* argv[])
           // becasue we control the number of expanding wildcard
           // so don't need to delete rules manually
           //cout << "group index=" << j << ", index num: " << k << "," << "value: "<< newnewTable[k].value << "," << "mask: "
-               //<< newnewTable[k].mask << endl;
+          //<< newnewTable[k].mask << endl;
           tries[j].expand_rule(newnewTable.at(k));
           expandRule_num ++;
         }
@@ -795,7 +795,7 @@ int main(int argc, char* argv[])
         // becasue we control the number of expanding wildcard
         // so don't need to delete rules manually
         //cout << "group index=" << j << ", index num: " << k << "," << "value: "<< newnewnewTable[k].value << "," << "mask: "
-             //<< newnewnewTable[k].mask << endl;
+        //<< newnewnewTable[k].mask << endl;
         newtries[j].expand_rule(newnewnewTable.at(k));
         newexpandRule_num ++;
       }
