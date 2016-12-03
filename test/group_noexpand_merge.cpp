@@ -514,7 +514,7 @@ int main(int argc, char* argv[])
     }
   }
   file1.close();
-  // cout << keyTable.size() << endl;
+  cout << "The num of keys: " << keyTable.size() << endl;
   // Genearte the different size of key nums
   /*
   vector<uint64_t> keyTable;
@@ -569,10 +569,10 @@ int main(int argc, char* argv[])
   }
   // Copy the groupVector, in order to recover the deleted element later
   vector<uint32_t> original_groupVector(groupVector);
-  cout << "Num of groups is:" << " " << groupVector.size() << endl;
+  cout << "(No expand) Num of Original groups is:" << " " << original_groupVector.size() << endl;
 
-  for (i = 0; i < groupVector.size(); i++) {
-    cout << "Group index: " << i << "," << groupVector[i] << endl;
+  for (i = 0; i < original_groupVector.size(); i++) {
+    cout << "Original Group index: " << i << "," << original_groupVector[i] << endl;
   }
 
   //cout << "The num of trie node: " << trie1.node_count << endl;
@@ -618,9 +618,6 @@ int main(int argc, char* argv[])
 
     int expandRule_num = 0;
     int insertRule_num = 0;
-    //uint64_t actionSum = 0;
-    //uint64_t checksum = 0; // show the sum of matching priority
-    //uint64_t match = 0; // how many keys are being matched in these new rules
     uint64_t sum_trie_expand_count = 0;
     uint64_t sum_trie_count = 0;
     uint64_t sum_trie_node_count = 0;
@@ -663,12 +660,23 @@ int main(int argc, char* argv[])
           insertRule_num ++;
         }
         else {
+          // Avoid the memory overflow, expand too much
+          // Set the threshold to "20"
+          if ( tries[j].get_new_num( newnewTable.at (k))  < 12 ) {
           // becasue we control the number of expanding wildcard
           // so don't need to delete rules manually
           //cout << "group index=" << j << ", index num: " << k << "," << "value: "<< newnewTable[k].value << "," << "mask: "
           //<< newnewTable[k].mask << endl;
           tries[j].expand_rule(newnewTable.at(k));
           expandRule_num ++;
+          }
+          else {
+            cout << "test test==expand too much" << endl;
+            // If expand too much
+            //groupVector.insert(groupVector.begin(), original_groupVector[v-1]);
+            break;
+
+          }
         }
       }
       //cout << "j=" << j << ", " << "count number: " << tries[j].count << endl;
@@ -682,25 +690,39 @@ int main(int argc, char* argv[])
 
     }
 
-    cout << "Original num of trie node: " << sum_trie_node_count << endl;
+    cout << "Num of trie node: " << sum_trie_node_count << endl;
     // Check the memory cost, compared with the hard threshold==200,000 trie node
     // If the total cost of trie node is smaller than the threshold,
     // do the merge group operation
-    if ( sum_trie_node_count < 200000 ) {
-      // do the grouping merge, which means change the groupVector
-      // show the original group vector without expansion
-      // erase the first element in the groupVector
-      groupVector.erase(groupVector.begin());
-      continue;
-      //groupVector.erase(groupVector.begin());
-      //groupVector.erase(groupVector.begin());
-    }
-    // If the trie node > 200000, break the for loop
-    else {
-      cout << "Index of v: " << v-1 << "," << original_groupVector[v-1] << endl;
-      // Insert the element to the beginning of the vector, "0" position
-      groupVector.insert(groupVector.begin(), original_groupVector[v-1]);
+    if ( original_groupVector.size() == 1 && groupVector.size() == 1 ) {
+      // The original group is 1, cannot merge anymore, would be "-1"
       break;
+    }
+    // Too specific......
+    /*
+    if ( original_groupVector.size() == 2 ) {
+      //groupVector.insert(groupVector.begin(), original_groupVector[v-1]);
+      break;
+    }
+    */
+    else {
+      if ( sum_trie_node_count < 200000 ) {
+        // do the grouping merge, which means change the groupVector
+        // show the original group vector without expansion
+        // erase the first element in the groupVector
+        groupVector.erase(groupVector.begin());
+        continue;
+        //groupVector.erase(groupVector.begin());
+        //groupVector.erase(groupVector.begin());
+      }
+      // If the trie node > 200000, break the for loop
+      else {
+        //cout << "test: " << v << endl;
+        cout << "Index of v: " << v-1 << "," << original_groupVector[v-1] << endl;
+        // Insert the element to the beginning of the vector, "0" position
+        groupVector.insert(groupVector.begin(), original_groupVector[v-1]);
+        break;
+      }
     }
   }
 
