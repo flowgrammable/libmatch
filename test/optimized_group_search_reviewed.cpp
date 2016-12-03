@@ -694,13 +694,13 @@ int main(int argc, char* argv[])
     auto start1 = get_time::now();
 
     // Merge the rules in the same group
-    vector<Rule> mergedTable = merge_rules(bigArray[j]);
+    //vector<Rule> mergedTable = merge_rules(bigArray[j]);
 
-    vector<int> delta_need = generate_delta(mergedTable);
+    vector<int> delta_need = generate_delta(bigArray[j]);
     // Push each delta vector into the 2D vector
     delta_vector.push_back(delta_need);
     //vector<Rule> newSumRuleTable = rules_rearrange(bigArray[j], delta_need);
-    vector<Rule> newnewTable = rules_rearrange(mergedTable, delta_need);
+    vector<Rule> newnewTable = rules_rearrange(bigArray[j], delta_need);
     // ===========================
     // Get the new rules table after applying rearrange vector
     // Need to check the maximal value of the get_new_num
