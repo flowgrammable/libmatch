@@ -694,8 +694,11 @@ int main(int argc, char* argv[])
     // Check the memory cost, compared with the hard threshold==200,000 trie node
     // If the total cost of trie node is smaller than the threshold,
     // do the merge group operation
-    if ( original_groupVector.size() == 1 && groupVector.size() == 1 ) {
+    if ( original_groupVector.size() == 1 ) {
       // The original group is 1, cannot merge anymore, would be "-1"
+      break;
+    }
+    if ( groupVector.size() == 1 ) {
       break;
     }
     // Too specific......
