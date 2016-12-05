@@ -705,10 +705,8 @@ int main(int argc, char* argv[])
       // The original group is 1, cannot merge anymore, would be "-1"
       break;
     }
-<<<<<<< HEAD
+
     /*
-=======
->>>>>>> 70dc69e1f5382fc260d30aa7f5dfa6e82a36f897
     if ( groupVector.size() == 2 || groupVector.size() == 1 ) {
       break;
     }
