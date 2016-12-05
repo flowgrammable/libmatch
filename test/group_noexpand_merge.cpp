@@ -698,7 +698,7 @@ int main(int argc, char* argv[])
       // The original group is 1, cannot merge anymore, would be "-1"
       break;
     }
-    if ( groupVector.size() == 2 ) {
+    if ( groupVector.size() == 2 || groupVector.size() == 1 ) {
       break;
     }
     // Too specific......
