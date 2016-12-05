@@ -580,7 +580,7 @@ int main(int argc, char* argv[])
   /* Create all the subgroups
    * The big array is called bigArray
   */
-
+  int test_flag = 0;
   for (int v = 0; v < original_groupVector.size(); v++) {
 
     vector< vector<Rule> > bigArray;
@@ -674,6 +674,7 @@ int main(int argc, char* argv[])
             cout << "test test==expand too much" << endl;
             // If expand too much
             //groupVector.insert(groupVector.begin(), original_groupVector[v-1]);
+            test_flag = 100; // make sure to break out of the loop
             break;
 
           }
@@ -689,18 +690,26 @@ int main(int argc, char* argv[])
       sum_trie_node_count += tries[j].node_count;
 
     }
-
+    cout << "test_flag: " << test_flag << endl;
     cout << "Num of trie node: " << sum_trie_node_count << endl;
     // Check the memory cost, compared with the hard threshold==200,000 trie node
     // If the total cost of trie node is smaller than the threshold,
     // do the merge group operation
+    if ( test_flag == 100 ){
+      cout << "Index of v: " << v-1 << "," << original_groupVector[v-1] << endl;
+      // Insert the element to the beginning of the vector, "0" position
+      groupVector.insert(groupVector.begin(), original_groupVector[v-1]);
+      break;
+    }
     if ( original_groupVector.size() == 1 ) {
       // The original group is 1, cannot merge anymore, would be "-1"
       break;
     }
-    if ( groupVector.size() == 2 ) {
+    /*
+    if ( groupVector.size() == 2 || groupVector.size() == 1 ) {
       break;
     }
+    */
     // Too specific......
     /*
     if ( original_groupVector.size() == 2 ) {
