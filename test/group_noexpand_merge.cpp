@@ -875,7 +875,7 @@ int main(int argc, char* argv[])
       decisionVector.push_back(search_ret.action);
       //cout << "test value: " << search_ret.action << endl; // Has a bug here....... action should not be 0
       // Find the bug, the expand function did not insert the action attribute value
-      newsum_key_search_time += chrono::duration_cast<ms>(diff4).count();
+      newsum_key_search_time += chrono::duration_cast<ns>(diff4).count();
     }
     //cout << "matchVector size: " << matchVector.size() << endl;
     //cout << "decisionVector size: " << decisionVector.size() << endl; // should be the same
@@ -923,7 +923,7 @@ int main(int argc, char* argv[])
   cout << "Total rules rearrange configure time is:" << newsum_rule_rearrange_time << " ms " << endl;
   cout << "Total rules insertion configure time is:" << newsum_rule_insertion_time << " ms " << endl;
   cout << "Total keys rearrange configure time is:" << newsum_key_rearrange_time << " ms " << endl;
-  cout << "Total keys search time is:" << newsum_key_search_time << " ms " << endl;
+  cout << "Total keys search time is:" << newsum_key_search_time << " ns " << endl;
   cout << "Total expanded count is:" << " " << newsum_trie_expand_count << endl;
   cout << "Expand rule num is:" << " " << newexpandRule_num << endl;
   cout << "Insert rule num is:" << " " << newinsertRule_num << endl;
