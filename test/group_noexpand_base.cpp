@@ -832,7 +832,7 @@ int main(int argc, char* argv[])
   cout << "Total expanded count is:" << " " << sum_trie_expand_count << endl;
   cout << "Expand rule num is:" << " " << expandRule_num << endl;
   cout << "Insert rule num is:" << " " << insertRule_num << endl;
-  cout << "Total actual insert rule num is:" << " " << sum_trie_count << endl;
+  cout << "Total insert rule num is:" << " " << sum_trie_count << endl;
   cout << "Total insert trie_node count is:" << " " << sum_trie_node_count << endl;
   cout << "Checksum: " << checksum << endl;
   cout << "ActionSum: " << actionSum << endl;
