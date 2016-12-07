@@ -462,7 +462,7 @@ int main(int argc, char* argv[])
   }
   file2.close();
   // Set the hard line for the memory cost == number of trie node
-  //threshold = stoull(argv[4]);
+  threshold = stoull(argv[4]);
   ifstream file (argv[1]);
   // Read the rules from txt file
   vector<Rule> oldpingRulesTable;
@@ -719,7 +719,7 @@ int main(int argc, char* argv[])
     }
     */
     else {
-      if ( sum_trie_node_count < 200000 ) {
+      if ( sum_trie_node_count < threshold ) {
         // do the grouping merge, which means change the groupVector
         // show the original group vector without expansion
         // erase the first element in the groupVector
