@@ -825,10 +825,10 @@ int main(int argc, char* argv[])
   //auto end = get_time::now();
   //auto diff = end - start;
 
-  cout << "Total rules rearrange configure time is:" << sum_rule_rearrange_time << " ms " << endl;
-  cout << "Total rules insertion configure time is:" << sum_rule_insertion_time << " ms " << endl;
-  cout << "Total keys rearrange configure time is:" << sum_key_rearrange_time << " ms " << endl;
-  cout << "Total keys search time is:" << sum_key_search_time << " ns " << endl;
+  cout << "Total rules rearrange configure time is:" << sum_rule_rearrange_time << endl;
+  cout << "Total rules insertion configure time is:" << sum_rule_insertion_time << endl;
+  cout << "Total keys rearrange configure time is:" << sum_key_rearrange_time << endl;
+  cout << "Total keys search time is:" << sum_key_search_time << endl;
   cout << "Total expanded count is:" << " " << sum_trie_expand_count << endl;
   cout << "Expand rule num is:" << " " << expandRule_num << endl;
   cout << "Insert rule num is:" << " " << insertRule_num << endl;
