@@ -706,11 +706,11 @@ int main(int argc, char* argv[])
       break;
     }
 
-    /*
-    if ( groupVector.size() == 2 || groupVector.size() == 1 ) {
+
+    if ( groupVector.size() == 1 ) {
       break;
     }
-    */
+
     // Too specific......
     /*
     if ( original_groupVector.size() == 2 ) {
