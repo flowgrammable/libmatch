@@ -675,7 +675,7 @@ int main(int argc, char* argv[])
         else {
           // Avoid the memory overflow, expand too much
           // Set the threshold to "20"
-          if ( tries[j].get_new_num( newnewTable.at (k))  < 20 ) {
+          if ( tries[j].get_new_num( newnewTable.at (k))  < 24 ) {
             // becasue we control the number of expanding wildcard
             // so don't need to delete rules manually
             tries[j].expand_rule(newnewTable.at(k));
@@ -929,7 +929,7 @@ int main(int argc, char* argv[])
       }
       // If the trie node > 200000, break the for loop
       else {
-        cout << "Index of v: " << v-1 << "," << original_groupVector[v-1] << endl;
+        cout << "trie node num ==> Index of v: " << v-1 << "," << original_groupVector[v-1] << endl;
         // Insert the element to the beginning of the vector, "0" position
         groupVector.insert(groupVector.begin(), original_groupVector[v-1]);
         break;
