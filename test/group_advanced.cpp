@@ -647,6 +647,7 @@ int main(int argc, char* argv[])
     uint64_t sum_trie_expand_count = 0;
     uint64_t sum_trie_count = 0;
     uint64_t sum_trie_node_count = 0;
+    int ping_test = 0;
 
     //get time1
     //auto start = get_time::now(); // use auto keyword to minimize typing strokes :)
@@ -675,16 +676,17 @@ int main(int argc, char* argv[])
         else {
           // Avoid the memory overflow, expand too much
           // Set the threshold to "20"
-          if ( tries[j].get_new_num( newnewTable.at (k))  < 24 ) {
+          if ( tries[j].get_new_num( newnewTable.at (k))  < 20 ) {
             // becasue we control the number of expanding wildcard
             // so don't need to delete rules manually
             tries[j].expand_rule(newnewTable.at(k));
             expandRule_num ++;
           }
           else {
+            test_flag = 100; // make sure to break out of the loop
             cout << "test test==expand too much" << endl;
             // If expand too much
-            test_flag = 100; // make sure to break out of the loop
+            cout << "ping test....." << endl;
             break;
           }
         }
@@ -695,6 +697,7 @@ int main(int argc, char* argv[])
       sum_trie_node_count += tries[j].node_count;
 
     }
+    cout << "ping ping test...." << endl;
     cout << "test_flag: " << test_flag << endl;
     cout << "Num of trie node: " << sum_trie_node_count << endl;
     // Check the memory cost, compared with the hard threshold==200,000 trie node
@@ -718,12 +721,17 @@ int main(int argc, char* argv[])
         // do the grouping merge, which means change the groupVector
         // show the original group vector without expansion
         // erase the first element in the groupVector
+        vector<uint32_t> flag_groupVector(groupVector);
+
         groupVector.erase(groupVector.begin());
 
+
+/*
         if ( groupVector.size() == 1 ) {
           break;
         }
-        else {
+        */
+       //else {
           vector< vector<Rule> > newbigArray;
           // Create a new sub group by copying the related rules
 
@@ -812,17 +820,16 @@ int main(int argc, char* argv[])
                   expandRule_num ++;
                 }
                 else {
+                  cout << "888888888888888888888" << endl;
                   cout << "test test==expand too much" << endl;
                   // If expand too much
-                  test_flag = 100; // make sure to break out of the loop
+                  ping_test = 100; // make sure to break out of the loop
                   break;
                 }
 
               }
             }
-            if ( test_flag == 100 ) {
-              break; // break the j loop, uppter layer
-            }
+
             //cout << "j=" << j << ", " << "count number: " << tries[j].count << endl;
             cout << "j=" << j << ", " << "trie node num: " << newtries[j].node_count << endl;
             auto end2 = get_time::now();
@@ -834,7 +841,11 @@ int main(int argc, char* argv[])
 
           }
 
-
+          if ( ping_test == 100 ) {
+            cout << "break the j" << endl;
+            groupVector.insert(groupVector.begin(), flag_groupVector[0]);
+            break; // break the j loop, uppter layer
+          }
 
           // Finished the rearranged rule insertion for each subtrie
           // Doing the rule searching
@@ -924,7 +935,8 @@ int main(int argc, char* argv[])
           cout << "Checksum: " << checksum << endl;
           cout << "ActionSum: " << actionSum << endl;
           cout << "Total matches: " << match << endl;
-        }
+          cout << "==================================================" << endl;
+        //}
 
 
 
