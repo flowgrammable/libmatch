@@ -847,6 +847,8 @@ int main(int argc, char* argv[])
             break; // break the j loop, uppter layer
           }
 
+          cout << "Num of groups is:" << " " << groupVector.size() << endl;
+
           // Finished the rearranged rule insertion for each subtrie
           // Doing the rule searching
           char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
