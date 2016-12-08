@@ -813,7 +813,7 @@ int main(int argc, char* argv[])
                 // so don't need to delete rules manually
                 //cout << "group index=" << j << ", index num: " << k << "," << "value: "<< newnewnewTable[k].value << "," << "mask: "
                 //<< newnewnewTable[k].mask << endl;
-                if ( newtries[j].get_new_num( newnewnewTable.at (k))  < 20 ) {
+                if ( newtries[j].get_new_num( newnewnewTable.at (k))  < 23 ) {
                   // becasue we control the number of expanding wildcard
                   // so don't need to delete rules manually
                   newtries[j].expand_rule(newnewnewTable.at(k));
