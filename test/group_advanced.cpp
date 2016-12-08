@@ -820,6 +820,9 @@ int main(int argc, char* argv[])
 
               }
             }
+            if ( test_flag == 100 ) {
+              break; // break the j loop, uppter layer
+            }
             //cout << "j=" << j << ", " << "count number: " << tries[j].count << endl;
             cout << "j=" << j << ", " << "trie node num: " << newtries[j].node_count << endl;
             auto end2 = get_time::now();
@@ -929,7 +932,7 @@ int main(int argc, char* argv[])
       }
       // If the trie node > 200000, break the for loop
       else {
-        cout << "trie node num ==> Index of v: " << v-1 << "," << original_groupVector[v-1] << endl;
+        cout << "trie node num threshold ==> Index of v: " << v-1 << "," << original_groupVector[v-1] << endl;
         // Insert the element to the beginning of the vector, "0" position
         groupVector.insert(groupVector.begin(), original_groupVector[v-1]);
         break;
