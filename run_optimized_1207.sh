@@ -16,7 +16,7 @@ echo "=====207 original====="
 
 echo "=====461====="
 ./optimized_libmatch/test/group_noexpand_base.test ~/libmatch/test/Benchmarks/461.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action461.txt >> result_try1.txt
-./optimized_libmatch/test/group_merge.test ~/libmatch/test/Benchmarks/461.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action461.txt 2000000 >> result_try1.txt
+./optimized_libmatch/test/group_advanced.test ~/libmatch/test/Benchmarks/461.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action461.txt 2000000 >> result_try1.txt
 #./optimized_libmatch/test/basic_trie_group.test ~/libmatch/test/Benchmarks/461.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action461.txt >> result_try1.txt
 
 echo "=====461_1====="
