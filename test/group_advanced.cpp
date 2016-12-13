@@ -532,6 +532,7 @@ int main(int argc, char* argv[])
     }
   }
   file1.close();
+  cout << "######Group_advanced algorithm#####" << endl;
   cout << "The num of keys: " << keyTable.size() << endl;
   // Genearte the different size of key nums
   /*
