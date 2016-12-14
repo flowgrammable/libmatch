@@ -1310,3 +1310,247 @@ Checksum: 9295389
 ActionSum: 179839
 Total matches: 7344
 ==================================================
+######Group_advanced algorithm#####
+The num of keys: 17642
+(No expand) Num of Original groups is: 12
+j=0, trie node num: 59129
+j=1, trie node num: 3394
+j=2, trie node num: 2202
+j=3, trie node num: 1924
+j=4, trie node num: 1424
+j=5, trie node num: 4189
+j=6, trie node num: 3500
+j=7, trie node num: 3503
+j=8, trie node num: 2454
+j=9, trie node num: 2064
+j=10, trie node num: 1741
+j=11, trie node num: 710
+ping ping test....
+test_flag: 0
+Num of trie node: 86234
+j=0, trie node num: 61308
+j=1, trie node num: 2202
+j=2, trie node num: 1924
+j=3, trie node num: 1424
+j=4, trie node num: 4189
+j=5, trie node num: 3500
+j=6, trie node num: 3503
+j=7, trie node num: 2454
+j=8, trie node num: 2064
+j=9, trie node num: 1741
+j=10, trie node num: 710
+Num of groups is: 11
+Total rules rearrange configure time is:1461
+Total rules insertion configure time is:9310
+Total keys rearrange configure time is:5692436
+Total keys search time is:351948581
+Total expanded count is: 0
+Expand rule num is: 0
+Insert rule num is: 2925
+Total insert rule num is: 2891
+Total insert trie_node count is: 85019
+Checksum: 9295389
+ActionSum: 179839
+Total matches: 7344
+==================================================
+j=0, trie node num: 61308
+j=1, trie node num: 2202
+j=2, trie node num: 1924
+j=3, trie node num: 1424
+j=4, trie node num: 4189
+j=5, trie node num: 3500
+j=6, trie node num: 3503
+j=7, trie node num: 2454
+j=8, trie node num: 2064
+j=9, trie node num: 1741
+j=10, trie node num: 710
+ping ping test....
+test_flag: 0
+Num of trie node: 85019
+j=0, trie node num: 62223
+j=1, trie node num: 1924
+j=2, trie node num: 1424
+j=3, trie node num: 4189
+j=4, trie node num: 3500
+j=5, trie node num: 3503
+j=6, trie node num: 2454
+j=7, trie node num: 2064
+j=8, trie node num: 1741
+j=9, trie node num: 710
+Num of groups is: 10
+Total rules rearrange configure time is:1442
+Total rules insertion configure time is:9180
+Total keys rearrange configure time is:4685569
+Total keys search time is:319894467
+Total expanded count is: 0
+Expand rule num is: 0
+Insert rule num is: 2925
+Total insert rule num is: 2891
+Total insert trie_node count is: 83732
+Checksum: 9295389
+ActionSum: 179839
+Total matches: 7344
+==================================================
+j=0, trie node num: 62223
+j=1, trie node num: 1924
+j=2, trie node num: 1424
+j=3, trie node num: 4189
+j=4, trie node num: 3500
+j=5, trie node num: 3503
+j=6, trie node num: 2454
+j=7, trie node num: 2064
+j=8, trie node num: 1741
+j=9, trie node num: 710
+ping ping test....
+test_flag: 0
+Num of trie node: 83732
+j=0, trie node num: 62814
+j=1, trie node num: 1424
+j=2, trie node num: 4189
+j=3, trie node num: 3500
+j=4, trie node num: 3503
+j=5, trie node num: 2454
+j=6, trie node num: 2064
+j=7, trie node num: 1741
+j=8, trie node num: 710
+Num of groups is: 9
+Total rules rearrange configure time is:1410
+Total rules insertion configure time is:9070
+Total keys rearrange configure time is:3771458
+Total keys search time is:286903388
+Total expanded count is: 0
+Expand rule num is: 0
+Insert rule num is: 2925
+Total insert rule num is: 2891
+Total insert trie_node count is: 82399
+Checksum: 9295389
+ActionSum: 179839
+Total matches: 7344
+==================================================
+j=0, trie node num: 62814
+j=1, trie node num: 1424
+j=2, trie node num: 4189
+j=3, trie node num: 3500
+j=4, trie node num: 3503
+j=5, trie node num: 2454
+j=6, trie node num: 2064
+j=7, trie node num: 1741
+j=8, trie node num: 710
+ping ping test....
+test_flag: 0
+Num of trie node: 82399
+j=0, trie node num: 63237
+j=1, trie node num: 4189
+j=2, trie node num: 3500
+j=3, trie node num: 3503
+j=4, trie node num: 2454
+j=5, trie node num: 2064
+j=6, trie node num: 1741
+j=7, trie node num: 710
+Num of groups is: 8
+Total rules rearrange configure time is:1423
+Total rules insertion configure time is:8909
+Total keys rearrange configure time is:2974178
+Total keys search time is:255114810
+Total expanded count is: 0
+Expand rule num is: 0
+Insert rule num is: 2925
+Total insert rule num is: 2891
+Total insert trie_node count is: 81398
+Checksum: 9295389
+ActionSum: 179839
+Total matches: 7344
+==================================================
+j=0, trie node num: 63237
+j=1, trie node num: 4189
+j=2, trie node num: 3500
+j=3, trie node num: 3503
+j=4, trie node num: 2454
+j=5, trie node num: 2064
+j=6, trie node num: 1741
+j=7, trie node num: 710
+ping ping test....
+test_flag: 0
+Num of trie node: 81398
+j=0, trie node num: 149891
+j=1, trie node num: 3500
+j=2, trie node num: 3503
+j=3, trie node num: 2454
+j=4, trie node num: 2064
+j=5, trie node num: 1741
+j=6, trie node num: 710
+Num of groups is: 7
+Total rules rearrange configure time is:1464
+Total rules insertion configure time is:17926
+Total keys rearrange configure time is:2276063
+Total keys search time is:225506991
+Total expanded count is: 4102
+Expand rule num is: 0
+Insert rule num is: 2636
+Total insert rule num is: 6582
+Total insert trie_node count is: 163863
+Checksum: 9295389
+ActionSum: 179839
+Total matches: 7344
+==================================================
+j=0, trie node num: 149891
+j=1, trie node num: 3500
+j=2, trie node num: 3503
+j=3, trie node num: 2454
+j=4, trie node num: 2064
+j=5, trie node num: 1741
+j=6, trie node num: 710
+ping ping test....
+test_flag: 0
+Num of trie node: 163863
+j=0, trie node num: 2810818
+j=1, trie node num: 3503
+j=2, trie node num: 2454
+j=3, trie node num: 2064
+j=4, trie node num: 1741
+j=5, trie node num: 710
+Num of groups is: 6
+Total rules rearrange configure time is:1407
+Total rules insertion configure time is:304021
+Total keys rearrange configure time is:1654186
+Total keys search time is:194629877
+Total expanded count is: 122618
+Expand rule num is: 0
+Insert rule num is: 2401
+Total insert rule num is: 119480
+Total insert trie_node count is: 2821290
+Checksum: 9295389
+ActionSum: 179839
+Total matches: 7344
+==================================================
+j=0, trie node num: 2810818
+j=1, trie node num: 3503
+j=2, trie node num: 2454
+j=3, trie node num: 2064
+j=4, trie node num: 1741
+j=5, trie node num: 710
+ping ping test....
+test_flag: 0
+Num of trie node: 2821290
+trie node num threshold ==> Index of v: 5,2217
+Num of groups is: 7
+j=0, trie node num: 149891
+j=1, trie node num: 3500
+j=2, trie node num: 3503
+j=3, trie node num: 2454
+j=4, trie node num: 2064
+j=5, trie node num: 1741
+j=6, trie node num: 710
+Total rules rearrange configure time is:1424
+Total rules insertion configure time is:17667
+Total keys rearrange configure time is:2294199
+Total keys search time is:224910941
+Total expanded count is: 4102
+Expand rule num is: 289
+Insert rule num is: 2636
+Total insert rule num is: 6582
+Total insert trie_node count is: 163863
+Checksum: 9295389
+ActionSum: 179839
+Total matches: 7344
+==================================================

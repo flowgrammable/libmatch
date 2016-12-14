@@ -1,14 +1,52 @@
 Num of groups is: 2
-Total rules rearrange configure time is:29591
-Total rules insertion configure time is:4763895
-Total keys rearrange configure time is:147253
-Total keys search time is:69680564
+Total rules rearrange configure time is:29610
+Total rules insertion configure time is:4992099
+Total keys rearrange configure time is:147432
+Total keys search time is:69743823
 Total expanded count is: 1687294
 Expand rule num is: 548
 Insert rule num is: 2374
 Total insert rule num is: 1667234
 Total insert trie_node count is: 46726190
 Checksum: 9285955
+ActionSum: 179839
+Total matches: 7344
+==================================================
+Num of groups is: 12
+Group index: 0,1584
+Group index: 1,1715
+Group index: 2,1846
+Group index: 3,1977
+Group index: 4,2070
+Group index: 5,2217
+Group index: 6,2348
+Group index: 7,2479
+Group index: 8,2610
+Group index: 9,2741
+Group index: 10,2872
+Group index: 11,2924
+j=0, trie node num: 59129
+j=1, trie node num: 3394
+j=2, trie node num: 2202
+j=3, trie node num: 1924
+j=4, trie node num: 1424
+j=5, trie node num: 4189
+j=6, trie node num: 3500
+j=7, trie node num: 3503
+j=8, trie node num: 2454
+j=9, trie node num: 2064
+j=10, trie node num: 1741
+j=11, trie node num: 710
+Total rules rearrange configure time is:1490
+Total rules insertion configure time is:9134
+Total keys rearrange configure time is:6847949
+Total keys search time is:383414367
+Total expanded count is: 0
+Expand rule num is: 0
+Insert rule num is: 2925
+Total insert rule num is: 2891
+Total insert trie_node count is: 86234
+Checksum: 9295389
 ActionSum: 179839
 Total matches: 7344
 ==================================================
@@ -42,10 +80,10 @@ j=8, trie node num: 2064
 j=9, trie node num: 1741
 j=10, trie node num: 710
 Num of groups is: 11
-Total rules rearrange configure time is:1466
-Total rules insertion configure time is:9391
-Total keys rearrange configure time is:5667605
-Total keys search time is:351844967
+Total rules rearrange configure time is:1528
+Total rules insertion configure time is:9515
+Total keys rearrange configure time is:5820399
+Total keys search time is:358889974
 Total expanded count is: 0
 Expand rule num is: 0
 Insert rule num is: 2925
@@ -79,10 +117,10 @@ j=7, trie node num: 2064
 j=8, trie node num: 1741
 j=9, trie node num: 710
 Num of groups is: 10
-Total rules rearrange configure time is:1456
-Total rules insertion configure time is:9252
-Total keys rearrange configure time is:4682402
-Total keys search time is:320323278
+Total rules rearrange configure time is:1442
+Total rules insertion configure time is:9303
+Total keys rearrange configure time is:4726675
+Total keys search time is:321177680
 Total expanded count is: 0
 Expand rule num is: 0
 Insert rule num is: 2925
@@ -114,10 +152,10 @@ j=6, trie node num: 2064
 j=7, trie node num: 1741
 j=8, trie node num: 710
 Num of groups is: 9
-Total rules rearrange configure time is:1370
-Total rules insertion configure time is:9201
-Total keys rearrange configure time is:3791549
-Total keys search time is:290496030
+Total rules rearrange configure time is:1376
+Total rules insertion configure time is:9197
+Total keys rearrange configure time is:3808240
+Total keys search time is:289507597
 Total expanded count is: 0
 Expand rule num is: 0
 Insert rule num is: 2925
@@ -147,10 +185,10 @@ j=5, trie node num: 2064
 j=6, trie node num: 1741
 j=7, trie node num: 710
 Num of groups is: 8
-Total rules rearrange configure time is:1333
-Total rules insertion configure time is:9062
-Total keys rearrange configure time is:2959316
-Total keys search time is:257581764
+Total rules rearrange configure time is:1359
+Total rules insertion configure time is:9114
+Total keys rearrange configure time is:2994273
+Total keys search time is:257861621
 Total expanded count is: 0
 Expand rule num is: 0
 Insert rule num is: 2925
@@ -178,10 +216,10 @@ j=4, trie node num: 4830
 j=5, trie node num: 3206
 j=6, trie node num: 710
 Num of groups is: 7
-Total rules rearrange configure time is:1402
-Total rules insertion configure time is:8948
-Total keys rearrange configure time is:2251631
-Total keys search time is:226367987
+Total rules rearrange configure time is:1401
+Total rules insertion configure time is:9013
+Total keys rearrange configure time is:2274719
+Total keys search time is:226992040
 Total expanded count is: 0
 Expand rule num is: 0
 Insert rule num is: 2925
@@ -207,10 +245,10 @@ j=3, trie node num: 6884
 j=4, trie node num: 4830
 j=5, trie node num: 3206
 Num of groups is: 6
-Total rules rearrange configure time is:1370
-Total rules insertion configure time is:8880
-Total keys rearrange configure time is:1636030
-Total keys search time is:195359206
+Total rules rearrange configure time is:1359
+Total rules insertion configure time is:8898
+Total keys rearrange configure time is:1652821
+Total keys search time is:196055520
 Total expanded count is: 0
 Expand rule num is: 0
 Insert rule num is: 2873
@@ -234,10 +272,10 @@ j=2, trie node num: 6884
 j=3, trie node num: 4830
 j=4, trie node num: 3206
 Num of groups is: 5
-Total rules rearrange configure time is:1315
-Total rules insertion configure time is:8839
-Total keys rearrange configure time is:1114818
-Total keys search time is:162584929
+Total rules rearrange configure time is:1323
+Total rules insertion configure time is:8861
+Total keys rearrange configure time is:1127174
+Total keys search time is:162789704
 Total expanded count is: 0
 Expand rule num is: 0
 Insert rule num is: 2873
@@ -259,10 +297,10 @@ j=1, trie node num: 2773
 j=2, trie node num: 12252
 j=3, trie node num: 3206
 Num of groups is: 4
-Total rules rearrange configure time is:1311
-Total rules insertion configure time is:8719
-Total keys rearrange configure time is:690223
-Total keys search time is:130828698
+Total rules rearrange configure time is:1322
+Total rules insertion configure time is:8712
+Total keys rearrange configure time is:698060
+Total keys search time is:131065514
 Total expanded count is: 0
 Expand rule num is: 0
 Insert rule num is: 2873
@@ -282,10 +320,10 @@ j=0, trie node num: 63237
 j=1, trie node num: 12252
 j=2, trie node num: 3206
 Num of groups is: 3
-Total rules rearrange configure time is:1288
-Total rules insertion configure time is:8500
-Total keys rearrange configure time is:371058
-Total keys search time is:99434488
+Total rules rearrange configure time is:1292
+Total rules insertion configure time is:8479
+Total keys rearrange configure time is:375597
+Total keys search time is:99394498
 Total expanded count is: 0
 Expand rule num is: 0
 Insert rule num is: 2873
@@ -303,10 +341,10 @@ current group size: 3
 j=0, trie node num: 63237
 j=1, trie node num: 13938
 Num of groups is: 2
-Total rules rearrange configure time is:1263
-Total rules insertion configure time is:8441
-Total keys rearrange configure time is:143344
-Total keys search time is:67567824
+Total rules rearrange configure time is:1274
+Total rules insertion configure time is:8471
+Total keys rearrange configure time is:143709
+Total keys search time is:67717129
 Total expanded count is: 0
 Expand rule num is: 0
 Insert rule num is: 2873
