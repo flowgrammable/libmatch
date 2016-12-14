@@ -1,3 +1,17 @@
+Num of groups is: 1
+Total rules rearrange configure time is:2520
+Total rules insertion configure time is:1070
+Total keys rearrange configure time is:9863
+Total keys search time is:8186026
+Total expanded count is: 0
+Expand rule num is: 0
+Insert rule num is: 207
+Total insert rule num is: 207
+Total insert trie_node count is: 9289
+Checksum: 158980
+ActionSum: 38279
+Total matches: 1579
+==================================================
 ++++++Group_nolimit algorithm+++++
 The num of keys: 17642
 (No expand) Num of Original groups is: 1
