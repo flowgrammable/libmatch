@@ -238,6 +238,49 @@ bool wayToSort1(Rule aaa, Rule bbb)
   return (aaa.value < bbb.value);
 }
 
+// Get the number of wildcard * in a rule
+// The rule is 64-bit
+int get_numOFwildcard(Rule& rule)
+{
+  int count = 0; // show the number of wildcard
+  for(int i = 0; i < 64; i++) {
+    // if this: get the position whose bit is 1 (have wildcard)
+    if((rule.mask >> i) & uint64_t(1) == 1) {
+      count++;
+    }
+  }
+  return count;
+}
+
+/*
+ * Bit-weaving paper
+ * sort the two rules by the number of wildcard
+ * call the get_numOFwildcard function
+*/
+bool bw_wayToSort(Rule a, Rule b)
+{
+  int num_a = get_numOFwildcard(a);
+  int num_b = get_numOFwildcard(b);
+  return (num_a < num_b);
+}
+
+/*
+ * Bit-weaving paper
+ * sort function: according to the number of wildcard in the rules
+ * first: get the number of wildcard, put the number into an int vector
+ * second: sort this number int vector in an ascending order
+*/
+vector<Rule> bw_sortrules(vector<Rule>& ruleList)
+{
+  //vector<Rule> bw_sortTable;
+  std::sort(ruleList.begin(), ruleList.end(), bw_wayToSort);
+  for (int k = 0; k < ruleList.size(); k ++) {
+    cout << ruleList[k].value << ", " << ruleList[k].mask << endl;
+  }
+  return ruleList;
+}
+
+
 /*
  * Sorting the prefix format rules into asscending order, denpending on the prefix length
  * using the std::sort function
@@ -443,6 +486,8 @@ uint64_t keys_rearrange(uint64_t key, vector<int> delta_array)
 }
 
 static int threshold; // Set the wildcard num as a variable
+static int method; // pass the different algorithm to the program
+// has two algorithm: one is mine own, the other one is bitweaving
 int main(int argc, char* argv[])
 {
   // Input the action file
@@ -485,8 +530,26 @@ int main(int argc, char* argv[])
     }
   }
   file.close();
+  /*
+  method = stoull(argv[4]); // input the value
+  // if method == 1, it is the bitweaving algorithm
+  // if method == 2, it is mine own algorithm
+
+  if (method == 1) {
+    cout << "Bit-weaving algorithm" << endl;
+    vector<Rule> pingRulesTable = bw_sortrules(oldpingRulesTable);
+  }
+  if (method == 2) {
+    cout << "Ping's algorithm" << endl;
+    vector<Rule> pingRulesTable = sort_rules(oldpingRulesTable);
+  }
+  */
   // Need to check the priority preserve the same after sorting
   vector<Rule> pingRulesTable = sort_rules(oldpingRulesTable);
+  //vector<Rule> ping2RulesTable = sort_rules(oldpingRulesTable);
+  //vector<Rule> pingRulesTable = bw_sortrules(oldpingRulesTable);
+  //cout << "After sorted rule table size is: " << pingRulesTable.size() << endl;
+  //vector<Rule> pingRulesTable = bw_sortrules(oldpingRulesTable);
   //cout << "Sorted total size = " << pingRulesTable.size() << endl;
   //vector<Rule> pingRulesTable = merge_rules(oldpingRulesTable);
   //cout << "Merged total size = " << pingRulesTable.size() << endl;
@@ -546,7 +609,7 @@ int main(int argc, char* argv[])
       vector<Rule> new_table_list = rules_rearrange(
             newList, new_generated_delta );
       for ( int k = 0; k < new_table_list.size(); k++ ) {
-        Trie trie1; // for caculating the trie1.new_num
+        //Trie trie1; // for caculating the trie1.new_num
         // for guarantee avoding the bad memory alloc
 
         if ( is_prefix(new_table_list.at (k)) ) {
@@ -563,6 +626,29 @@ int main(int argc, char* argv[])
       }
     }
     else {
+      // There is a bug when the last group includes 460 and 461, which they cannot get
+      // into a same group
+      newList.push_back(pingRulesTable[i]);
+      vector<int> new_generated_delta2 = generate_delta(newList);
+      // Create the rearranged rule set
+      vector<Rule> new_table_list2 = rules_rearrange(
+            newList, new_generated_delta2 );
+      for ( int k = 0; k < new_table_list2.size(); k++ ) {
+        //Trie trie2; // for caculating the trie1.new_num
+        // for guarantee avoding the bad memory alloc
+
+        if ( is_prefix(new_table_list2.at (k)) ) {
+          // if this is prefix rules, don't need to expand
+          continue;
+        }
+        else {
+          groupVector.push_back(i-1);
+          // clear the newList vector, becasue this is a seperated group
+          newList.clear();
+          //i = i -1;
+          break;
+        }
+      }
       groupVector.push_back(i);
     }
   }
@@ -683,6 +769,7 @@ int main(int argc, char* argv[])
       else {
         // becasue we control the number of expanding wildcard
         // so don't need to delete rules manually
+        cout << "There has expansion" << endl;
         cout << "group index=" << j << ", index num: " << k << "," << "value: "<< newnewTable[k].value << "," << "mask: "
              << newnewTable[k].mask << endl;
         tries[j].expand_rule(newnewTable.at(k));
@@ -703,60 +790,6 @@ int main(int argc, char* argv[])
   // Finished the rearranged rule insertion for each subtrie
   // Doing the rule searching
   char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
-  /*
-  for (int i = 0; i < keyTable.size(); i++) {
-    // Check each key
-    auto start3 = get_time::now();
-    vector<uint64_t> matchVector;
-    for (int m = 0; m < groupVector.size(); m++) {
-      uint64_t newGenKey = keys_rearrange(keyTable[i], delta_vector[m]);
-      //cout << "Key index:" << " " << i << " " << newGenKey << endl;
-      auto end3 = get_time::now();
-      auto diff3 = end3 - start3;
-      sum_key_rearrange_time += chrono::duration_cast<ms>(diff3).count();
-      auto start4 = get_time::now();
-      // How to get the multiple match index in a tree???
-      uint64_t priority = tries[m].LPM1_search_rule(newGenKey);
-      auto end4 = get_time::now();
-      auto diff4 = end4 - start4;
-      // Insert all the priority value, including match and no_match
-
-      matchVector.push_back(priority);
-
-      sum_key_search_time += chrono::duration_cast<ms>(diff4).count();
-    }
-
-    for (int h = 0; h < matchVector.size(); h++) {
-      cout << "The key index:" << i << " " << matchVector[h] << endl;
-    }
-
-
-
-    vector<uint64_t> test1;
-    for (int v = 0; v < matchVector.size(); v++) {
-
-      if (matchVector[v] == 0) {
-
-        continue;
-      }
-      else {
-        uint64_t test = matchVector[v];
-        test1.push_back(test);
-        continue;
-      }
-    }
-    // Choose the smallest one, which means the highest priority
-    if (test1.size() > 0) {
-
-      uint64_t match_final = *min_element(test1.begin(), test1.end());
-      //cout << "i index:" << i << " " << "final match priority index============:" << " " << match_final << endl;
-      checksum += match_final;
-      match++;
-    }
-
-
-  }
-*/
 
   for (int i = 0; i < keyTable.size(); i++) {
     // Check each key

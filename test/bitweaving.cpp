@@ -229,6 +229,34 @@ bool is_prefix(Rule& rule)
   }
 }
 
+
+
+// Get the number of wildcard * in a rule
+// The rule is 64-bit
+int get_numOFwildcard(Rule& rule)
+{
+  int count = 0; // show the number of wildcard
+  for(int i = 0; i < 64; i++) {
+    // if this: get the position whose bit is 1 (have wildcard)
+    if((rule.mask >> i) & uint64_t(1) == 1) {
+      count++;
+    }
+  }
+  return count;
+}
+
+/*
+ * Bit-weaving paper
+ * sort the two rules by the number of wildcard
+ * call the get_numOFwildcard function
+*/
+bool bw_wayToSort(Rule a, Rule b)
+{
+  int num_a = get_numOFwildcard(a);
+  int num_b = get_numOFwildcard(b);
+  return (num_a < num_b);
+}
+
 // Sorting the rules in an asscending order
 bool wayToSort(Rule aa, Rule bb)
 {
@@ -238,6 +266,23 @@ bool wayToSort(Rule aa, Rule bb)
 bool wayToSort1(Rule aaa, Rule bbb)
 {
   return (aaa.value < bbb.value);
+}
+
+/*
+ * Bit-weaving paper
+ * sort function: according to the number of wildcard in the rules
+ * first: get the number of wildcard, put the number into an int vector
+ * second: sort this number int vector in an ascending order
+*/
+vector<Rule> bw_sortrules(vector<Rule>& ruleList)
+{
+  //vector<Rule> bw_sortTable;
+  std::sort(ruleList.begin(), ruleList.end(), bw_wayToSort);
+  for (int k = 0; k < ruleList.size(); k ++) {
+    cout << ruleList[k].value << ", " << ruleList[k].mask << ", "
+         << ruleList[k].priority << ", " << ruleList[k].action << endl;
+  }
+  return ruleList;
 }
 
 /*
@@ -511,7 +556,8 @@ int main(int argc, char* argv[])
   }
   file.close();
   // Need to check the priority preserve the same after sorting
-  vector<Rule> pingRulesTable = sort_rules(oldpingRulesTable);
+  //vector<Rule> pingRulesTable = sort_rules(oldpingRulesTable);
+  vector<Rule> pingRulesTable = bw_sortrules(oldpingRulesTable);
   //cout << "Sorted total size = " << pingRulesTable.size() << endl;
   //vector<Rule> pingRulesTable = merge_rules(oldpingRulesTable);
   //cout << "Merged total size = " << pingRulesTable.size() << endl;
@@ -599,29 +645,6 @@ int main(int argc, char* argv[])
       }
     }
     else {
-      // There is a bug when the last group includes 460 and 461, which they cannot get
-      // into a same group
-      newList.push_back(pingRulesTable[i]);
-      vector<int> new_generated_delta2 = generate_delta(newList);
-      // Create the rearranged rule set
-      vector<Rule> new_table_list2 = rules_rearrange(
-            newList, new_generated_delta2 );
-      for ( int k = 0; k < new_table_list2.size(); k++ ) {
-        //Trie trie2; // for caculating the trie1.new_num
-        // for guarantee avoding the bad memory alloc
-
-        if ( is_prefix(new_table_list2.at (k)) ) {
-          // if this is prefix rules, don't need to expand
-          continue;
-        }
-        else {
-          groupVector.push_back(i-1);
-          // clear the newList vector, becasue this is a seperated group
-          newList.clear();
-          //i = i -1;
-          break;
-        }
-      }
       groupVector.push_back(i);
     }
   }
@@ -693,17 +716,17 @@ int main(int argc, char* argv[])
         groupVector.erase(groupVector.begin() + (v+1));
         //groupVector.erase(groupVector.begin() + (2*(v+1)-1));
       }
-
+      /*
       else if (  v < 8 ) {
         cout << "ping test" << endl;
         groupVector.erase(groupVector.begin() + ((v- int(original_groupVector.size() / 2 )) *2));
       }
-
-      else if ( v == 8 ){
+      */
+      else if ( v == 3 ){
         cout << "$$$$$test" << endl;
         groupVector.erase(groupVector.begin());
       }
-      else if ( v == 9 ) {
+      else if ( v == 4 ) {
         cout << "@@@@@@test" << endl;
         groupVector.erase(groupVector.begin() + 1);
       }
@@ -716,7 +739,7 @@ int main(int argc, char* argv[])
 
       //groupVector.erase(groupVector.begin() + (v+1));
       for (int b = 0; b < groupVector.size(); b++) {
-        cout << "New group index: " << b << ", " << "The new group index after group merge is: " << groupVector[b] << endl;
+        cout << groupVector[b] << endl;
       }
 
       /*
@@ -802,10 +825,14 @@ int main(int argc, char* argv[])
             newinsertRule_num ++;
           }
           else {
-            cout << "Occur expand+++++" << endl;
             newtries[j].expand_rule(newnewnewTable.at(k));
-            newexpandRule_num ++;
+            try {
 
+            }
+            catch (std::bad_alloc& ba){
+              cerr << "bad_alloc caught: " << ba.what() << endl;
+            }
+            newexpandRule_num ++;
           }
         }
 

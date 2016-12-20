@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <vector>
+#include <new>
+#include <exception>
 #include <string>
 #include <limits.h>
 #include <stdio.h>
@@ -10,6 +12,7 @@
 #include "basic_trie.hpp"
 
 using namespace std;
+extern char * _eMemory;
 
 // This function is caculating the log2 value
 static uint64_t mylog2 (uint64_t val) {
@@ -65,7 +68,15 @@ void convert_rule(vector<uint64_t>& rulesTable, Rule& rule)
 // Create a new trie node
 trie_node* new_node()
 {
-  trie_node* pNode = new trie_node();
+  trie_node* pNode = NULL;
+  try{
+    pNode = new trie_node();
+  }
+  catch (std::bad_alloc& ba)
+  {
+    cerr << "bad allocation: " << ba.what() << endl;
+    exit(EXIT_FAILURE);
+  }
   if (pNode) {
     pNode->priority = 0;
     pNode->children[0] = NULL;
