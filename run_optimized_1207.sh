@@ -57,7 +57,7 @@ echo "====1911====="
 
 echo "====2925====="
 #./optimized_libmatch/test/group_nolimit.test ~/libmatch/test/Benchmarks/ping_big_64bit_original.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action2925.txt >> result_try1.txt
-./optimized_libmatch/test/group_advanced.test ~/libmatch/test/Benchmarks/ping_big_64bit_original.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action2925.txt 2000000 >> result_try1.txt
+./optimized_libmatch/test/group_advanced.test ~/libmatch/test/Benchmarks/ping_small_64bit.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action2925.txt 2000000 >> result_try1.txt
 
 
 

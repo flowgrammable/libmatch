@@ -19,6 +19,7 @@
 using namespace std;
 using  ns = chrono::nanoseconds;
 using  ms = chrono::microseconds;
+using  us = chrono::milliseconds;
 using get_time = chrono::steady_clock ;
 
 struct Result {
@@ -817,7 +818,7 @@ int main(int argc, char* argv[])
       decisionVector.push_back(search_ret.action);
       //cout << "test value: " << search_ret.action << endl; // Has a bug here....... action should not be 0
       // Find the bug, the expand function did not insert the action attribute value
-      sum_key_search_time += chrono::duration_cast<ms>(diff4).count();
+      sum_key_search_time += chrono::duration_cast<us>(diff4).count();
     }
     //cout << "matchVector size: " << matchVector.size() << endl;
     //cout << "decisionVector size: " << decisionVector.size() << endl; // should be the same

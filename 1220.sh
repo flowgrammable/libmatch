@@ -63,7 +63,7 @@ echo "====2925====="
 
 
 
-./optimized_libmatch/test/group_noexpand_base.test ~/libmatch/test/Benchmarks/ping_big_64bit_original.txt ~/libmatch/test/Benchmarks/two_fields_64bit_big.txt ~/libmatch/test/Benchmarks/action2925.txt >> result_try1.txt
+./optimized_libmatch/test/group_noexpand_base.test ~/libmatch/test/Benchmarks/ping_big_64bit_original.txt ~/libmatch/test/Benchmarks/two_fields_64bit.txt ~/libmatch/test/Benchmarks/action2925.txt >> result_try1.txt
 #./optimized_libmatch/test/group_advanced.test ~/libmatch/test/Benchmarks/ping_big_64bit_original.txt ~/libmatch/test/Benchmarks/two_fields_64bit_big.txt ~/libmatch/test/Benchmarks/action2925.txt >> result_try1.txt
 #./optimized_libmatch/test/basic_trie_group.test ~/libmatch/test/Benchmarks/ping_big_64bit_original.txt ~/libmatch/test/Benchmarks/two_fields_64bit_big.txt ~/libmatch/test/Benchmarks/action2925.txt >> result_try1.txt
 
