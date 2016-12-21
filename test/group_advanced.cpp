@@ -818,7 +818,7 @@ int main(int argc, char* argv[])
                   // becasue we control the number of expanding wildcard
                   // so don't need to delete rules manually
                   newtries[j].expand_rule(newnewnewTable.at(k));
-                  expandRule_num ++;
+                  newexpandRule_num ++;
                 }
                 else {
                   cout << "888888888888888888888" << endl;
@@ -996,14 +996,14 @@ int main(int argc, char* argv[])
    * if not, do the expansion algorithm to make it is prefix rule
   */
 
-  int newexpandRule_num = 0;
-  int newinsertRule_num = 0;
+  int newnewexpandRule_num = 0;
+  int newnewinsertRule_num = 0;
 
-  uint64_t newsum_trie_expand_count = 0;
-  uint64_t newsum_trie_count = 0;
-  uint64_t newsum_trie_node_count = 0;
-  auto newsum_rule_rearrange_time = 0;
-  auto newsum_rule_insertion_time = 0;
+  uint64_t newnewsum_trie_expand_count = 0;
+  uint64_t newnewsum_trie_count = 0;
+  uint64_t newnewsum_trie_node_count = 0;
+  auto newnewsum_rule_rearrange_time = 0;
+  auto newnewsum_rule_insertion_time = 0;
 
   //get time1
   //auto start = get_time::now(); // use auto keyword to minimize typing strokes :)
@@ -1031,13 +1031,13 @@ int main(int argc, char* argv[])
     //vector<Rule> newnewTable = merge_rules(newSumRuleTable);
     auto end1 = get_time::now();
     auto diff1 = end1 - start1;
-    newsum_rule_rearrange_time += chrono::duration_cast<ms>(diff1).count();
+    newnewsum_rule_rearrange_time += chrono::duration_cast<ms>(diff1).count();
     // Doing the rule insertion
     auto start2 = get_time::now();
     for (int k = 0; k < newnewnewTable.size(); k++) {
       if ( is_prefix(newnewnewTable.at(k)) ) {
         newtries[j].insert_prefix_rule_priority(newnewnewTable.at(k));
-        newinsertRule_num ++;
+        newnewinsertRule_num ++;
       }
       else {
         // becasue we control the number of expanding wildcard
@@ -1045,17 +1045,17 @@ int main(int argc, char* argv[])
         //cout << "group index=" << j << ", index num: " << k << "," << "value: "<< newnewnewTable[k].value << "," << "mask: "
         //<< newnewnewTable[k].mask << endl;
         newtries[j].expand_rule(newnewnewTable.at(k));
-        newexpandRule_num ++;
+        newnewexpandRule_num ++;
       }
     }
     //cout << "j=" << j << ", " << "count number: " << tries[j].count << endl;
     cout << "j=" << j << ", " << "trie node num: " << newtries[j].node_count << endl;
     auto end2 = get_time::now();
     auto diff2 = end2 - start2;
-    newsum_rule_insertion_time += chrono::duration_cast<ms>(diff2).count();
-    newsum_trie_expand_count += newtries[j].expand_count;  // correct
-    newsum_trie_count += newtries[j].count;
-    newsum_trie_node_count += newtries[j].node_count;
+    newnewsum_rule_insertion_time += chrono::duration_cast<ms>(diff2).count();
+    newnewsum_trie_expand_count += newtries[j].expand_count;  // correct
+    newnewsum_trie_count += newtries[j].count;
+    newnewsum_trie_node_count += newtries[j].node_count;
 
   }
 
@@ -1067,8 +1067,8 @@ int main(int argc, char* argv[])
   uint64_t actionSum = 0;
   uint64_t checksum = 0; // show the sum of matching priority
   uint64_t match = 0; // how many keys are being matched in these new rules
-  auto newsum_key_rearrange_time = 0;
-  auto newsum_key_search_time = 0;
+  auto newnewsum_key_rearrange_time = 0;
+  auto newnewsum_key_search_time = 0;
 
   for (int i = 0; i < keyTable.size(); i++) {
     // Check each key
@@ -1079,7 +1079,7 @@ int main(int argc, char* argv[])
       uint64_t newGenKey = keys_rearrange(keyTable[i], newdelta_vector[m]);
       auto end3 = get_time::now();
       auto diff3 = end3 - start3;
-      newsum_key_rearrange_time += chrono::duration_cast<ms>(diff3).count();
+      newnewsum_key_rearrange_time += chrono::duration_cast<ms>(diff3).count();
       auto start4 = get_time::now();
       trie_result search_ret = newtries[m].LPM1_search_rule(newGenKey);
       //uint64_t priority = tries[m].LPM1_search_rule(newGenKey);
@@ -1092,7 +1092,7 @@ int main(int argc, char* argv[])
       decisionVector.push_back(search_ret.action);
       //cout << "test value: " << search_ret.action << endl; // Has a bug here....... action should not be 0
       // Find the bug, the expand function did not insert the action attribute value
-      newsum_key_search_time += chrono::duration_cast<ns>(diff4).count();
+      newnewsum_key_search_time += chrono::duration_cast<ns>(diff4).count();
     }
     //cout << "matchVector size: " << matchVector.size() << endl;
     //cout << "decisionVector size: " << decisionVector.size() << endl; // should be the same
@@ -1137,15 +1137,15 @@ int main(int argc, char* argv[])
   //auto end = get_time::now();
   //auto diff = end - start;
 
-  cout << "Total rules rearrange configure time is:" << newsum_rule_rearrange_time << endl;
-  cout << "Total rules insertion configure time is:" << newsum_rule_insertion_time << endl;
-  cout << "Total keys rearrange configure time is:" << newsum_key_rearrange_time << endl;
-  cout << "Total keys search time is:" << newsum_key_search_time << endl;
-  cout << "Total expanded count is:" << " " << newsum_trie_expand_count << endl;
-  cout << "Expand rule num is:" << " " << newexpandRule_num << endl;
-  cout << "Insert rule num is:" << " " << newinsertRule_num << endl;
-  cout << "Total insert rule num is:" << " " << newsum_trie_count << endl;
-  cout << "Total insert trie_node count is:" << " " << newsum_trie_node_count << endl;
+  cout << "Total rules rearrange configure time is:" << newnewsum_rule_rearrange_time << endl;
+  cout << "Total rules insertion configure time is:" << newnewsum_rule_insertion_time << endl;
+  cout << "Total keys rearrange configure time is:" << newnewsum_key_rearrange_time << endl;
+  cout << "Total keys search time is:" << newnewsum_key_search_time << endl;
+  cout << "Total expanded count is:" << " " << newnewsum_trie_expand_count << endl;
+  cout << "Expand rule num is:" << " " << newnewexpandRule_num << endl;
+  cout << "Insert rule num is:" << " " << newnewinsertRule_num << endl;
+  cout << "Total insert rule num is:" << " " << newnewsum_trie_count << endl;
+  cout << "Total insert trie_node count is:" << " " << newnewsum_trie_node_count << endl;
   cout << "Checksum: " << checksum << endl;
   cout << "ActionSum: " << actionSum << endl;
   cout << "Total matches: " << match << endl;

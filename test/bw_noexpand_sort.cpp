@@ -805,7 +805,7 @@ int main(int argc, char* argv[])
       uint64_t newGenKey = keys_rearrange(keyTable[i], delta_vector[m]);
       auto end3 = get_time::now();
       auto diff3 = end3 - start3;
-      sum_key_rearrange_time += chrono::duration_cast<ms>(diff3).count();
+      sum_key_rearrange_time += chrono::duration_cast<us>(diff3).count();
       auto start4 = get_time::now();
       trie_result search_ret = tries[m].LPM1_search_rule(newGenKey);
       //uint64_t priority = tries[m].LPM1_search_rule(newGenKey);
