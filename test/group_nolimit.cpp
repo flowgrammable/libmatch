@@ -240,6 +240,86 @@ bool wayToSort1(Rule aaa, Rule bbb)
   return (aaa.value < bbb.value);
 }
 
+// Get the number of wildcard * in a rule
+// The rule is 64-bit
+int get_numOFwildcard(Rule& rule)
+{
+  int count = 0; // show the number of wildcard
+  for(int i = 0; i < 64; i++) {
+    // if this: get the position whose bit is 1 (have wildcard)
+    if((rule.mask >> i) & uint64_t(1) == 1) {
+      count++;
+    }
+  }
+  return count;
+}
+
+
+/*
+ * Bit-weaving paper
+ * sort the two rules by the number of wildcard
+ * call the get_numOFwildcard function
+*/
+bool bw_wayToSort(Rule a, Rule b)
+{
+  int num_a = get_numOFwildcard(a);
+  int num_b = get_numOFwildcard(b);
+  return (num_a < num_b);
+}
+
+// Get the number of consecutive "0" of mask value
+// From the right side, consecutive "0"
+// The rule is 64-bit
+int get_numOFzero(Rule& rule)
+{
+  int count = 0; // show the number of wildcard
+  for(int i = 0; i < 64; i++) {
+    // if this: get the position whose bit is 1 (have wildcard)
+    if((rule.mask >> i) & uint64_t(1) == 0) {
+      count++;
+      continue; // guarantee the "0" is consective
+    }
+    else {
+      break;
+    }
+  }
+  return count;
+}
+
+/*
+ * ping's algorithm
+ * sort the number of "0" from the right
+ * 0001
+ * 0011
+ * 0111
+ * 1111
+*/
+bool zero_wayToSort(Rule a, Rule b)
+{
+  int num_aa = get_numOFzero(a);
+  int num_bb = get_numOFzero(b);
+  return (num_aa < num_bb);
+}
+
+/*
+ * Ping sort algorithm:
+ * sort function: according to the number of consective "0" from right side
+ * first: get the number of consective "0" from right side, put the number into an int vector
+ * second: sort this number int vector in an ascending order
+*/
+vector<Rule> ping_sortrules(vector<Rule>& ruleList)
+{
+  //vector<Rule> bw_sortTable;
+  std::sort(ruleList.begin(), ruleList.end(), zero_wayToSort);
+  /*
+  for (int k = 0; k < ruleList.size(); k ++) {
+    cout << ruleList[k].value << ", " << ruleList[k].mask << endl;
+  }
+  */
+  return ruleList;
+}
+
+
 /*
  * Sorting the prefix format rules into asscending order, denpending on the prefix length
  * using the std::sort function

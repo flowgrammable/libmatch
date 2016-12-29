@@ -265,6 +265,8 @@ bool bw_wayToSort(Rule a, Rule b)
   return (num_a < num_b);
 }
 
+
+
 /*
  * Bit-weaving paper
  * sort function: according to the number of wildcard in the rules
@@ -280,6 +282,106 @@ vector<Rule> bw_sortrules(vector<Rule>& ruleList)
     cout << ruleList[k].value << ", " << ruleList[k].mask << endl;
   }
   */
+  return ruleList;
+}
+
+// Get the number of consecutive "0" of mask value
+// From the right side, consecutive "0"
+// The rule is 64-bit
+int get_numOFzero(Rule& rule)
+{
+  int count = 0; // show the number of wildcard
+  for(int i = 0; i < 64; i++) {
+    // if this: get the position whose bit is 1 (have wildcard)
+    if((rule.mask >> i) & uint64_t(1) == 0) {
+      count++;
+      continue; // guarantee the "0" is consective
+    }
+    else {
+      break;
+    }
+  }
+  return count;
+}
+
+/*
+ * ping's algorithm
+ * sort the number of "0" from the right
+ * 0001
+ * 0011
+ * 0111
+ * 1111
+*/
+bool zero_wayToSort(Rule a, Rule b)
+{
+  int num_aa = get_numOFzero(a);
+  int num_bb = get_numOFzero(b);
+  return (num_aa < num_bb);
+}
+
+/*
+ * Ping sort algorithm:
+ * sort function: according to the number of consective "0" from right side
+ * first: get the number of consective "0" from right side, put the number into an int vector
+ * second: sort this number int vector in an ascending order
+*/
+vector<Rule> ping_sortrules(vector<Rule>& ruleList)
+{
+  //vector<Rule> bw_sortTable;
+  std::sort(ruleList.begin(), ruleList.end(), zero_wayToSort);
+  /*
+  for (int k = 0; k < ruleList.size(); k ++) {
+    cout << ruleList[k].value << ", " << ruleList[k].mask << endl;
+  }
+  */
+  vector<Rule> sortTable;
+  vector<Rule> sortTotalTable;
+  // Determine the size of combined table
+  sortTotalTable.reserve(ruleList.size());
+  for (int i = 0; i < ruleList.size(); i ++) {
+    if (i != ruleList.size() - 1) {
+      if (get_numOFzero(ruleList.at(i)) == get_numOFzero(ruleList.at(i+1))) {
+        // if the mask value is the same, push into the same vector
+        //cout << "test" << endl;
+        sortTable.push_back(ruleList.at(i));
+        continue;
+      }
+      else {
+        sortTable.push_back(ruleList.at(i));
+        //cout << "i = " << i << endl;
+        std::sort(sortTable.begin(), sortTable.end(), wayToSort);
+        sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
+        /*
+        for (int k = 0; k < sortTotalTable.size(); k ++) {
+          cout << sortTotalTable[k].value << ", " << sortTotalTable[k].mask << endl;
+        }
+        cout << "sortTotalTable size = " << sortTotalTable.size() << endl;
+        */
+        // Delete the current contents, clear the memory
+        sortTable.clear();
+        //cout << "sortTable size = " << sortTable.size() << endl;
+        continue;
+      }
+    }
+    else {
+      // for the last element in the vector
+      // for avoiding the over-range of the vector
+      if (get_numOFzero(ruleList.at(i)) == get_numOFzero(ruleList.at(i-1))) {
+        sortTable.push_back(ruleList.at(i));
+        //cout << "i = " << i << endl;
+        std::sort(sortTable.begin(), sortTable.end(), wayToSort);
+        sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
+      }
+      else {
+        std::sort(sortTable.begin(), sortTable.end(), wayToSort);
+        sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
+        sortTable.clear();
+        sortTable.push_back(ruleList.at(i));
+        sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
+      }
+    }
+  }
+  return sortTotalTable;
   return ruleList;
 }
 
@@ -550,7 +652,8 @@ int main(int argc, char* argv[])
   // Need to check the priority preserve the same after sorting
   //vector<Rule> pingRulesTable = sort_rules(oldpingRulesTable);
   //vector<Rule> ping2RulesTable = sort_rules(oldpingRulesTable);
-  vector<Rule> pingRulesTable = bw_sortrules(oldpingRulesTable);
+  //vector<Rule> pingRulesTable = bw_sortrules(oldpingRulesTable);
+  vector<Rule> pingRulesTable = ping_sortrules(oldpingRulesTable);
   //cout << "After sorted rule table size is: " << pingRulesTable.size() << endl;
   //vector<Rule> pingRulesTable = bw_sortrules(oldpingRulesTable);
   //cout << "Sorted total size = " << pingRulesTable.size() << endl;
