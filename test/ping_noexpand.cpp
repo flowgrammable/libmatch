@@ -80,6 +80,158 @@ bool is_subset_old(Rule a, Rule b)
   }
 }
 
+// Get the hamming distance between two rules, in mask field
+int get_hd_mask(Rule a, Rule b)
+{
+  int hd = 0;
+  for (int i = 0; i < 64; i++) {
+    if ((a.mask & (uint64_t(1) << i)) != (b.mask & (uint64_t(1) << i)) ) {
+      hd++;
+    }
+    else {
+      continue;
+    }
+  }
+  return hd;
+}
+
+// Get the difference of number of "1" between two rules, in mask field
+int get_sub1_mask(Rule a , Rule b)
+{
+  int a_num = 0;
+  int b_num = 0;
+  int dif_num = 0;
+  for (int i = 0; i < 64; i++) {
+    if ( (a.mask & (uint64_t(1) << i)) == 1 ) {
+      a_num++;
+    }
+    if ( (b.mask & (uint64_t(1) << i)) == 1 ) {
+      b_num++;
+    }
+    else {
+      continue;
+    }
+  }
+  dif_num = abs(a_num - b_num);
+
+  return dif_num;
+}
+
+/*
+ * Determine whether the rules can be inserted into a same group
+ * two conditions: hamming distance of mask value == the number of difference of "1" in mask value
+ * if true, then it is subset. if not, it's false
+*/
+bool is_subset(Rule a, Rule b)
+{
+  int check_hd = get_hd_mask(a, b);
+  int check_dif = get_sub1_mask(a, b);
+  if (check_hd == check_dif) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+
+/*
+ * To check whether a new rule can be inserted into a group
+ * condition: to see the new rule whether is_subset to all the rules in the group already
+ * if yes, then insert. if not, continue
+*/
+bool is_insert(Rule a, vector<Rule>& ruleTable)
+{
+  for (int i = 0; i < ruleTable.size(); i++) {
+    if (is_subset (a, ruleTable.at(i))) {
+      continue;
+    }
+    else {
+      return false;
+    }
+  }
+  return true;
+}
+
+
+
+/*
+ * Ping_sort rules and grouping algorithm
+ * will use recursion to choose the best combination of each group
+ * use the function is_insert to choose whether can insert into the same group
+ * output the int vector with the number of rules on the different base
+*/
+vector<int> ping_group_rules(vector<Rule>& ruleList)
+{
+  vector<int> vector_num; // To store the number of rules in a group, with different base from the 0 to size-1
+  vector<Rule> newPingList; // Initialize the new list of a group
+  for (int i = 0; i < ruleList.size(); i++) {
+    Rule base = ruleList.at(i);
+    newPingList.push_back(base); // push the first rule into the new table, which is the first group
+    for (int j = 0; j < ruleList.size(); j++) {
+      if (j != i) {
+        if (is_insert(ruleList.at(j), newPingList)) {
+          // if it can be inserted into the same group, the first group
+          newPingList.push_back(ruleList.at(j));
+        }
+        else {
+          // if it cannot insert into the same group, then go to the next one
+          continue;
+        }
+      }
+    }
+    vector_num.push_back(newPingList.size()); // insert the number of rules inserted into a group
+    newPingList.clear(); // clear out the new table
+
+  }
+  return vector_num;
+}
+
+/*
+ * Ping_sort rules and grouping algorithm
+ * get the maximal number of rules in a group
+ * use the recursion method
+ * get the index of the original rule vector of the maximal value
+*/
+int get_maximal(vector<int>& vector_num)
+{
+  int max_num = *max_element(vector_num.begin(), vector_num.end());
+  vector<int>::iterator it;
+  // Find the index of the maximal number of rules
+  it = find(vector_num.begin(), vector_num.end(), max_num);
+  int index_num = distance(vector_num.begin(), it);
+  return index_num;
+}
+
+/*
+ * Generate the group, depending on the maximal index and the original rule table
+ * also need to recreate the next original rule table
+ * which means need to remove the rules appeared in the privious group
+ * need to putput two vector<Rule>
+*/
+ vector< vector<Rule> > generate_group(int index, vector<Rule>& ruleList)
+{
+   vector< vector<Rule> > bigArray;
+   vector<Rule> newPingList = bigArray[0];
+   newPingList.push_back(ruleList.at(index)); // push the first rule into the new table, which is the first group
+   ruleList.erase(ruleList.begin() + index);
+   for (int j = 0; j < ruleList.size(); j++) {
+     if (j != index) {
+       if (is_insert(ruleList.at(j), newPingList)) {
+         // if it can be inserted into the same group, the first group
+         newPingList.push_back(ruleList.at(j));
+         ruleList.erase(ruleList.begin() + j); // Not sure here is j or (j-1)???? maybe it's a bug here
+       }
+       else {
+         // if it cannot insert into the same group, then go to the next one
+         continue;
+       }
+     }
+   }
+   ruleList = bigArray[1];
+   return bigArray; // The new group and the left original rule table
+}
+
 
 /*
  * Merge the rules between the first rule and second rule
@@ -1250,6 +1402,7 @@ int main(int argc, char* argv[])
 
   return 0;
 }
+
 
 
 
