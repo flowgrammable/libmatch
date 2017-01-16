@@ -160,8 +160,11 @@ bool is_insert(Rule a, vector<Rule>& ruleTable)
  * will use recursion to choose the best combination of each group
  * use the function is_insert to choose whether can insert into the same group
  * output the int vector with the number of rules on the different base
+ * get the maximal number of rules in a group
+ * use the recursion method
+ * get the index of the original rule vector of the maximal value
 */
-vector<int> ping_group_rules(vector<Rule>& ruleList)
+int ping_group_rules(vector<Rule>& ruleList)
 {
   vector<int> vector_num; // To store the number of rules in a group, with different base from the 0 to size-1
   vector<Rule> newPingList; // Initialize the new list of a group
@@ -184,17 +187,6 @@ vector<int> ping_group_rules(vector<Rule>& ruleList)
     newPingList.clear(); // clear out the new table
 
   }
-  return vector_num;
-}
-
-/*
- * Ping_sort rules and grouping algorithm
- * get the maximal number of rules in a group
- * use the recursion method
- * get the index of the original rule vector of the maximal value
-*/
-int get_maximal(vector<int>& vector_num)
-{
   int max_num = *max_element(vector_num.begin(), vector_num.end());
   vector<int>::iterator it;
   // Find the index of the maximal number of rules
@@ -203,34 +195,71 @@ int get_maximal(vector<int>& vector_num)
   return index_num;
 }
 
+
 /*
  * Generate the group, depending on the maximal index and the original rule table
  * also need to recreate the next original rule table
  * which means need to remove the rules appeared in the privious group
  * need to putput two vector<Rule>
 */
- vector< vector<Rule> > generate_group(int index, vector<Rule>& ruleList)
+vector< vector<Rule> > generate_group(int index, vector<Rule>& ruleList)
 {
-   vector< vector<Rule> > bigArray;
-   vector<Rule> newPingList = bigArray[0];
-   newPingList.push_back(ruleList.at(index)); // push the first rule into the new table, which is the first group
-   ruleList.erase(ruleList.begin() + index);
-   for (int j = 0; j < ruleList.size(); j++) {
-     if (j != index) {
-       if (is_insert(ruleList.at(j), newPingList)) {
-         // if it can be inserted into the same group, the first group
-         newPingList.push_back(ruleList.at(j));
-         ruleList.erase(ruleList.begin() + j); // Not sure here is j or (j-1)???? maybe it's a bug here
-       }
-       else {
-         // if it cannot insert into the same group, then go to the next one
-         continue;
-       }
-     }
-   }
-   ruleList = bigArray[1];
-   return bigArray; // The new group and the left original rule table
+  vector< vector<Rule> > bigArray;
+  vector<Rule> newList(ruleList); // copy the original rule table
+  bigArray.push_back(vector<Rule> ());
+  vector<Rule> newPingList; // Initilize
+  newPingList.push_back(ruleList.at(index)); // push the first rule into the new table, which is the first group
+  newList.erase(newList.begin() + index);
+  for (int j = 0; j < ruleList.size(); j++) {
+    if (j != index) {
+      if (is_insert(ruleList.at(j), newPingList)) {
+        // if it can be inserted into the same group, the first group
+        newPingList.push_back(ruleList.at(j));
+        newList.erase(newList.begin() + j); // Not sure here is j or (j-1)???? maybe it's a bug here
+      }
+      else {
+        // if it cannot insert into the same group, then go to the next one
+        continue;
+      }
+    }
+  }
+  for (int i = 0; i < newPingList.size(); i++) {
+    bigArray[0].push_back(newPingList.at(i));
+  }
+  cout << "test size: " << bigArray[0].size() << endl;
+  ruleList = bigArray[1];
+  return bigArray; // The new group and the left original rule table
 }
+
+/*
+  * The whole grouping algorithm
+  * recursion algorithm
+  * the stop sign: while the size of pingRuleTable is 0
+ */
+vector< vector<Rule> > grouping_algorithm(vector<Rule>& ruleList)
+{
+  vector< vector<Rule> > groupArray;
+  cout << "The num of rules is: " << ruleList.size() << endl;
+  while(ruleList.size() != 0) {
+    int index_max_num = ping_group_rules(ruleList);
+    cout << "The maximal index: " << index_max_num << endl;
+    vector< vector<Rule> > bigArray = generate_group(index_max_num, ruleList);
+    cout << "TEST" << endl;
+    groupArray.push_back(bigArray[0]); // insert every group into the groupArray
+    // need to check whether this function is doable or not
+    ruleList.clear(); // clear the original rule talbe
+    ruleList = bigArray[1];
+    bigArray.clear();
+  }
+
+  return groupArray;
+}
+
+
+
+
+
+
 
 
 /*
@@ -722,7 +751,7 @@ int main(int argc, char* argv[])
   //threshold = stoull(argv[4]);
   ifstream file (argv[1]);
   // Read the rules from txt file
-  vector<Rule> oldpingRulesTable;
+  vector<Rule> pingRulesTable;
   int i = 0;
   if (file.is_open()) {
     while (!file.eof()) {
@@ -738,16 +767,12 @@ int main(int argc, char* argv[])
         rule.priority = i;
         //rule.priority = ++i;
         // Push the input file into ruleArray
-        oldpingRulesTable.push_back(rule);
+        pingRulesTable.push_back(rule);
       }
     }
   }
   file.close();
-  // Need to check the priority preserve the same after sorting
-  vector<Rule> pingRulesTable = sort_rules(oldpingRulesTable);
-  //cout << "Sorted total size = " << pingRulesTable.size() << endl;
-  //vector<Rule> pingRulesTable = merge_rules(oldpingRulesTable);
-  //cout << "Merged total size = " << pingRulesTable.size() << endl;
+
   /*
   for (int k = 0; k < pingRulesTable.size(); k++) {
     cout << pingRulesTable[k].priority << " " << pingRulesTable[k].action << " " << pingRulesTable[k].value << " " << pingRulesTable[k].mask << endl;
@@ -771,541 +796,85 @@ int main(int argc, char* argv[])
     }
   }
   file1.close();
-  cout << "++++++Group_nolimit algorithm+++++" << endl;
+  cout << "++++++Ping Group noexpand algorithm+++++" << endl;
   cout << "The num of keys: " << keyTable.size() << endl;
   cout << "The num of rules: " << pingRulesTable.size() << endl;
-  // Genearte the different size of key nums
-  /*
-  vector<uint64_t> keyTable;
-  for (int i = 0; i < 17642000; i++) {
-    keyTable.push_back(keyTable1[i]);
-  }
-  */
 
-  /*
-   * Grouping algorithm
-   * Use the is_cross_pattern function to check the grouping number
-   * Avoid the expanding number is too large
-   * how to improve the grouping algorithm??
-   * add the threshold, to adjust the grouping seperation
-  */
+
+  vector< vector<Rule> > groupArray = grouping_algorithm(pingRulesTable);
+  cout << "The number of group is: " << groupArray.size() << endl;
 
 
 
-  //set the new_handler
 
-
-  // For the grouped rule table
-  vector<uint32_t> groupVector;
-  vector<Rule> newList;
-
-  // avoid the bad allocation memory
-  // The grouping algorithm is to create the most number of
-  // groups without expansion
-
-  /*
-   * Noexpand group algorithm
-  */
-
-  for ( int i = 0; i < pingRulesTable.size(); i++ ) {
-    if (i < (pingRulesTable.size()-1)) {
-      newList.push_back(pingRulesTable[i]);
-      vector<int> new_generated_delta = generate_delta(newList);
-      // Create the rearranged rule set
-      vector<Rule> new_table_list = rules_rearrange(
-            newList, new_generated_delta );
-      for ( int k = 0; k < new_table_list.size(); k++ ) {
-        //Trie trie1; // for caculating the trie1.new_num
-        // for guarantee avoding the bad memory alloc
-        if ( is_prefix(new_table_list.at (k)) ) {
-          // if this is prefix rules, don't need to expand
-          //trie1.insert_prefix_rule_priority(new_table_list.at(k));
-          continue;
-        }
-        else {
-          groupVector.push_back(i-1);
-          // clear the newList vector, becasue this is a seperated group
-          newList.clear();
-          i = i -1;
-          break;
-        }
-      }
-    }
-    else {
-      // There is a bug when the last group includes 460 and 461, which they cannot get
-      // into a same group
-      newList.push_back(pingRulesTable[i]);
-      vector<int> new_generated_delta2 = generate_delta(newList);
-      // Create the rearranged rule set
-      vector<Rule> new_table_list2 = rules_rearrange(
-            newList, new_generated_delta2 );
-      for ( int k = 0; k < new_table_list2.size(); k++ ) {
-        //Trie trie2; // for caculating the trie1.new_num
-        // for guarantee avoding the bad memory alloc
-
-        if ( is_prefix(new_table_list2.at (k)) ) {
-          // if this is prefix rules, don't need to expand
-          continue;
-        }
-        else {
-          groupVector.push_back(i-1);
-          // clear the newList vector, becasue this is a seperated group
-          newList.clear();
-          //i = i -1;
-          break;
-        }
-      }
-      groupVector.push_back(i);
-    }
-  }
-  //==========================================
-
-  // Copy the groupVector, in order to recover the deleted element later
-  vector<uint32_t> original_groupVector(groupVector);
-  cout << "(No expand) Num of Original groups is:" << " " << original_groupVector.size() << endl;
-
-  /*
-  for (i = 0; i < original_groupVector.size(); i++) {
-    cout << "Original Group index: " << i << "," << original_groupVector[i] << endl;
-  }
-  */
-
-  /* Create all the subgroups
-   * The big array is called bigArray
-   * insert the whole rule set into the separate groups
-  */
-  //int test_flag = 0; // This variable is used to break the nested loop
-
-  for (int v = 0; v < 4; v++) {
-    vector< vector<Rule> > bigArray; // it's a intermediate variable, two-dimensional array
-    // Create a new sub group by copying the related rules
-
-    for (int m = 0; m < groupVector.size(); m++) {
-      bigArray.push_back(vector<Rule> ());
-    }
-
-    for (int j = 0; j < groupVector.size(); j++) {
-      if (j == 0) {
-        for (int i = 0; i < (groupVector[j] + 1); i++) {
-          bigArray[j].push_back(pingRulesTable.at(i));
-        }
-        continue;
-      }
-      else {
-        for (int k = (groupVector[j-1] + 1); k < (groupVector[j] + 1); k++) {
-          bigArray[j].push_back(pingRulesTable.at(k));
-        }
-        continue;
-      }
-    }
-    //================================================
-
-    /*
-   * Start to build the newRules in each group
-   * We get the new rearrangement rules table here, named sumRulesTabel
-   * Next, we will do the rules insertion
-   * Here, we just insert prefix rules, follow the LPM insertion function
-   * So we need to check whether each new rules is prefix rule
-   * If it is, then do the insertion
-   * if not, do the expansion algorithm to make it is prefix rule
-  */
-
-    if ( original_groupVector.size() == 1 ) {
-      // The original group is 1, cannot merge anymore, would be "-1"
-      break;
-    }
-    if ( groupVector.size() == 1 ) {
-      break;
-    }
-    else {
-
-      if (v == 0) {
-        cout << "v: " << v << endl;
-        cout << "current group size: " << groupVector.size() << endl;
-        groupVector.erase(groupVector.begin() + 1);
-        groupVector.erase(groupVector.begin() + 2);
-        groupVector.erase(groupVector.begin() + 3);
-        //groupVector.erase(groupVector.begin() + 4);
-        //groupVector.erase(groupVector.begin() + 5);
-      }
-      if (v == 1) {
-        cout << "current group size: " << groupVector.size() << endl;
-        groupVector.erase(groupVector.begin());
-        groupVector.erase(groupVector.begin() + 1);
-        //groupVector.erase(groupVector.begin() + 2);
-        //groupVector.erase(groupVector.begin() + 3);
-      }
-      if (v == 2) {
-        cout << "current group size: " << groupVector.size() << endl;
-        //groupVector.erase(groupVector.begin());
-        //groupVector.erase(groupVector.begin() + 1);
-        groupVector.erase(groupVector.begin());
-      }
-
-      /*
-      if (v == 3) {
-        cout << "current group size: " << groupVector.size() << endl;
-        groupVector.erase(groupVector.begin());
-      }
-      */
-/*
-      if (v == 0) {
-        cout << "v: " << v << endl;
-        cout << "current group size: " << groupVector.size() << endl;
-        groupVector.erase(groupVector.begin() + 1);
-      }
-      if (v == 1) {
-        cout << "current group size: " << groupVector.size() << endl;
-        groupVector.erase(groupVector.begin());
-      }
-      */
-
-
-    }
-
-      /*
-      if ( v < int(groupVector.size() / 2 ) ) {
-        cout << "test test*****" << endl;
-        groupVector.erase(groupVector.begin() + (v+1));
-        //groupVector.erase(groupVector.begin() + (2*(v+1)-1));
-      }
-
-      else if (  v < 8 ) {
-        cout << "ping test" << endl;
-        groupVector.erase(groupVector.begin() + ((v- int(groupVector.size() / 2 )) *2));
-      }
-
-      else if ( v == 8 ){
-        cout << "$$$$$test" << endl;
-        groupVector.erase(groupVector.begin());
-      }
-      else if ( v == 9 ) {
-        cout << "@@@@@@test" << endl;
-        groupVector.erase(groupVector.begin() + 1);
-      }
-
-
-      else {
-        cout << "0000000test" << endl;
-        groupVector.erase(groupVector.begin());
-      }
-      */
-
-
-      //groupVector.erase(groupVector.begin() + (v+1));
-      for (int b = 0; b < groupVector.size(); b++) {
-        cout << "New group index: " << b << ", " << "The new group index after group merge is: " << groupVector[b] << endl;
-      }
-
-      /*
-      if ( groupVector.size() == 1 ) {
-        break;
-      }
-      */
-      //else {
-      vector< vector<Rule> > newbigArray;
-      // Create a new sub group by copying the related rules
-
-      for (int m = 0; m < groupVector.size(); m++) {
-        newbigArray.push_back(vector<Rule> ());
-      }
-
-      for (int j = 0; j < groupVector.size(); j++) {
-        if (j == 0) {
-          for (int i = 0; i < (groupVector[j] + 1); i++) {
-            newbigArray[j].push_back(pingRulesTable.at(i));
-          }
-          continue;
-        }
-        else {
-          for (int k = (groupVector[j-1] + 1); k < (groupVector[j] + 1); k++) {
-            newbigArray[j].push_back(pingRulesTable.at(k));
-
-          }
-          continue;
-        }
-      }
-
-      // Start to build the newRules in each group
-      /*
-       * We get the new rearrangement rules table here, named sumRulesTabel
-       * Next, we will do the rules insertion
-       * Here, we just insert prefix rules, follow the LPM insertion function
-       * So we need to check whether each new rules is prefix rule
-       * If it is, then do the insertion
-       * if not, do the expansion algorithm to make it is prefix rule
-      */
-
-      int newexpandRule_num = 0;
-      int newinsertRule_num = 0;
-
-      uint64_t newsum_trie_expand_count = 0;
-      uint64_t newsum_trie_count = 0;
-      uint64_t newsum_trie_node_count = 0;
-      auto newsum_rule_rearrange_time = 0;
-      auto newsum_rule_insertion_time = 0;
-
-      //get time1
-      //auto start = get_time::now(); // use auto keyword to minimize typing strokes :)
-      // Define a 2D vector for storing delta vector
-      vector< vector<int> > newdelta_vector;
-      // Allocate an array to hold my class objects
-      vector<Trie> newtries(groupVector.size());
-      //Trie* trie = new Trie[groupVector.size()];
-
-      // Start to construct the trie data structure here
-      for (int j = 0; j < groupVector.size(); j++) {
-        // Initilize a trie
-        // Each group is a seperate trie
-        // Initialize each trie
-
-        auto start1 = get_time::now();
-
-        vector<int> delta_need = generate_delta(newbigArray[j]);
-        // Push each delta vector into the 2D vector
-        newdelta_vector.push_back(delta_need);
-        vector<Rule> newnewnewTable = rules_rearrange(newbigArray[j], delta_need);
-
-        // Sorting the rules in each group into asscending order
-        // prepare for the merging next
-        //vector<Rule> newnewTable = merge_rules(newSumRuleTable);
-        auto end1 = get_time::now();
-        auto diff1 = end1 - start1;
-        newsum_rule_rearrange_time += chrono::duration_cast<ms>(diff1).count();
-        // Doing the rule insertion
-        auto start2 = get_time::now();
-        for (int k = 0; k < newnewnewTable.size(); k++) {
-          if ( is_prefix(newnewnewTable.at(k)) ) {
-            newtries[j].insert_prefix_rule_priority(newnewnewTable.at(k));
-            newinsertRule_num ++;
-          }
-          else {
-            //cout << "Occur expand+++++" << endl;
-            newtries[j].expand_rule(newnewnewTable.at(k));
-            newexpandRule_num ++;
-
-          }
-        }
-
-        //cout << "j=" << j << ", " << "count number: " << tries[j].count << endl;
-        cout << "j=" << j << ", " << "trie node num: " << newtries[j].node_count << endl;
-        auto end2 = get_time::now();
-        auto diff2 = end2 - start2;
-        newsum_rule_insertion_time += chrono::duration_cast<ms>(diff2).count();
-        newsum_trie_expand_count += newtries[j].expand_count;  // correct
-        newsum_trie_count += newtries[j].count;
-        newsum_trie_node_count += newtries[j].node_count;
-
-      }
-
-
-
-      cout << "Num of groups is:" << " " << groupVector.size() << endl;
-
-      // Finished the rearranged rule insertion for each subtrie
-      // Doing the rule searching
-      char output[][32] = {"Not present in rulesTable", "Present in rulesTable"};
-      uint64_t actionSum = 0;
-      uint64_t checksum = 0; // show the sum of matching priority
-      uint64_t match = 0; // how many keys are being matched in these new rules
-      auto newsum_key_rearrange_time = 0;
-      auto newsum_key_search_time = 0;
-
-      for (int i = 0; i < keyTable.size(); i++) {
-        // Check each key
-        auto start3 = get_time::now();
-        vector<uint64_t> matchVector;
-        vector<uint32_t> decisionVector;
-        for (int m = 0; m < groupVector.size(); m++) {
-          uint64_t newGenKey = keys_rearrange(keyTable[i], newdelta_vector[m]);
-          auto end3 = get_time::now();
-          auto diff3 = end3 - start3;
-          newsum_key_rearrange_time += chrono::duration_cast<ms>(diff3).count();
-          auto start4 = get_time::now();
-          trie_result search_ret = newtries[m].LPM1_search_rule(newGenKey);
-          //uint64_t priority = tries[m].LPM1_search_rule(newGenKey);
-          //cout << "Priority value: " << search_ret.priority << ", Action value: " << search_ret.action << endl;
-          auto end4 = get_time::now();
-          auto diff4 = end4 - start4;
-          // Insert all the priority value, including match and no_match
-          //matchVector.push_back(priority);
-          matchVector.push_back(search_ret.priority); // Store the priority value
-          decisionVector.push_back(search_ret.action);
-          //cout << "test value: " << search_ret.action << endl; // Has a bug here....... action should not be 0
-          // Find the bug, the expand function did not insert the action attribute value
-          newsum_key_search_time += chrono::duration_cast<ns>(diff4).count();
-        }
-        //cout << "matchVector size: " << matchVector.size() << endl;
-        //cout << "decisionVector size: " << decisionVector.size() << endl; // should be the same
-        vector<uint64_t> test1; // Store the priority value
-        vector<uint32_t> test2; // Store the action value
-        for (int v = 0; v < matchVector.size(); v++) {
-          if (matchVector[v] == 0) {
-            continue;
-          }
-          else {
-            uint64_t test = matchVector[v];
-            uint32_t action2 = decisionVector[v];
-            test1.push_back(test);
-            test2.push_back(action2);
-            continue;
-          }
-        }
-
-        // Choose the smallest one, which means the highest priority
-        if (test1.size() > 0) {
-          uint64_t match_final = *min_element(test1.begin(), test1.end());
-          checksum += match_final;
-          match++;
-          vector<uint64_t>::iterator it;
-          it = find(test1.begin(), test1.end(),match_final);
-          int position1 = distance(test1.begin(), it);
-          //cout << "action size: " << test2.size() << endl;
-          /*
-          for (int q = 0; q < test2.size(); q++) {
-            cout << "action set==="  << q  << " " << test2[q] << endl;
-          }
-          */
-          actionSum += test2.at(position1);
-          //cout << "i index:" << j << ", action=:" << decision << endl;
-          //cout << "i index:" << i << ", action=" << test2.at(position1) << endl;
-          //cout << "i index:" << i << " " << "priority=:" << match_final << ", action=" << test2.at(position1) << endl;
-        }
-
-      }
-
-      //get time2
-      //auto end = get_time::now();
-      //auto diff = end - start;
-
-      cout << "Total rules rearrange configure time is:" << newsum_rule_rearrange_time << endl;
-      cout << "Total rules insertion configure time is:" << newsum_rule_insertion_time << endl;
-      cout << "Total keys rearrange configure time is:" << newsum_key_rearrange_time << endl;
-      cout << "Total keys search time is:" << newsum_key_search_time << endl;
-      cout << "Total expanded count is:" << " " << newsum_trie_expand_count << endl;
-      cout << "Expand rule num is:" << " " << newexpandRule_num << endl;
-      cout << "Insert rule num is:" << " " << newinsertRule_num << endl;
-      cout << "Total insert rule num is:" << " " << newsum_trie_count << endl;
-      cout << "Total insert trie_node count is:" << " " << newsum_trie_node_count << endl;
-      cout << "Checksum: " << checksum << endl;
-      cout << "ActionSum: " << actionSum << endl;
-      cout << "Total matches: " << match << endl;
-      cout << "==================================================" << endl;
-      //}
-
-      // delete trie data structure
-
-      continue;
-    }
-
-
-    // return groupVector, in order to build the final groups
-
-
-  cout << "Num of groups is:" << " " << groupVector.size() << endl;
-  /*
-  for (i = 0; i < groupVector.size(); i++) {
-    cout << "Group index: " << i << "," << groupVector[i] << endl;
-  }
-  */
-
-  vector< vector<Rule> > newbigArray;
-  // Create a new sub group by copying the related rules
-
-  for (int m = 0; m < groupVector.size(); m++) {
-    newbigArray.push_back(vector<Rule> ());
-  }
-
-  for (int j = 0; j < groupVector.size(); j++) {
-    if (j == 0) {
-      for (int i = 0; i < (groupVector[j] + 1); i++) {
-        newbigArray[j].push_back(pingRulesTable.at(i));
-      }
-      continue;
-    }
-    else {
-      for (int k = (groupVector[j-1] + 1); k < (groupVector[j] + 1); k++) {
-        newbigArray[j].push_back(pingRulesTable.at(k));
-
-      }
-      continue;
-    }
-  }
 
   // Start to build the newRules in each group
-  /*
-   * We get the new rearrangement rules table here, named sumRulesTabel
-   * Next, we will do the rules insertion
-   * Here, we just insert prefix rules, follow the LPM insertion function
-   * So we need to check whether each new rules is prefix rule
-   * If it is, then do the insertion
-   * if not, do the expansion algorithm to make it is prefix rule
-  */
 
-  int expandRule_num = 0;
-  int insertRule_num = 0;
+  int newexpandRule_num = 0;
+  int newinsertRule_num = 0;
 
-  uint64_t sum_trie_expand_count = 0;
-  uint64_t sum_trie_count = 0;
-  uint64_t sum_trie_node_count = 0;
-  auto sum_rule_rearrange_time = 0;
-  auto sum_rule_insertion_time = 0;
+  uint64_t newsum_trie_expand_count = 0;
+  uint64_t newsum_trie_count = 0;
+  uint64_t newsum_trie_node_count = 0;
+  auto newsum_rule_rearrange_time = 0;
+  auto newsum_rule_insertion_time = 0;
 
   //get time1
   //auto start = get_time::now(); // use auto keyword to minimize typing strokes :)
   // Define a 2D vector for storing delta vector
   vector< vector<int> > newdelta_vector;
   // Allocate an array to hold my class objects
-  vector<Trie> pingnewtries(groupVector.size());
+  vector<Trie> newtries(groupArray.size());
   //Trie* trie = new Trie[groupVector.size()];
 
   // Start to construct the trie data structure here
-  for (int j = 0; j < groupVector.size(); j++) {
+  for (int j = 0; j < groupArray.size(); j++) {
     // Initilize a trie
     // Each group is a seperate trie
     // Initialize each trie
 
     auto start1 = get_time::now();
 
-    vector<int> delta_need = generate_delta(newbigArray[j]);
+    vector<int> delta_need = generate_delta(groupArray[j]);
     // Push each delta vector into the 2D vector
     newdelta_vector.push_back(delta_need);
-    vector<Rule> newnewnewTable = rules_rearrange(newbigArray[j], delta_need);
+    vector<Rule> newnewnewTable = rules_rearrange(groupArray[j], delta_need);
 
     // Sorting the rules in each group into asscending order
     // prepare for the merging next
     //vector<Rule> newnewTable = merge_rules(newSumRuleTable);
     auto end1 = get_time::now();
     auto diff1 = end1 - start1;
-    sum_rule_rearrange_time += chrono::duration_cast<ms>(diff1).count();
+    newsum_rule_rearrange_time += chrono::duration_cast<ms>(diff1).count();
     // Doing the rule insertion
     auto start2 = get_time::now();
     for (int k = 0; k < newnewnewTable.size(); k++) {
       if ( is_prefix(newnewnewTable.at(k)) ) {
-        pingnewtries[j].insert_prefix_rule_priority(newnewnewTable.at(k));
-        insertRule_num ++;
+        newtries[j].insert_prefix_rule_priority(newnewnewTable.at(k));
+        newinsertRule_num ++;
       }
       else {
-        // becasue we control the number of expanding wildcard
-        // so don't need to delete rules manually
-        //cout << "group index=" << j << ", index num: " << k << "," << "value: "<< newnewnewTable[k].value << "," << "mask: "
-        //<< newnewnewTable[k].mask << endl;
-        pingnewtries[j].expand_rule(newnewnewTable.at(k));
-        expandRule_num ++;
+        //cout << "Occur expand+++++" << endl;
+        newtries[j].expand_rule(newnewnewTable.at(k));
+        newexpandRule_num ++;
+
       }
     }
+
     //cout << "j=" << j << ", " << "count number: " << tries[j].count << endl;
-    cout << "j=" << j << ", " << "trie node num: " << pingnewtries[j].node_count << endl;
+    cout << "j=" << j << ", " << "trie node num: " << newtries[j].node_count << endl;
     auto end2 = get_time::now();
     auto diff2 = end2 - start2;
-    sum_rule_insertion_time += chrono::duration_cast<ms>(diff2).count();
-    sum_trie_expand_count += pingnewtries[j].expand_count;  // correct
-    sum_trie_count += pingnewtries[j].count;
-    sum_trie_node_count += pingnewtries[j].node_count;
+    newsum_rule_insertion_time += chrono::duration_cast<ms>(diff2).count();
+    newsum_trie_expand_count += newtries[j].expand_count;  // correct
+    newsum_trie_count += newtries[j].count;
+    newsum_trie_node_count += newtries[j].node_count;
 
   }
 
 
+
+  cout << "Num of groups is:" << " " << groupArray.size() << endl;
 
   // Finished the rearranged rule insertion for each subtrie
   // Doing the rule searching
@@ -1313,21 +882,21 @@ int main(int argc, char* argv[])
   uint64_t actionSum = 0;
   uint64_t checksum = 0; // show the sum of matching priority
   uint64_t match = 0; // how many keys are being matched in these new rules
-  auto sum_key_rearrange_time = 0;
-  auto sum_key_search_time = 0;
+  auto newsum_key_rearrange_time = 0;
+  auto newsum_key_search_time = 0;
 
   for (int i = 0; i < keyTable.size(); i++) {
     // Check each key
     auto start3 = get_time::now();
     vector<uint64_t> matchVector;
     vector<uint32_t> decisionVector;
-    for (int m = 0; m < groupVector.size(); m++) {
+    for (int m = 0; m < groupArray.size(); m++) {
       uint64_t newGenKey = keys_rearrange(keyTable[i], newdelta_vector[m]);
       auto end3 = get_time::now();
       auto diff3 = end3 - start3;
-      sum_key_rearrange_time += chrono::duration_cast<ms>(diff3).count();
+      newsum_key_rearrange_time += chrono::duration_cast<ms>(diff3).count();
       auto start4 = get_time::now();
-      trie_result search_ret = pingnewtries[m].LPM1_search_rule(newGenKey);
+      trie_result search_ret = newtries[m].LPM1_search_rule(newGenKey);
       //uint64_t priority = tries[m].LPM1_search_rule(newGenKey);
       //cout << "Priority value: " << search_ret.priority << ", Action value: " << search_ret.action << endl;
       auto end4 = get_time::now();
@@ -1338,7 +907,7 @@ int main(int argc, char* argv[])
       decisionVector.push_back(search_ret.action);
       //cout << "test value: " << search_ret.action << endl; // Has a bug here....... action should not be 0
       // Find the bug, the expand function did not insert the action attribute value
-      sum_key_search_time += chrono::duration_cast<ns>(diff4).count();
+      newsum_key_search_time += chrono::duration_cast<ns>(diff4).count();
     }
     //cout << "matchVector size: " << matchVector.size() << endl;
     //cout << "decisionVector size: " << decisionVector.size() << endl; // should be the same
@@ -1367,10 +936,10 @@ int main(int argc, char* argv[])
       int position1 = distance(test1.begin(), it);
       //cout << "action size: " << test2.size() << endl;
       /*
-      for (int q = 0; q < test2.size(); q++) {
-        cout << "action set==="  << q  << " " << test2[q] << endl;
-      }
-      */
+          for (int q = 0; q < test2.size(); q++) {
+            cout << "action set==="  << q  << " " << test2[q] << endl;
+          }
+          */
       actionSum += test2.at(position1);
       //cout << "i index:" << j << ", action=:" << decision << endl;
       //cout << "i index:" << i << ", action=" << test2.at(position1) << endl;
@@ -1383,21 +952,22 @@ int main(int argc, char* argv[])
   //auto end = get_time::now();
   //auto diff = end - start;
 
-  cout << "Total rules rearrange configure time is:" << sum_rule_rearrange_time << endl;
-  cout << "Total rules insertion configure time is:" << sum_rule_insertion_time << endl;
-  cout << "Total keys rearrange configure time is:" << sum_key_rearrange_time << endl;
-  cout << "Total keys search time is:" << sum_key_search_time << endl;
-  cout << "Total expanded count is:" << " " << sum_trie_expand_count << endl;
-  cout << "Expand rule num is:" << " " << expandRule_num << endl;
-  cout << "Insert rule num is:" << " " << insertRule_num << endl;
-  cout << "Total insert rule num is:" << " " << sum_trie_count << endl;
-  cout << "Total insert trie_node count is:" << " " << sum_trie_node_count << endl;
+  cout << "Total rules rearrange configure time is:" << newsum_rule_rearrange_time << endl;
+  cout << "Total rules insertion configure time is:" << newsum_rule_insertion_time << endl;
+  cout << "Total keys rearrange configure time is:" << newsum_key_rearrange_time << endl;
+  cout << "Total keys search time is:" << newsum_key_search_time << endl;
+  cout << "Total expanded count is:" << " " << newsum_trie_expand_count << endl;
+  cout << "Expand rule num is:" << " " << newexpandRule_num << endl;
+  cout << "Insert rule num is:" << " " << newinsertRule_num << endl;
+  cout << "Total insert rule num is:" << " " << newsum_trie_count << endl;
+  cout << "Total insert trie_node count is:" << " " << newsum_trie_node_count << endl;
   cout << "Checksum: " << checksum << endl;
   cout << "ActionSum: " << actionSum << endl;
   cout << "Total matches: " << match << endl;
   cout << "==================================================" << endl;
+  //}
 
-
+  // delete trie data structure
 
 
   return 0;
