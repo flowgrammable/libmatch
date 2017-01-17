@@ -206,16 +206,29 @@ vector< vector<Rule> > generate_group(int index, vector<Rule>& ruleList)
 {
   vector< vector<Rule> > bigArray;
   vector<Rule> newList(ruleList); // copy the original rule table
-  bigArray.push_back(vector<Rule> ());
+  for (int m = 0; m < 2; m++) {
+    bigArray.push_back(vector<Rule> ());
+  }
+
   vector<Rule> newPingList; // Initilize
   newPingList.push_back(ruleList.at(index)); // push the first rule into the new table, which is the first group
-  newList.erase(newList.begin() + index);
-  for (int j = 0; j < ruleList.size(); j++) {
+  newList.erase(newList.begin() + index); // remove the index rule, the reference rule
+  // Need to traverse all the rules from the end of rule table
+  // IN order not to impact the index when you erase a rule
+  for (int j = ruleList.size() - 1; j >= 0; j--) {
     if (j != index) {
       if (is_insert(ruleList.at(j), newPingList)) {
         // if it can be inserted into the same group, the first group
         newPingList.push_back(ruleList.at(j));
-        newList.erase(newList.begin() + j); // Not sure here is j or (j-1)???? maybe it's a bug here
+        if (j < index) {
+          // not influnced by removing the index rule
+          newList.erase(newList.begin() + j); // Not sure here is j or (j-1)???? maybe it's a bug here
+        }
+        if (j > index) {
+          // influnced by removing the index rule
+          newList.erase(newList.begin() + (j-1)); // because
+        }
+
       }
       else {
         // if it cannot insert into the same group, then go to the next one
@@ -226,8 +239,12 @@ vector< vector<Rule> > generate_group(int index, vector<Rule>& ruleList)
   for (int i = 0; i < newPingList.size(); i++) {
     bigArray[0].push_back(newPingList.at(i));
   }
-  cout << "test size: " << bigArray[0].size() << endl;
-  ruleList = bigArray[1];
+  cout << "Group rule size: " << bigArray[0].size() << endl;
+
+  for (int j = 0; j < newList.size(); j++) {
+    bigArray[1].push_back(newList.at(j));
+  }
+  cout << "Left rule size: " << bigArray[1].size() << endl;
   return bigArray; // The new group and the left original rule table
 }
 
@@ -244,7 +261,7 @@ vector< vector<Rule> > grouping_algorithm(vector<Rule>& ruleList)
     int index_max_num = ping_group_rules(ruleList);
     cout << "The maximal index: " << index_max_num << endl;
     vector< vector<Rule> > bigArray = generate_group(index_max_num, ruleList);
-    cout << "TEST" << endl;
+
     groupArray.push_back(bigArray[0]); // insert every group into the groupArray
     // need to check whether this function is doable or not
     ruleList.clear(); // clear the original rule talbe
@@ -778,7 +795,8 @@ int main(int argc, char* argv[])
     cout << pingRulesTable[k].priority << " " << pingRulesTable[k].action << " " << pingRulesTable[k].value << " " << pingRulesTable[k].mask << endl;
   }
   */
-
+  // to check whether sort is a impact
+  //vector<Rule> pingRulesTable = sort_rules(oldpingRulesTable);
 
   // Read in keys from file:
   ifstream file1 (argv[2]);
