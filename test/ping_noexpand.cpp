@@ -236,6 +236,7 @@ vector< vector<Rule> > generate_group(int index, vector<Rule>& ruleList)
       }
     }
   }
+
   for (int i = 0; i < newPingList.size(); i++) {
     bigArray[0].push_back(newPingList.at(i));
   }
