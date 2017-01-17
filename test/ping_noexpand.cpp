@@ -118,6 +118,144 @@ int get_sub1_mask(Rule a , Rule b)
 }
 
 /*
+ * Check whether the new rule is a prefix rule
+ * if yes, do the LPM insertion
+ * if not, do the expand rule function
+*/
+bool is_prefix(Rule& rule)
+{
+  // Store the wildcard postion into vector maskPosion
+  vector<uint32_t> maskPosition;
+  // Check the mask field from the lower bit
+  for(int i = 0; i < 64; i++) {
+    // if this: get the position whose bit is 1 (have wildcard)
+    if((rule.mask >> i) & uint64_t(1) == 1) {
+      maskPosition.push_back(i);
+    }
+  }
+  uint32_t num = maskPosition.size(); // num is the number of wildcard
+  if (rule.mask == (uint64_t(1) << num)-1) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+/*
+ * Generate the two dimensional array (generate delta array) from the pingRulesTable array
+ * With all the bits in each rule, including "0" and "1"
+ * Caculate the score--the sum of column
+*/
+vector<int> generate_delta(vector<Rule>& ruleList)
+{
+  vector<uint64_t> sumColumn;
+  for (int j = 0; j < 64; j++) {
+    uint32_t score = 0;
+    for (int i = 0; i < ruleList.size(); i++) {
+      score += ((((ruleList.at(i)).mask) >> j) & uint64_t(1));
+    }
+    sumColumn.push_back(score);
+  }
+
+  // Copy the sumColumn vector to a new vector
+  vector<uint64_t> newSumColumn(sumColumn);
+  /*
+   * Checked the newSumColumn vector is the same with the sumColumn vector
+  cout << newSumColumn.size() << endl;
+  for (i = 0; i < newSumColumn.size(); i++) {
+    cout << newSumColumn[i] << endl;
+  }
+  */
+
+  // Sort the newSumColumn vector in descending order
+  std::sort(newSumColumn.begin(), newSumColumn.end(), std::greater<uint64_t>());
+  /*
+   * Checked the descending order is correct or not
+  for (i = 0; i < newSumColumn.size(); i++) {
+    cout << newSumColumn[i] << endl;
+  }
+  */
+
+  // Construct the delta(): the rearrangement operation {left shift, right shift, and no change}
+  // the element in delta vector, can be negative, positive and "0"
+  vector<int> delta;
+  // checkpoint is the index/subscript of the newSumColumn has the same value with the sumColumn
+  uint32_t checkpoint = 0;
+  int gap = 0; // Gap is the difference between the original and new sumcolumn vectors
+  for (int i = 0; i < sumColumn.size(); i++) {
+    //cout << "mark1" << " " << sumColumn[i] << endl;
+    for (int j = 0; j < newSumColumn.size(); j++) {
+      //cout << newSumColumn[j] << endl;
+      // Check the first equal element, if it is true, then return the checkpoint
+      if (newSumColumn[j] != sumColumn[i]) {
+        continue;
+      }
+      else if (newSumColumn[j] == sumColumn[i]) {
+        checkpoint = j;
+        newSumColumn[j] = 132; // make the matched column invalid
+        break;
+      }
+      else {
+        // Search all the 64 values, still didn't find the same value
+        cout << "Error occurs" << endl;
+      }
+    }
+    // Get the difference between the original vector data and the sorted vector data
+    // Create the rearrangement operation
+    gap = i - checkpoint;
+    delta.push_back(gap);
+  }
+  return delta;
+}
+
+/*
+ * Generate the new rule after the delta operations
+ * if the element value of delta vector is negative, which means left shift
+ * if the element value of delta vector is positive, which means right shift
+ * if the element value of delta vector is "0", which means no change
+*/
+// Create a new pingRulesTable for the new rearrangement rules
+//vector<Rule> newPingRulesTable; // for each bit of each rule
+vector<Rule> rules_rearrange(vector<Rule>& oldRuleList, vector<int> delta_array)
+{
+  vector<Rule> sumRulesTable; // for a new rule
+
+  for (int i = 0; i < oldRuleList.size(); i++) {
+    Rule newRule;
+    for (int j = 0; j < 64; j++) {
+      Rule subRule;
+      if (delta_array[j] < 0) {
+        // if it is negative, do the left shift
+        // from the lsb position, do the correct operations
+        // Note: because here is 64 bit, if we just use 1 to do left shift, it will occur overflow
+        // since "1" is 32bit by default
+        subRule.value = ( (( (oldRuleList[i].value) & (uint64_t(1) << j) ) ) << (abs(delta_array[j])) );
+        subRule.mask = ( (( (oldRuleList[i].mask) & (uint64_t(1) << j) ) ) << (abs(delta_array[j])) );
+      }
+      else if (delta_array[j] > 0) {
+        // if it is positive, do the right shift
+        subRule.value = ( (( (oldRuleList[i].value) & (uint64_t(1) << j) ) ) >> (abs(delta_array[j])) );
+        subRule.mask = ( (( (oldRuleList[i].mask) & (uint64_t(1) << j) ) ) >> (abs(delta_array[j])) );
+      }
+      else if (delta_array[j] == 0) {
+        // if it is "0", no change
+        subRule.value = (( (oldRuleList[i].value) & (uint64_t(1) << j) ) );
+        subRule.mask = (( (oldRuleList[i].mask) & (uint64_t(1) << j) ) );
+      }
+      newRule.value |= subRule.value;
+      newRule.mask |= subRule.mask;
+      //cout << j << " " << newRule.mask << endl;
+      newRule.priority = oldRuleList[i].priority;
+      newRule.action = oldRuleList[i].action;
+    }
+    sumRulesTable.push_back(newRule);
+  }
+  return sumRulesTable;
+}
+
+
+/*
  * Determine whether the rules can be inserted into a same group
  * two conditions: hamming distance of mask value == the number of difference of "1" in mask value
  * if true, then it is subset. if not, it's false
@@ -153,7 +291,23 @@ bool is_insert(Rule a, vector<Rule>& ruleTable)
   return true;
 }
 
+bool is_insert_2(Rule a, vector<Rule>& ruleTable)
+{
+  ruleTable.push_back(a); // insert the rule into the current table first
+  vector<int> new_generated_delta = generate_delta(ruleTable);
+  vector<Rule> new_table_list = rules_rearrange(
+        ruleTable, new_generated_delta );
 
+  for ( int k = 0; k < new_table_list.size(); k++ ) {
+    if ( is_prefix(new_table_list.at (k)) ) {
+      continue;
+    }
+    else {
+      return false;
+    }
+  }
+  return true;
+}
 
 /*
  * Ping_sort rules and grouping algorithm
@@ -173,7 +327,7 @@ int ping_group_rules(vector<Rule>& ruleList)
     newPingList.push_back(base); // push the first rule into the new table, which is the first group
     for (int j = 0; j < ruleList.size(); j++) {
       if (j != i) {
-        if (is_insert(ruleList.at(j), newPingList)) {
+        if (is_insert_2(ruleList.at(j), newPingList)) {
           // if it can be inserted into the same group, the first group
           newPingList.push_back(ruleList.at(j));
         }
@@ -217,7 +371,7 @@ vector< vector<Rule> > generate_group(int index, vector<Rule>& ruleList)
   // IN order not to impact the index when you erase a rule
   for (int j = ruleList.size() - 1; j >= 0; j--) {
     if (j != index) {
-      if (is_insert(ruleList.at(j), newPingList)) {
+      if (is_insert_2(ruleList.at(j), newPingList)) {
         // if it can be inserted into the same group, the first group
         newPingList.push_back(ruleList.at(j));
         if (j < index) {
@@ -404,30 +558,7 @@ vector<Rule> merge_rules(vector<Rule>& ruleList)
   return new_rule_list;
 }
 
-/*
- * Check whether the new rule is a prefix rule
- * if yes, do the LPM insertion
- * if not, do the expand rule function
-*/
-bool is_prefix(Rule& rule)
-{
-  // Store the wildcard postion into vector maskPosion
-  vector<uint32_t> maskPosition;
-  // Check the mask field from the lower bit
-  for(int i = 0; i < 64; i++) {
-    // if this: get the position whose bit is 1 (have wildcard)
-    if((rule.mask >> i) & uint64_t(1) == 1) {
-      maskPosition.push_back(i);
-    }
-  }
-  uint32_t num = maskPosition.size(); // num is the number of wildcard
-  if (rule.mask == (uint64_t(1) << num)-1) {
-    return true;
-  }
-  else {
-    return false;
-  }
-}
+
 
 // Sorting the rules in an asscending order
 bool wayToSort(Rule aa, Rule bb)
@@ -583,117 +714,6 @@ vector<Rule> sort_rules(vector<Rule>& ruleList)
   return sortTotalTable;
 }
 
-/*
- * Generate the two dimensional array (generate delta array) from the pingRulesTable array
- * With all the bits in each rule, including "0" and "1"
- * Caculate the score--the sum of column
-*/
-vector<int> generate_delta(vector<Rule>& ruleList)
-{
-  vector<uint64_t> sumColumn;
-  for (int j = 0; j < 64; j++) {
-    uint32_t score = 0;
-    for (int i = 0; i < ruleList.size(); i++) {
-      score += ((((ruleList.at(i)).mask) >> j) & uint64_t(1));
-    }
-    sumColumn.push_back(score);
-  }
-
-  // Copy the sumColumn vector to a new vector
-  vector<uint64_t> newSumColumn(sumColumn);
-  /*
-   * Checked the newSumColumn vector is the same with the sumColumn vector
-  cout << newSumColumn.size() << endl;
-  for (i = 0; i < newSumColumn.size(); i++) {
-    cout << newSumColumn[i] << endl;
-  }
-  */
-
-  // Sort the newSumColumn vector in descending order
-  std::sort(newSumColumn.begin(), newSumColumn.end(), std::greater<uint64_t>());
-  /*
-   * Checked the descending order is correct or not
-  for (i = 0; i < newSumColumn.size(); i++) {
-    cout << newSumColumn[i] << endl;
-  }
-  */
-
-  // Construct the delta(): the rearrangement operation {left shift, right shift, and no change}
-  // the element in delta vector, can be negative, positive and "0"
-  vector<int> delta;
-  // checkpoint is the index/subscript of the newSumColumn has the same value with the sumColumn
-  uint32_t checkpoint = 0;
-  int gap = 0; // Gap is the difference between the original and new sumcolumn vectors
-  for (int i = 0; i < sumColumn.size(); i++) {
-    //cout << "mark1" << " " << sumColumn[i] << endl;
-    for (int j = 0; j < newSumColumn.size(); j++) {
-      //cout << newSumColumn[j] << endl;
-      // Check the first equal element, if it is true, then return the checkpoint
-      if (newSumColumn[j] != sumColumn[i]) {
-        continue;
-      }
-      else if (newSumColumn[j] == sumColumn[i]) {
-        checkpoint = j;
-        newSumColumn[j] = 132; // make the matched column invalid
-        break;
-      }
-      else {
-        // Search all the 64 values, still didn't find the same value
-        cout << "Error occurs" << endl;
-      }
-    }
-    // Get the difference between the original vector data and the sorted vector data
-    // Create the rearrangement operation
-    gap = i - checkpoint;
-    delta.push_back(gap);
-  }
-  return delta;
-}
-
-/*
- * Generate the new rule after the delta operations
- * if the element value of delta vector is negative, which means left shift
- * if the element value of delta vector is positive, which means right shift
- * if the element value of delta vector is "0", which means no change
-*/
-// Create a new pingRulesTable for the new rearrangement rules
-//vector<Rule> newPingRulesTable; // for each bit of each rule
-vector<Rule> rules_rearrange(vector<Rule>& oldRuleList, vector<int> delta_array)
-{
-  vector<Rule> sumRulesTable; // for a new rule
-
-  for (int i = 0; i < oldRuleList.size(); i++) {
-    Rule newRule;
-    for (int j = 0; j < 64; j++) {
-      Rule subRule;
-      if (delta_array[j] < 0) {
-        // if it is negative, do the left shift
-        // from the lsb position, do the correct operations
-        // Note: because here is 64 bit, if we just use 1 to do left shift, it will occur overflow
-        // since "1" is 32bit by default
-        subRule.value = ( (( (oldRuleList[i].value) & (uint64_t(1) << j) ) ) << (abs(delta_array[j])) );
-        subRule.mask = ( (( (oldRuleList[i].mask) & (uint64_t(1) << j) ) ) << (abs(delta_array[j])) );
-      }
-      else if (delta_array[j] > 0) {
-        // if it is positive, do the right shift
-        subRule.value = ( (( (oldRuleList[i].value) & (uint64_t(1) << j) ) ) >> (abs(delta_array[j])) );
-        subRule.mask = ( (( (oldRuleList[i].mask) & (uint64_t(1) << j) ) ) >> (abs(delta_array[j])) );
-      }
-      else if (delta_array[j] == 0) {
-        // if it is "0", no change
-        subRule.value = (( (oldRuleList[i].value) & (uint64_t(1) << j) ) );
-        subRule.mask = (( (oldRuleList[i].mask) & (uint64_t(1) << j) ) );
-      }
-      newRule.value |= subRule.value;
-      newRule.mask |= subRule.mask;
-      //cout << j << " " << newRule.mask << endl;
-      newRule.priority = oldRuleList[i].priority;
-      newRule.action = oldRuleList[i].action;
-    }
-    sumRulesTable.push_back(newRule);
-  }
-  return sumRulesTable;
-}
 
 /*
  * Rearrange each key in the keyTable according to the delta vector
