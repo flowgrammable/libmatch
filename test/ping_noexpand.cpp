@@ -297,7 +297,7 @@ bool is_insert_2(Rule a, vector<Rule>& ruleTable)
   vector<int> new_generated_delta = generate_delta(ruleTable);
   vector<Rule> new_table_list = rules_rearrange(
         ruleTable, new_generated_delta );
-
+  ruleTable.pop_back(); // Avoiding to change the ruleTable, maybe it is correct....
   for ( int k = 0; k < new_table_list.size(); k++ ) {
     if ( is_prefix(new_table_list.at (k)) ) {
       continue;
@@ -358,22 +358,22 @@ int ping_group_rules(vector<Rule>& ruleList)
 */
 vector< vector<Rule> > generate_group(int index, vector<Rule>& ruleList)
 {
-  vector< vector<Rule> > bigArray;
+  vector< vector<Rule> > bigArray; // includes two array: the group array and the left array after grouping
   vector<Rule> newList(ruleList); // copy the original rule table
   for (int m = 0; m < 2; m++) {
+    // INitilize
     bigArray.push_back(vector<Rule> ());
   }
-
-  vector<Rule> newPingList; // Initilize
-  newPingList.push_back(ruleList.at(index)); // push the first rule into the new table, which is the first group
+  vector<Rule> newPingTable; // Initilize
+  newPingTable.push_back(ruleList.at(index)); // push the first rule into the new table, which is the first group
   newList.erase(newList.begin() + index); // remove the index rule, the reference rule
   // Need to traverse all the rules from the end of rule table
   // IN order not to impact the index when you erase a rule
   for (int j = ruleList.size() - 1; j >= 0; j--) {
     if (j != index) {
-      if (is_insert_2(ruleList.at(j), newPingList)) {
+      if (is_insert_2(ruleList.at(j), newPingTable)) {
         // if it can be inserted into the same group, the first group
-        newPingList.push_back(ruleList.at(j));
+        newPingTable.push_back(ruleList.at(j));
         if (j < index) {
           // not influnced by removing the index rule
           newList.erase(newList.begin() + j); // Not sure here is j or (j-1)???? maybe it's a bug here
@@ -390,9 +390,9 @@ vector< vector<Rule> > generate_group(int index, vector<Rule>& ruleList)
       }
     }
   }
-
-  for (int i = 0; i < newPingList.size(); i++) {
-    bigArray[0].push_back(newPingList.at(i));
+ cout << "Check table size: " << newPingTable.size() << endl;
+  for (int i = 0; i < newPingTable.size(); i++) {
+    bigArray[0].push_back(newPingTable.at(i));
   }
   cout << "Group rule size: " << bigArray[0].size() << endl;
 
