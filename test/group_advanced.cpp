@@ -239,6 +239,64 @@ bool wayToSort1(Rule aaa, Rule bbb)
 }
 
 /*
+ * A modified version of sort_rules() function
+ * remove the value part sorting=====>wayToSort1 function
+ * Because want to see whether the value sort is an impact
+ * Sorting the prefix format rules into asscending order, denpending on the prefix length
+ * using the std::sort function
+*/
+vector<Rule> sort_rules_rm_vs(vector<Rule>& ruleList)
+{
+  std::sort(ruleList.begin(), ruleList.end(), wayToSort);
+  /*
+  cout << "mark" << "===============" << endl;
+  for (int k = 0; k < ruleList.size(); k ++) {
+    cout << ruleList[k].value << ", " << ruleList[k].mask << endl;
+  }
+  */
+
+  return ruleList;
+}
+
+/*
+ * Paul's sorting idear
+ * first group: no wildcard, mask value = 0
+ * second group: all prefix rules, all the wildcard are all at the end
+ * for the mask value, there is no "0" in each rule of this group, ascending sort the mask value
+ * third group: there is 1 "0" bit at the end, then remove this one "0", to check whether the left 63 bit rules are prefix
+ * after, ascending sort the mask value
+ * ..............
+ * 63 "0" bit, remove that, to check whether = 1
+ * last group: use the ping sort_rules() function
+ * using the std::sort function
+*/
+vector<Rule> paul_sort_rules(vector<Rule>& ruleList)
+{
+  vector<Rule> sortTable;
+  vector<Rule> sortTotalTable;
+  for (int i = ruleList.size() - 1; i >= 0; i--) {
+    // guarantee erase function doesn't impact the index correct
+    if (ruleList.at(i).mask == 0) {
+      // the first group, no wildcard
+      sortTable.push_back(ruleList.at(i));
+      // remove the first group out of the original rule table
+      ruleList.erase(ruleList.begin() + i);
+    }
+    else {
+      continue;
+    }
+  }
+  // insert the first group into the whole table
+  sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
+  // probably need to write a improved is_prefic() function,
+  // to make the i as a variable, depends on the number of "0" from the right side,
+  // check the meaning of "i" in is_prefix() function
+  for (int i = ruleList.size() - 1; i >= 0; i--) {
+    // check the left rules
+  }
+}
+
+/*
  * Sorting the prefix format rules into asscending order, denpending on the prefix length
  * using the std::sort function
 */

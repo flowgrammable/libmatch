@@ -327,7 +327,7 @@ int ping_group_rules(vector<Rule>& ruleList)
     newPingList.push_back(base); // push the first rule into the new table, which is the first group
     for (int j = 0; j < ruleList.size(); j++) {
       if (j != i) {
-        if (is_insert_2(ruleList.at(j), newPingList)) {
+        if (is_insert(ruleList.at(j), newPingList)) {
           // if it can be inserted into the same group, the first group
           newPingList.push_back(ruleList.at(j));
         }
@@ -371,7 +371,7 @@ vector< vector<Rule> > generate_group(int index, vector<Rule>& ruleList)
   // IN order not to impact the index when you erase a rule
   for (int j = ruleList.size() - 1; j >= 0; j--) {
     if (j != index) {
-      if (is_insert_2(ruleList.at(j), newPingTable)) {
+      if (is_insert(ruleList.at(j), newPingTable)) {
         // if it can be inserted into the same group, the first group
         newPingTable.push_back(ruleList.at(j));
         if (j < index) {
