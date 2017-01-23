@@ -258,6 +258,23 @@ vector<Rule> sort_rules_rm_vs(vector<Rule>& ruleList)
   return ruleList;
 }
 
+/*
+ * function purpose: check the number of trie node in a trie === in each group
+ * to see whether has the same answer with the insert opertion into a data structure
+ * would be simple when we just use binary trie now
+ * calculate for each group, then sum up, get the total value for the totalTable
+ * all the rules should be prefix pattern: 1001**
+*/
+int get_num_trienode(vector<Rule>& ruleList)
+{
+  int num_trienode = 0;
+
+
+
+  return num_trienode;
+}
+
+
 
   /*
  * Paul's sorting idear
@@ -317,10 +334,11 @@ vector<Rule> sort_rules_rm_vs(vector<Rule>& ruleList)
           continue;
         }
       }
+      cout << "# of zero from left = " << a << "," << "== The number of nowildcard rules: " << sortTable.size() << endl;
       sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
       sortTable.clear();
-      //cout << "== The number of nowildcard rules: " << sortTotalTable.size() << endl;
-      //cout << "== The number of left rules: " << ruleList.size() << endl;
+      //cout << "# of zero from left = " << a << "," << "== The number of nowildcard rules: " << sortTotalTable.size() << endl;
+      cout << "== The number of left rules: " << ruleList.size() << endl;
       continue;
     }
 
