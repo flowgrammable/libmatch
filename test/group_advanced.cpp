@@ -288,18 +288,27 @@ vector<Rule> sort_rules_rm_vs(vector<Rule>& ruleList)
     }
     // insert the first group into the whole table
     sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
-
+    sortTable.clear();
+    //cout << "The number of nowildcard rules: " << sortTotalTable.size() << endl;
+    //cout << "The number of left rules: " << ruleList.size() << endl;
+    /*
+    for (int k = 0; k < sortTotalTable.size(); k ++) {
+      cout << sortTotalTable[k].value << ", " << sortTotalTable[k].mask << endl;
+    }
+    */
     for (int a = 0; a < 64; a++) {
       for (int i = ruleList.size() - 1; i >= 0; i--) {
         // guarantee erase function doesn't impact the index correct
         vector<uint32_t> maskPosition;
         for(int j = a; j < 64; j++) {
+          //cout << "j = " << j << endl;
           // for the 64 bit or less for each rule
           if ((ruleList.at(i).mask >> j) & uint64_t(1) == 1) {
             maskPosition.push_back(j);
           }
         }
         uint32_t num = maskPosition.size(); // num is the number of wildcard
+        maskPosition.clear();
         if (ruleList.at(i).mask == (uint64_t(1) << num)-1) {
           sortTable.push_back(ruleList.at(i));
           ruleList.erase(ruleList.begin() + i);
@@ -309,15 +318,22 @@ vector<Rule> sort_rules_rm_vs(vector<Rule>& ruleList)
         }
       }
       sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
+      sortTable.clear();
+      //cout << "== The number of nowildcard rules: " << sortTotalTable.size() << endl;
+      //cout << "== The number of left rules: " << ruleList.size() << endl;
       continue;
     }
+
     // sort the last group
     std::sort(ruleList.begin(), ruleList.end(), wayToSort);
-    sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
+    sortTotalTable.insert( sortTotalTable.end(), ruleList.begin(), ruleList.end() );
     // probably need to write a improved is_prefic() function,
     // to make the i as a variable, depends on the number of "0" from the right side,
     // check the meaning of "i" in is_prefix() function
+    cout << "==== The total rules: " << sortTotalTable.size() << endl;
+    cout << "==== The number of left rules: " << ruleList.size() << endl;
 
+    return sortTotalTable;
   }
 
   /*
@@ -587,7 +603,8 @@ vector<Rule> sort_rules_rm_vs(vector<Rule>& ruleList)
     }
     file.close();
     // Need to check the priority preserve the same after sorting
-    vector<Rule> pingRulesTable = sort_rules(oldpingRulesTable);
+    //vector<Rule> pingRulesTable = sort_rules(oldpingRulesTable);
+    vector<Rule> pingRulesTable = paul_sort_rules(oldpingRulesTable);
     //cout << "Sorted total size = " << pingRulesTable.size() << endl;
     //vector<Rule> pingRulesTable = merge_rules(oldpingRulesTable);
     //cout << "Merged total size = " << pingRulesTable.size() << endl;
