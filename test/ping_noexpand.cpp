@@ -118,6 +118,25 @@ int get_sub1_mask(Rule a , Rule b)
 }
 
 /*
+ * Get the length of prefix: the number of not being "*"
+*/
+int get_prefix_num(Rule& rule)
+{
+  vector<uint32_t> maskPosition;
+  // Check the mask field from the lower bit
+  for(int i = 0; i < 64; i++) {
+    // if this: get the position whose bit is 1 (have wildcard)
+    if((rule.mask >> i) & uint64_t(1) == 1) {
+      maskPosition.push_back(i);
+    }
+  }
+  uint32_t num = 64 - maskPosition.size();
+
+  return num;
+}
+
+
+/*
  * Check whether the new rule is a prefix rule
  * if yes, do the LPM insertion
  * if not, do the expand rule function
@@ -310,6 +329,90 @@ bool is_insert_2(Rule a, vector<Rule>& ruleTable)
 }
 
 /*
+ * function purpose: check the number of trie node in a trie === in each group
+ * to see whether has the same answer with the insert opertion into a data structure
+ * would be simple when we just use binary trie now
+ * calculate for each group, then sum up, get the total value for the totalTable
+ * all the rules should be prefix pattern: 1001**
+*/
+int get_num_trienode(vector<Rule>& ruleList)
+{
+  int num_trienode = 0;
+  // get the bit for the most right side "63" location
+  vector<Rule> leftBranch; // for the rules start with "0" branch
+  vector<Rule> rightBranch; // for the rules start with "1" branch
+  for (int i = 0; i < ruleList.size(); i++) {
+     if ((ruleList.at(i).mask & (uint64_t(1) << 63)) == 0) {
+       // go to the leftBranch
+       leftBranch.push_back(ruleList.at(i));
+     }
+     else {
+       rightBranch.push_back(ruleList.at(i));
+     }
+  }
+  vector < vector<int> > twoArray0; // 2-dimensional array with variable column in each row
+  vector<int> sub0; // the vector for each row
+  // finished the first seperation
+  // Generate the twoArray first
+  for (int n = 0; n < leftBranch.size(); n++) {
+    // find the legth of each row, depending on the mask value and value value for each row
+    int row_size0 = get_prefix_num(leftBranch.at(n)) - 1; // because we remove the "63" location
+    for (int q = 62; q <=0; q--) {
+      if ((leftBranch.at(n).value & (uint64_t(1) << q)) == 0) {
+        sub0.push_back(0);
+      }
+      else {
+        sub0.push_back(1);
+      }
+      if (sub0.size() == row_size0) {
+        break;
+      }
+      twoArray0.push_back(sub0); // insert the sub vector into the twoArray
+      sub0.clear();
+    }
+  }
+  // got the twoArray for the leftBranch
+  vector < vector<int> > twoArray1; // 2-dimensional array with variable column in each row
+  vector<int> sub1; // the vector for each row
+  // finished the first seperation
+  // Generate the twoArray first
+  for (int n = 0; n < rightBranch.size(); n++) {
+    // find the legth of each row, depending on the mask value and value value for each row
+    int row_size1 = get_prefix_num(rightBranch.at(n)) - 1; // because we remove the "63" location
+    for (int q = 62; q <=0; q--) {
+      if ((leftBranch.at(n).value & (uint64_t(1) << q)) == 0) {
+        sub1.push_back(0);
+      }
+      else {
+        sub1.push_back(1);
+      }
+      if (sub1.size() == row_size1) {
+        break;
+      }
+      twoArray1.push_back(sub1); // insert the sub vector into the twoArray
+      sub1.clear();
+    }
+  }
+  for (j = 62; j <=0; j--) {
+    // get the certain location bit for each rule
+    for (int m = 0; m < leftBranch.size(); m ++) {
+      // for each rule
+      if ((leftBranch.at(m).mask & (uint64_t(1) << j)) == 0) {
+        flag_01.push_back();
+      }
+    }
+  }
+
+
+
+
+
+  return num_trienode;
+}
+
+
+
+/*
  * Ping_sort rules and grouping algorithm
  * will use recursion to choose the best combination of each group
  * use the function is_insert to choose whether can insert into the same group
@@ -337,6 +440,9 @@ int ping_group_rules(vector<Rule>& ruleList)
         }
       }
     }
+    // Get the rules can be grouped together, need to process all the rules into prefix rules
+    // then use the get_num_trienode() function to get the number
+    // then to choose the smallest num as a group
     vector_num.push_back(newPingList.size()); // insert the number of rules inserted into a group
     newPingList.clear(); // clear out the new table
 
