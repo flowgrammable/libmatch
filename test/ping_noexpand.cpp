@@ -117,23 +117,7 @@ int get_sub1_mask(Rule a , Rule b)
   return dif_num;
 }
 
-/*
- * Get the length of prefix: the number of not being "*"
-*/
-int get_prefix_num(Rule& rule)
-{
-  vector<uint32_t> maskPosition;
-  // Check the mask field from the lower bit
-  for(int i = 0; i < 64; i++) {
-    // if this: get the position whose bit is 1 (have wildcard)
-    if((rule.mask >> i) & uint64_t(1) == 1) {
-      maskPosition.push_back(i);
-    }
-  }
-  uint32_t num = 64 - maskPosition.size();
 
-  return num;
-}
 
 
 /*
@@ -329,6 +313,158 @@ bool is_insert_2(Rule a, vector<Rule>& ruleTable)
 }
 
 /*
+ * Get the length of prefix: the number of not being "*"
+*/
+int get_prefix_num(Rule& rule)
+{
+  vector<uint32_t> maskPosition;
+  // Check the mask field from the lower bit
+  for(int i = 0; i < 64; i++) {
+    // if this: get the position whose bit is 1 (have wildcard)
+    if((rule.mask >> i) & uint64_t(1) == 1) {
+      maskPosition.push_back(i);
+    }
+  }
+  uint32_t num = 64 - maskPosition.size();
+
+  return num;
+}
+
+
+/*
+ * function purpose: generate the 2-dimensional array for the bit of prefix rules
+ * start from the leftBranch and rightBranch
+*/
+vector < vector<int> > generate_twoArray(vector<Rule>& ruleList)
+{
+  vector < vector<int> > twoArray; // 2-dimensional array with variable column in each row
+  vector<int> sub; // the vector for each row
+  // finished the first seperation
+  // Generate the twoArray first
+  for (int n = 0; n < ruleList.size(); n++) {
+    // find the legth of each row, depending on the mask value and value value for each row
+    int row_size = get_prefix_num(ruleList.at(n)) - 1; // because we remove the "63" location
+    //cout << "row size = " << row_size << endl;
+    for (int q = 62; q >=0; q--) {
+      if ((ruleList[n].value & (uint64_t(1) << q)) == 0) {
+        sub.push_back(0);
+      }
+      else {
+        sub.push_back(1);
+      }
+      if (sub.size() == row_size) {
+        break;
+      }
+    }
+    //cout << "The size of sub is: " << sub.size() << endl;
+    twoArray.push_back(sub); // insert the sub vector into the twoArray
+    sub.clear();
+  }
+  return twoArray;
+}
+
+/*
+ * calculate the sum of element in each row of a vector
+*/
+int get_sum_row(vector<int> rowArray)
+{
+  int sum = 0; // initilization
+  for (int i = 0; i < rowArray.size(); i++) {
+    sum += rowArray[i];
+  }
+  return sum;
+}
+
+/*
+ * check whether has "0,1" at the same time
+*/
+bool is_same(vector<int> rowArray)
+{
+
+  for (int i = 0; i < rowArray.size() - 1; i++) {
+    if (rowArray[i+1] == rowArray[i]) {
+      continue;
+    }
+    else {
+      return false;
+    }
+  }
+  return true;
+}
+
+
+int get_trieNode_subnum(vector<vector<int>> array)
+{
+  int num_trienode = 0;
+  vector<int> flag;
+  vector<int> sum_flag;
+  vector <vector<int>> flagVector;
+
+  cout << "the num of rows in array: " << array.size() << endl;
+  for (int i = 0; i < array.size(); i++) {
+    cout << "the size of each row: " << array[i].size() << endl;
+  }
+
+  for (int j = 0; j < 63; j++) {
+    // get the certain location bit for each rule
+    for (int m = 0; m < array.size(); m ++) { // the size shows the number of rows? not sure yet
+      // for each rule
+      cout << "array[m] size: " << array[m].size() << endl;
+      if ( j < array[m].size() ) {
+        if (array[m][j] == 0) {
+          flag.push_back(0);
+        }
+        if (array[m][j] == 1) {
+          flag.push_back(1);
+        }
+        continue;
+      }
+
+      continue;
+    }
+    int sum = get_sum_row(flag);
+    cout << "sum value is: " << sum << endl;
+    flagVector.push_back(flag);
+    //cout << "THe size of flagVector: " << flagVector.size() << endl;
+    flag.clear();
+    sum_flag.push_back(sum);
+
+  }
+  // above: get all the sum for each colunm, from 0-63, maybe the index is wrong. not sure yet.......
+  for (int j = 0; j < 63; j++) {
+    cout << "The size of j: " << j << ", " << flagVector[j].size() << endl;
+    if (j == 0) {
+      if (sum_flag[j] == 0 || sum_flag[j] == flagVector[j].size()) {
+        // which means there has "0" and "1", which means the number of trie node would be 2
+
+        num_trienode += 1;
+      }
+      else {
+        num_trienode += 2;
+      }
+    }
+    else {
+      if (sum_flag[j-1] == 0 || sum_flag[j-1] == flagVector[j-1].size()) {
+        if (sum_flag[j] == 0 || sum_flag[j] == flagVector[j].size()) {
+          // which means there has "0" and "1", which means the number of trie node would be 2
+          cout << "++++++" << endl;
+          num_trienode += 1;
+        }
+        else {
+          num_trienode += 2;
+        }
+      }
+      else {
+        cout << "==============" << endl;
+        num_trienode += 2;
+      }
+    }
+  }
+
+  return num_trienode;
+}
+
+/*
  * function purpose: check the number of trie node in a trie === in each group
  * to see whether has the same answer with the insert opertion into a data structure
  * would be simple when we just use binary trie now
@@ -337,80 +473,83 @@ bool is_insert_2(Rule a, vector<Rule>& ruleTable)
 */
 int get_num_trienode(vector<Rule>& ruleList)
 {
-  int num_trienode = 0;
+  int trienode = 0;
   // get the bit for the most right side "63" location
   vector<Rule> leftBranch; // for the rules start with "0" branch
   vector<Rule> rightBranch; // for the rules start with "1" branch
   for (int i = 0; i < ruleList.size(); i++) {
-     if ((ruleList.at(i).mask & (uint64_t(1) << 63)) == 0) {
-       // go to the leftBranch
-       leftBranch.push_back(ruleList.at(i));
-     }
-     else {
-       rightBranch.push_back(ruleList.at(i));
-     }
-  }
-  vector < vector<int> > twoArray0; // 2-dimensional array with variable column in each row
-  vector<int> sub0; // the vector for each row
-  // finished the first seperation
-  // Generate the twoArray first
-  for (int n = 0; n < leftBranch.size(); n++) {
-    // find the legth of each row, depending on the mask value and value value for each row
-    int row_size0 = get_prefix_num(leftBranch.at(n)) - 1; // because we remove the "63" location
-    for (int q = 62; q <=0; q--) {
-      if ((leftBranch.at(n).value & (uint64_t(1) << q)) == 0) {
-        sub0.push_back(0);
-      }
-      else {
-        sub0.push_back(1);
-      }
-      if (sub0.size() == row_size0) {
-        break;
-      }
-      twoArray0.push_back(sub0); // insert the sub vector into the twoArray
-      sub0.clear();
+    if ((ruleList.at(i).value & (uint64_t(1) << 63)) == 0) {
+      // go to the leftBranch
+      leftBranch.push_back(ruleList.at(i));
+    }
+    else {
+      rightBranch.push_back(ruleList.at(i));
     }
   }
-  // got the twoArray for the leftBranch
-  vector < vector<int> > twoArray1; // 2-dimensional array with variable column in each row
-  vector<int> sub1; // the vector for each row
-  // finished the first seperation
-  // Generate the twoArray first
-  for (int n = 0; n < rightBranch.size(); n++) {
-    // find the legth of each row, depending on the mask value and value value for each row
-    int row_size1 = get_prefix_num(rightBranch.at(n)) - 1; // because we remove the "63" location
-    for (int q = 62; q <=0; q--) {
-      if ((leftBranch.at(n).value & (uint64_t(1) << q)) == 0) {
-        sub1.push_back(0);
-      }
-      else {
-        sub1.push_back(1);
-      }
-      if (sub1.size() == row_size1) {
-        break;
-      }
-      twoArray1.push_back(sub1); // insert the sub vector into the twoArray
-      sub1.clear();
-    }
-  }
-  for (j = 62; j <=0; j--) {
-    // get the certain location bit for each rule
-    for (int m = 0; m < leftBranch.size(); m ++) {
-      // for each rule
-      if ((leftBranch.at(m).mask & (uint64_t(1) << j)) == 0) {
-        flag_01.push_back();
-      }
-    }
-  }
+  //  cout << "the original rule size is: " << ruleList.size() << endl;
+  cout << "the left rule size: " << leftBranch.size() << endl;
+  cout << "the right rule size: " << rightBranch.size() << endl;
+  vector < vector<int> > left2Array = generate_twoArray(leftBranch);
+  vector < vector<int> > right2Array = generate_twoArray(rightBranch);
+  int a = get_trieNode_subnum(left2Array);
+  cout << "The size of a: " << a << endl;
+  int b = get_trieNode_subnum(right2Array);
+  cout << "The size of b: " << b << endl;
+  trienode = 2 + a + b + 1; // 1 is root node, 2 is the leftBranch and the rightBranch,
+  // a and b are come from the two branches
 
-
-
-
-
-  return num_trienode;
+  return trienode;
 }
 
+/*
+ * changed to choose the least number of trienode
+*/
+int ping_group_rules_2(vector<Rule>& ruleList)
+{
+  vector<int> vector_num; // To store the number of rules in a group, with different base from the 0 to size-1
+  vector<Rule> newPingList; // Initialize the new list of a group
+  for (int i = 0; i < ruleList.size(); i++) {
+    Rule base = ruleList.at(i);
+    newPingList.push_back(base); // push the first rule into the new table, which is the first group
+    for (int j = 0; j < ruleList.size(); j++) {
+      if (j != i) {
+        if (is_insert_2(ruleList.at(j), newPingList)) {
+          // if it can be inserted into the same group, the first group
+          newPingList.push_back(ruleList.at(j));
+        }
+        else {
+          // if it cannot insert into the same group, then go to the next one
+          continue;
+        }
+      }
+    }
+    // get the prefix rules for a group
+    vector<int> vector2 = generate_delta(newPingList);
+    vector<Rule> ruleTable2 = rules_rearrange(newPingList, vector2);
+    //    for (int i = 0; i < ruleTable2.size(); i++) {
+    //      // Check whether all these rules are prefix rules
+    //      int cc = is_prefix(ruleTable2[i]);
+    //      cout << cc << endl;
+    //    }
+    int num_2 = get_num_trienode(ruleTable2); // this function has errors.....
+    // Get the rules can be grouped together, need to process all the rules into prefix rules
+    // then use the get_num_trienode() function to get the number
+    // then to choose the smallest num as a group
+    vector_num.push_back(num_2); // insert the number of rules inserted into a group
+    newPingList.clear(); // clear out the new table
 
+  }
+  for (int i = 0; i < vector_num.size(); i++) {
+    cout << "num of trieNode of " << i << "is: " << vector_num[i] << endl;
+  }
+  int min_num = *min_element(vector_num.begin(), vector_num.end());
+  cout << "The minimal num of trieNode is: " << min_num << endl;
+  vector<int>::iterator it;
+  // Find the index of the maximal number of rules
+  it = find(vector_num.begin(), vector_num.end(), min_num);
+  int index_num = distance(vector_num.begin(), it);
+  return index_num;
+}
 
 /*
  * Ping_sort rules and grouping algorithm
@@ -477,7 +616,7 @@ vector< vector<Rule> > generate_group(int index, vector<Rule>& ruleList)
   // IN order not to impact the index when you erase a rule
   for (int j = ruleList.size() - 1; j >= 0; j--) {
     if (j != index) {
-      if (is_insert(ruleList.at(j), newPingTable)) {
+      if (is_insert_2(ruleList.at(j), newPingTable)) {
         // if it can be inserted into the same group, the first group
         newPingTable.push_back(ruleList.at(j));
         if (j < index) {
@@ -496,7 +635,7 @@ vector< vector<Rule> > generate_group(int index, vector<Rule>& ruleList)
       }
     }
   }
- cout << "Check table size: " << newPingTable.size() << endl;
+  cout << "Check table size: " << newPingTable.size() << endl;
   for (int i = 0; i < newPingTable.size(); i++) {
     bigArray[0].push_back(newPingTable.at(i));
   }
@@ -519,8 +658,8 @@ vector< vector<Rule> > grouping_algorithm(vector<Rule>& ruleList)
   vector< vector<Rule> > groupArray;
   cout << "The num of rules is: " << ruleList.size() << endl;
   while(ruleList.size() != 0) {
-    int index_max_num = ping_group_rules(ruleList);
-    cout << "The maximal index: " << index_max_num << endl;
+    int index_max_num = ping_group_rules_2(ruleList); // now the index is the minimal value==num of trienode
+    cout << "The minimal num of trieNode index: " << index_max_num << endl;
     vector< vector<Rule> > bigArray = generate_group(index_max_num, ruleList);
 
     groupArray.push_back(bigArray[0]); // insert every group into the groupArray
