@@ -704,8 +704,19 @@ vector< vector<Rule> > grouping_algorithm(vector<Rule>& ruleList)
     cout << "The minimal num of trieNode index: " << index_max_num << endl;
     vector< vector<Rule> > bigArray = generate_group(index_max_num, ruleList);
 
+    for (int k = 0; k < bigArray[0].size(); k++) {
+      cout <<  bigArray[0][k].value << endl;
+    }
+
+    cout << "===================" << endl;
+
+    for (int k = 0; k < bigArray[0].size(); k++) {
+      cout << bigArray[0][k].mask << endl;
+    }
+
     groupArray.push_back(bigArray[0]); // insert every group into the groupArray
     // need to check whether this function is doable or not
+
     ruleList.clear(); // clear the original rule talbe
     ruleList = bigArray[1];
     bigArray.clear();
@@ -1098,11 +1109,17 @@ int main(int argc, char* argv[])
   }
   file.close();
 
-  /*
-  for (int k = 0; k < pingRulesTable.size(); k++) {
-    cout << pingRulesTable[k].priority << " " << pingRulesTable[k].action << " " << pingRulesTable[k].value << " " << pingRulesTable[k].mask << endl;
-  }
-  */
+
+//  for (int k = 0; k < pingRulesTable.size(); k++) {
+//    cout <<  pingRulesTable[k].value << endl;
+//  }
+
+//  cout << "===================" << endl;
+
+//  for (int k = 0; k < pingRulesTable.size(); k++) {
+//    cout << pingRulesTable[k].mask << endl;
+//  }
+
   // to check whether sort is a impact
   //vector<Rule> pingRulesTable = sort_rules(oldpingRulesTable);
 

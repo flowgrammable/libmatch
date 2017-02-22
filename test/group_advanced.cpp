@@ -238,6 +238,41 @@ bool wayToSort1(Rule aaa, Rule bbb)
   return (aaa.value < bbb.value);
 }
 
+// Get the number of consecutive "0" of mask value
+// From the right side, consecutive "0"
+// The rule is 64-bit
+int get_numOFzero(Rule& rule)
+{
+  int count = 0; // show the number of wildcard
+  for(int i = 0; i < 64; i++) {
+    // if this: get the position whose bit is 1 (have wildcard)
+    if((rule.mask >> i) & uint64_t(1) == 0) {
+      count++;
+      continue; // guarantee the "0" is consective
+    }
+    else {
+      break;
+    }
+  }
+  return count;
+}
+
+/*
+ * paul's algorithm
+ * sort the number of "0" from the right
+ * 0001
+ * 0011
+ * 0111
+ * 1111
+*/
+bool zero_wayToSort(Rule a, Rule b)
+{
+  int num_aa = get_numOFzero(a);
+  int num_bb = get_numOFzero(b);
+  return (num_aa < num_bb);
+}
+
+
 /*
  * A modified version of sort_rules() function
  * remove the value part sorting=====>wayToSort1 function
@@ -248,12 +283,6 @@ bool wayToSort1(Rule aaa, Rule bbb)
 vector<Rule> sort_rules_rm_vs(vector<Rule>& ruleList)
 {
   std::sort(ruleList.begin(), ruleList.end(), wayToSort);
-  /*
-  cout << "mark" << "===============" << endl;
-  for (int k = 0; k < ruleList.size(); k ++) {
-    cout << ruleList[k].value << ", " << ruleList[k].mask << endl;
-  }
-  */
 
   return ruleList;
 }
@@ -265,18 +294,56 @@ vector<Rule> sort_rules_rm_vs(vector<Rule>& ruleList)
  * calculate for each group, then sum up, get the total value for the totalTable
  * all the rules should be prefix pattern: 1001**
 */
-int get_num_trienode(vector<Rule>& ruleList)
+
+vector<Rule> paul_sortrules(vector<Rule>& ruleList)
 {
-  int num_trienode = 0;
+  std::sort(ruleList.begin(), ruleList.end(), zero_wayToSort);
+  vector<Rule> sortTable;
+  vector<Rule> sortTotalTable;
+  // Determine the size of combined table
+  sortTotalTable.reserve(ruleList.size());
+  for (int i = 0; i < ruleList.size(); i ++) {
+    if (i != ruleList.size() - 1) {
+      if (get_numOFzero(ruleList.at(i)) == get_numOFzero(ruleList.at(i+1))) {
+        // if the mask value is the same, push into the same vector
+        //cout << "test" << endl;
+        sortTable.push_back(ruleList.at(i));
+        continue;
+      }
+      else {
+        sortTable.push_back(ruleList.at(i));
+        //cout << "i = " << i << endl;
+        std::sort(sortTable.begin(), sortTable.end(), wayToSort);
+        sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
 
-
-
-  return num_trienode;
+        // Delete the current contents, clear the memory
+        sortTable.clear();
+        //cout << "sortTable size = " << sortTable.size() << endl;
+        continue;
+      }
+    }
+    else {
+      // for the last element in the vector
+      // for avoiding the over-range of the vector
+      if (get_numOFzero(ruleList.at(i)) == get_numOFzero(ruleList.at(i-1))) {
+        sortTable.push_back(ruleList.at(i));
+        //cout << "i = " << i << endl;
+        std::sort(sortTable.begin(), sortTable.end(), wayToSort);
+        sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
+      }
+      else {
+        std::sort(sortTable.begin(), sortTable.end(), wayToSort);
+        sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
+        sortTable.clear();
+        sortTable.push_back(ruleList.at(i));
+        sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
+      }
+    }
+  }
+  return sortTotalTable;
+  return ruleList;
 }
-
-
-
-  /*
+ /*
  * Paul's sorting idear
  * first group: no wildcard, mask value = 0
  * second group: all prefix rules, all the wildcard are all at the end
@@ -306,19 +373,12 @@ int get_num_trienode(vector<Rule>& ruleList)
     // insert the first group into the whole table
     sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
     sortTable.clear();
-    //cout << "The number of nowildcard rules: " << sortTotalTable.size() << endl;
-    //cout << "The number of left rules: " << ruleList.size() << endl;
-    /*
-    for (int k = 0; k < sortTotalTable.size(); k ++) {
-      cout << sortTotalTable[k].value << ", " << sortTotalTable[k].mask << endl;
-    }
-    */
+
     for (int a = 0; a < 64; a++) {
       for (int i = ruleList.size() - 1; i >= 0; i--) {
         // guarantee erase function doesn't impact the index correct
         vector<uint32_t> maskPosition;
         for(int j = a; j < 64; j++) {
-          //cout << "j = " << j << endl;
           // for the 64 bit or less for each rule
           if ((ruleList.at(i).mask >> j) & uint64_t(1) == 1) {
             maskPosition.push_back(j);
@@ -334,11 +394,10 @@ int get_num_trienode(vector<Rule>& ruleList)
           continue;
         }
       }
-      cout << "# of zero from left = " << a << "," << "== The number of nowildcard rules: " << sortTable.size() << endl;
+      //cout << "# of zero from left = " << a << "," << "== The number of nowildcard rules: " << sortTable.size() << endl;
       sortTotalTable.insert( sortTotalTable.end(), sortTable.begin(), sortTable.end() );
       sortTable.clear();
-      //cout << "# of zero from left = " << a << "," << "== The number of nowildcard rules: " << sortTotalTable.size() << endl;
-      cout << "== The number of left rules: " << ruleList.size() << endl;
+      //cout << "== The number of left rules: " << ruleList.size() << endl;
       continue;
     }
 
@@ -558,25 +617,8 @@ int get_num_trienode(vector<Rule>& ruleList)
     //cout << newKey << endl;
   }
 
-  /*
- *Create a function called construct the data structure
- *Insert rules
-*/
-
-
-
-
-
-
-  /*
- *Create a function called the whole search process
- *search rules
-*/
-
-
-
-
   static int threshold; // Set the wildcard num as a variable
+
   int main(int argc, char* argv[])
   {
     // Input the action file
@@ -622,16 +664,7 @@ int get_num_trienode(vector<Rule>& ruleList)
     file.close();
     // Need to check the priority preserve the same after sorting
     //vector<Rule> pingRulesTable = sort_rules(oldpingRulesTable);
-    vector<Rule> pingRulesTable = paul_sort_rules(oldpingRulesTable);
-    //cout << "Sorted total size = " << pingRulesTable.size() << endl;
-    //vector<Rule> pingRulesTable = merge_rules(oldpingRulesTable);
-    //cout << "Merged total size = " << pingRulesTable.size() << endl;
-    /*
-  for (int k = 0; k < pingRulesTable.size(); k++) {
-    cout << pingRulesTable[k].priority << " " << pingRulesTable[k].action << " " << pingRulesTable[k].value << " " << pingRulesTable[k].mask << endl;
-  }
-  */
-
+    vector<Rule> pingRulesTable = paul_sortrules(oldpingRulesTable);
 
     // Read in keys from file:
     ifstream file1 (argv[2]);
@@ -652,14 +685,8 @@ int get_num_trienode(vector<Rule>& ruleList)
     cout << "######Group_advanced algorithm#####" << endl;
     cout << "The num of keys: " << keyTable.size() << endl;
     // Genearte the different size of key nums
-    /*
-  vector<uint64_t> keyTable;
-  for (int i = 0; i < 17642000; i++) {
-    keyTable.push_back(keyTable1[i]);
-  }
-  */
 
-    /*
+  /*
    * Grouping algorithm
    * Use the is_cross_pattern function to check the grouping number
    * Avoid the expanding number is too large
@@ -675,7 +702,7 @@ int get_num_trienode(vector<Rule>& ruleList)
     // The grouping algorithm is to create the most number of
     // groups without expansion
 
-    /*
+  /*
    * Noexpand group algorithm
   */
 
@@ -713,13 +740,7 @@ int get_num_trienode(vector<Rule>& ruleList)
     vector<uint32_t> original_groupVector(groupVector);
     cout << "(No expand) Num of Original groups is:" << " " << original_groupVector.size() << endl;
 
-    /*
-  for (i = 0; i < original_groupVector.size(); i++) {
-    cout << "Original Group index: " << i << "," << original_groupVector[i] << endl;
-  }
-  */
-
-    /* Create all the subgroups
+  /* Create all the subgroups
    * The big array is called bigArray
    * insert the whole rule set into the separate groups
   */
@@ -748,9 +769,10 @@ int get_num_trienode(vector<Rule>& ruleList)
           continue;
         }
       }
+      // Generate the original bigArray[] with the original group size
       //================================================
 
-      /*
+   /*
    * Start to build the newRules in each group
    * We get the new rearrangement rules table here, named sumRulesTabel
    * Next, we will do the rules insertion
@@ -803,8 +825,6 @@ int get_num_trienode(vector<Rule>& ruleList)
             else {
               test_flag = 100; // make sure to break out of the loop
               cout << "test test==expand too much" << endl;
-              // If expand too much
-              cout << "ping test....." << endl;
               break;
             }
           }
@@ -815,7 +835,7 @@ int get_num_trienode(vector<Rule>& ruleList)
         sum_trie_node_count += tries[j].node_count;
 
       }
-      cout << "ping ping test...." << endl;
+
       cout << "test_flag: " << test_flag << endl;
       cout << "Num of trie node: " << sum_trie_node_count << endl;
       // Check the memory cost, compared with the hard threshold==200,000 trie node
@@ -825,7 +845,7 @@ int get_num_trienode(vector<Rule>& ruleList)
         cout << "Index of v: " << v-1 << "," << original_groupVector[v-1] << endl;
         // Insert the element to the beginning of the vector, "0" position
         groupVector.insert(groupVector.begin(), original_groupVector[v-1]);
-        break;
+        break; // break from v loop
       }
       if ( original_groupVector.size() == 1 ) {
         // The original group is 1, cannot merge anymore, would be "-1"
@@ -843,13 +863,6 @@ int get_num_trienode(vector<Rule>& ruleList)
 
           groupVector.erase(groupVector.begin());
 
-
-          /*
-        if ( groupVector.size() == 1 ) {
-          break;
-        }
-        */
-          //else {
           vector< vector<Rule> > newbigArray;
           // Create a new sub group by copying the related rules
 
@@ -929,11 +942,8 @@ int get_num_trienode(vector<Rule>& ruleList)
               else {
                 // becasue we control the number of expanding wildcard
                 // so don't need to delete rules manually
-                //cout << "group index=" << j << ", index num: " << k << "," << "value: "<< newnewnewTable[k].value << "," << "mask: "
-                //<< newnewnewTable[k].mask << endl;
+
                 if ( newtries[j].get_new_num( newnewnewTable.at (k))  < 18 ) {
-                  // becasue we control the number of expanding wildcard
-                  // so don't need to delete rules manually
                   newtries[j].expand_rule(newnewnewTable.at(k));
                   newexpandRule_num ++;
                 }
@@ -948,7 +958,6 @@ int get_num_trienode(vector<Rule>& ruleList)
               }
             }
 
-            //cout << "j=" << j << ", " << "count number: " << tries[j].count << endl;
             cout << "j=" << j << ", " << "trie node num: " << newtries[j].node_count << endl;
             auto end2 = get_time::now();
             auto diff2 = end2 - start2;
@@ -1056,11 +1065,8 @@ int get_num_trienode(vector<Rule>& ruleList)
           cout << "ActionSum: " << actionSum << endl;
           cout << "Total matches: " << match << endl;
           cout << "==================================================" << endl;
-          //}
 
-
-
-          continue;
+          continue; // continue the loop v
         }
         // If the trie node > 200000, break the for loop
         else {
@@ -1074,11 +1080,7 @@ int get_num_trienode(vector<Rule>& ruleList)
     }
 
     cout << "Num of groups is:" << " " << groupVector.size() << endl;
-    /*
-  for (i = 0; i < groupVector.size(); i++) {
-    cout << "Group index: " << i << "," << groupVector[i] << endl;
-  }
-  */
+
 
     vector< vector<Rule> > newbigArray;
     // Create a new sub group by copying the related rules
@@ -1236,12 +1238,7 @@ int get_num_trienode(vector<Rule>& ruleList)
         vector<uint64_t>::iterator it;
         it = find(test1.begin(), test1.end(),match_final);
         int position1 = distance(test1.begin(), it);
-        //cout << "action size: " << test2.size() << endl;
-        /*
-      for (int q = 0; q < test2.size(); q++) {
-        cout << "action set==="  << q  << " " << test2[q] << endl;
-      }
-      */
+
         actionSum += test2.at(position1);
         //cout << "i index:" << j << ", action=:" << decision << endl;
         //cout << "i index:" << i << ", action=" << test2.at(position1) << endl;
@@ -1250,9 +1247,6 @@ int get_num_trienode(vector<Rule>& ruleList)
 
     }
 
-    //get time2
-    //auto end = get_time::now();
-    //auto diff = end - start;
 
     cout << "Total rules rearrange configure time is:" << newnewsum_rule_rearrange_time << endl;
     cout << "Total rules insertion configure time is:" << newnewsum_rule_insertion_time << endl;
